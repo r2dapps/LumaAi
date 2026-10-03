@@ -26,7 +26,7 @@
 <meta name="twitter:image:alt" content="Luma private local AI companion">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2310a37f'/%3E%3Cpath d='M17 25.5c0-6.1 4.9-11 11-11h4c6.1 0 11 4.9 11 11v1c0 6.1-4.9 11-11 11h-5.5l-6.8 5v-5.6A11 11 0 0 1 17 26.5v-1Z' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M23 27h14M28 32h7' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Luma","applicationCategory":"CommunicationApplication","operatingSystem":"Web Browser","description":"A private local AI companion that runs supported language models in the browser with WebGPU.","softwareVersion":"1.0","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Local browser AI inference","WebGPU acceleration","Companion customization","Local conversation memory","Voice input","Read aloud","Offline-capable cached models"],"publisher":{"@type":"Organization","name":"Luma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Luma","applicationCategory":"CommunicationApplication","operatingSystem":"Web Browser","description":"A private local AI companion that runs supported language models in the browser with WebGPU.","softwareVersion":"1.3","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Local browser AI inference","WebGPU acceleration","Companion customization","Local conversation memory","Voice input","Read aloud","Offline-capable cached models"],"publisher":{"@type":"Organization","name":"Luma"}}</script>
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Luma — Private Local AI Companion</title>
 <style>
@@ -145,6 +145,38 @@
 
 /* v10 model/cache UX */
 .model-card-side{max-width:48%;}.model-card-side .model-badge{display:inline-block;margin-bottom:5px}.model-card-actions{flex-wrap:wrap;justify-content:flex-end}.model-card-actions button{min-height:28px}.model-progress-head>span:last-child{flex:0 0 auto}.model-progress-head .mini-btn{padding:5px 7px;font-size:10px}.model-status-line{font-variant-numeric:tabular-nums}.storage-card strong{font-variant-numeric:tabular-nums}.data-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.data-stat{padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface2)}.data-stat b{display:block;font-size:13px}.data-stat span{display:block;font-size:10px;color:var(--muted);margin-top:2px}@media(max-width:700px){.model-card{flex-direction:column}.model-card-side{max-width:none;width:100%}.model-card-actions{justify-content:flex-start}.data-stat-row{grid-template-columns:1fr 1fr}}
+
+/* v11 — remaining phases / distribution */
+.phase3-card,.phase6-card,.phase8-card,.diagnostic-card{border:1px solid var(--line);border-radius:11px;background:var(--surface2);padding:11px;margin-top:10px}
+.phase3-card strong,.phase6-card strong,.phase8-card strong,.diagnostic-card strong{display:block;font-size:12px}
+.phase3-card p,.phase6-card p,.phase8-card p,.diagnostic-card p{font-size:10px;color:var(--muted);line-height:1.5;margin:5px 0 9px}
+.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.phase-grid .field{min-width:0}
+.inline-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.inline-actions .mini-btn{flex:1;min-width:110px}
+.range-compact{display:grid;grid-template-columns:1fr auto;align-items:center;gap:7px}.range-compact output{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:32px;text-align:right}
+.avatar-preview{display:flex;align-items:center;gap:9px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}.avatar-preview img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--text)}.avatar-preview .avatar-fallback{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--text);color:var(--bg);font-weight:600}
+.avatar-expr{position:relative}.avatar-expr .expr-badge{position:absolute;right:-4px;bottom:-3px;font-size:11px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:1px 4px}
+.install-card .mini-btn[disabled]{opacity:.6}.update-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--accent);margin-top:6px}
+.diagnostic-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.diag{padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}.diag b{display:block;font-size:11px}.diag span{display:block;font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}.diag.ok b{color:var(--accent)}.diag.warn b{color:#996f00}.diag.off b{color:var(--danger)}
+.model-download-note{font-size:10px;color:var(--muted);line-height:1.4;padding:7px 0 1px}.lan-models{min-height:36px}
+.message-attachment{display:block;max-width:min(420px,100%);max-height:320px;border-radius:11px;margin:0 0 8px;object-fit:contain;border:1px solid var(--line)}
+.voice-active{background:var(--hover)!important;color:var(--accent)}
+@media(max-width:700px){.phase-grid,.diagnostic-grid{grid-template-columns:1fr}.inline-actions .mini-btn{min-width:0}}
+
+/* v12 — final distribution hardening */
+.phase3-card,.phase6-card,.phase8-card,.diagnostic-card{border:1px solid var(--line);border-radius:11px;background:var(--surface2);padding:11px;margin-top:10px}
+.phase3-card strong,.phase6-card strong,.phase8-card strong,.diagnostic-card strong{display:block;font-size:12px}
+.phase3-card p,.phase6-card p,.phase8-card p,.diagnostic-card p{font-size:10px;color:var(--muted);line-height:1.5;margin:5px 0 9px}
+.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.phase-grid .field{min-width:0}
+.inline-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.inline-actions .mini-btn{flex:1;min-width:110px}
+.range-compact{display:grid;grid-template-columns:1fr auto;align-items:center;gap:7px}.range-compact output{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:32px;text-align:right}
+.avatar-preview{display:flex;align-items:center;gap:9px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}.avatar-preview img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--text)}.avatar-preview .avatar-fallback{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--text);color:var(--bg);font-weight:600}
+.avatar-expr{position:relative}.avatar-expr .expr-badge{position:absolute;right:-4px;bottom:-3px;font-size:11px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:1px 4px}
+.diagnostic-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.diag{padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}.diag b{display:block;font-size:11px}.diag span{display:block;font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}.diag.ok b{color:var(--accent)}.diag.warn b{color:#996f00}.diag.off b{color:var(--danger)}
+.v12-test-list{display:grid;gap:5px;margin-top:8px}.v12-test{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:10px}.v12-test b{font-size:10px}.v12-test span{color:var(--muted);text-align:right}.v12-pass{color:var(--accent)}.v12-warn{color:#996f00}.v12-fail{color:var(--danger)}
+.v12-action{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:8px}.v12-action .mini-btn{flex:1}
+.voice-active{background:var(--hover)!important;color:var(--accent)}
+.message-attachment{display:block;max-width:min(420px,100%);max-height:320px;border-radius:11px;margin:0 0 8px;object-fit:contain;border:1px solid var(--line)}
+@media(max-width:700px){.phase-grid,.diagnostic-grid{grid-template-columns:1fr}.inline-actions .mini-btn{min-width:0}}
 </style>
 </head>
 <body>
@@ -790,6 +822,636 @@ function speakMsg(i){const c=current(),text=c?.messages[i]?.content;if(!text||!(
 $('fileInput').onchange=async()=>{const f=$('fileInput').files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(x.comp)S.comp={...defaults,...x.comp};if(Array.isArray(x.chats))S.chats=x.chats.map(c=>({...c,pinned:!!c.pinned,archived:!!c.archived,messages:Array.isArray(c.messages)?c.messages:[]}));if(x.model)S.model=x.model;if(x.loadedModel)S.loadedModel=x.loadedModel;if(x.generation)S.generation={...generationDefaults,...x.generation};if(x.modelBenchmarks&&typeof x.modelBenchmarks==='object')S.modelBenchmarks=x.modelBenchmarks;if(x.modelCacheMeta&&typeof x.modelCacheMeta==='object')S.modelCacheMeta={...S.modelCacheMeta,...x.modelCacheMeta};S.active=x.active||S.chats[0]?.id||null;save();renderChats();renderMessages();$('sideName').textContent=S.comp.name;$('sideAvatar').textContent=initials()}catch(e){alert('Could not import backup: '+e.message)}$('fileInput').value=''};$('search').oninput=e=>{S.search=e.target.value;renderChats()};
 $('chatTitlebar').textContent='New chat';$('sideName').textContent=S.comp.name;$('sideAvatar').textContent=initials();ensureChat();renderChats();renderMessages();updateImageButton();if(S.sidebarCollapsed&&window.matchMedia('(min-width:761px)').matches)$('sidebar').classList.add('collapsed');window.addEventListener('online',()=>{if(!S.loading&&!S.engine)setStatus('Online · cached model ready to load',true)});window.addEventListener('offline',()=>{if(!S.loading&&!S.engine)setStatus('Offline · cached model required')});(async()=>{await detectDevice();await hydrateModels();if(navigator.gpu&&!S.modelBench)await benchmarkGPU();if(!S.model||!MODELS.some(m=>m.id===S.model)){const remembered=MODELS.find(m=>isModelDownloaded(m.id));S.model=remembered?.id||deviceModel(S.device||{})?.id||MODELS[0]?.id;save()}if(!navigator.gpu){setStatus('WebGPU unavailable');if(!S.setupComplete)setTimeout(openSetup,450);return}const remembered=isModelDownloaded(S.model);if(S.cacheRecoveryPending){setStatus('Recovering local model cache…',!!S.device?.gpu);setTimeout(()=>refreshCacheStates({forceAll:true}).catch(()=>{}),250)}else if(remembered){setStatus(S.loadedModel===S.model?'Local AI ready':'Downloaded model · ready to verify/load',S.loadedModel===S.model);setTimeout(()=>refreshCacheStates({forceAll:false}).catch(()=>{}),250)}else{localStorage.removeItem('luma_model_ready');if(!S.setupComplete)setTimeout(openSetup,450);else setStatus(browserOnline()?'Choose a downloaded model in Settings → Model':'Offline · open Settings → Model')}})();
 </script>
-<!-- Luma Phase 1 + 2 + 4 + 5 v10 -->
+<!-- Luma Final Distribution v13 — Phases 1-9 final hardening -->
+
+<script>
+/* Luma v11 — Phases 3, 6, 7, 8, 9 + hardening of Phases 4/5 */
+(function(){
+'use strict';
+
+/* ---------- state extensions ---------- */
+S.voice={
+ language:'en-IN', inputMode:'push', localOnly:true, streamingTTS:true, autoRead:false,
+ speakingStyle:'warm', voiceName:'auto', rate:0.98, pitch:1, continuous:false
+ ,...(S.voice||{})
+};
+S.customization={
+ avatarDataUrl:'', expression:'neutral', preset:'Balanced', customPersonality:'', speakingQuirks:'',
+ humorStyle:'light', emojiBehavior:'light', responseLength:'balanced', relationshipAutoProgress:false,
+ ...(S.customization||{})
+};
+S.lan={
+ enabled:false, provider:'ollama-openai', endpoint:'http://127.0.0.1:11434/v1/chat/completions',
+ model:'', apiKey:'', lastTest:'', models:[], vision:false,
+ ...(S.lan||{})
+};
+S.persistence={mode:'indexeddb',dbName:'LumaLocal',dbVersion:1,ready:false,lastSaveAt:0,error:'',...(S.persistence||{})};
+S.wasmFallback={enabled:false,url:'',loaded:false,provider:'wllama',...(S.wasmFallback||{})};
+S.relationshipPoints=Number(S.relationshipPoints)||0;
+S.relationshipMilestones=Array.isArray(S.relationshipMilestones)?S.relationshipMilestones:[];
+S.appVersion='13.0';
+
+/* ---------- IndexedDB primary local data layer with localStorage recovery ---------- */
+const DB_NAME='LumaLocal';
+const DB_VERSION=1;
+const STORES=['app_state','companions','conversations','messages','memories','user_profile','model_registry','model_cache_info','app_settings'];
+let db=null, dbReady=null, idbTimer=null, hydrating=false;
+function openLumaDB(){
+  if(dbReady)return dbReady;
+  dbReady=new Promise((resolve,reject)=>{
+    if(!window.indexedDB){reject(new Error('IndexedDB unavailable'));return}
+    const req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=e=>{
+      const d=e.target.result;
+      for(const name of STORES){if(!d.objectStoreNames.contains(name))d.createObjectStore(name,{keyPath:'id'})}
+      if(!d.objectStoreNames.contains('meta'))d.createObjectStore('meta',{keyPath:'id'});
+    };
+    req.onsuccess=e=>{db=e.target.result;S.persistence.ready=true;S.persistence.error='';resolve(db)};
+    req.onerror=()=>{S.persistence.ready=false;S.persistence.error=req.error?.message||'IndexedDB open failed';reject(req.error||new Error('IndexedDB open failed'))};
+  }).catch(e=>{dbReady=null;throw e});
+  return dbReady;
+}
+function txPut(store,obj){if(!db)return;db.transaction(store,'readwrite').objectStore(store).put(obj)}
+function txGet(store,id){return new Promise((resolve,reject)=>{if(!db)return reject(new Error('DB not ready'));const q=db.transaction(store).objectStore(store).get(id);q.onsuccess=()=>resolve(q.result||null);q.onerror=()=>reject(q.error||new Error('Read failed'))})}
+function snapshotState(){
+  return {version:11,app:'Luma',comp:S.comp,chats:S.chats,active:S.active,model:S.model,loadedModel:S.loadedModel,setupComplete:S.setupComplete,
+    generation:S.generation,benchmarkHistory:S.benchmarkHistory,modelBenchmarks:S.modelBenchmarks,showArchived:S.showArchived,sidebarCollapsed:S.sidebarCollapsed,
+    cacheStates:S.cacheStates,modelCacheMeta:S.modelCacheMeta,modelDownload:S.modelDownload,cacheRecoveryPending:S.cacheRecoveryPending,
+    voice:S.voice,customization:S.customization,lan:S.lan,wasmFallback:S.wasmFallback,relationshipPoints:S.relationshipPoints,relationshipMilestones:S.relationshipMilestones,
+    savedAt:Date.now()};
+}
+async function persistIndexedDBNow(){
+  if(hydrating||!db)return;
+  const snap=snapshotState();
+  try{
+    const stores=[...STORES,'meta'];const tx=db.transaction(stores,'readwrite');
+    tx.objectStore('app_state').put({id:'main',...snap});
+    tx.objectStore('companions').put({id:'main',...S.comp});
+    tx.objectStore('user_profile').put({id:'main',name:S.comp.userName||'',gender:S.comp.userGender||'',pronouns:S.comp.pronouns||'',nickname:S.comp.nickname||'',addressMode:S.comp.addressMode||'name'});
+    tx.objectStore('model_registry').clear();for(const m of MODELS){tx.objectStore('model_registry').put({id:m.id,label:m.label,size:m.size,vram:m.vram,contextWindow:m.contextWindow,modelType:m.modelType||'LLM',downloaded:isModelDownloaded(m.id)})}
+    tx.objectStore('model_cache_info').clear();for(const [id,meta] of Object.entries(S.modelCacheMeta||{})){tx.objectStore('model_cache_info').put({id,...meta})}
+    tx.objectStore('conversations').clear();tx.objectStore('messages').clear();
+    for(const c of S.chats||[]){const {messages,...head}=c;tx.objectStore('conversations').put({id:c.id,...head});(messages||[]).forEach((m,i)=>tx.objectStore('messages').put({id:`${c.id}:${i}`,chatId:c.id,index:i,...m}))}
+    tx.objectStore('memories').clear();for(const m of S.comp.memories||[]){tx.objectStore('memories').put({...m,id:m.id})}
+    tx.objectStore('app_settings').put({id:'main',voice:S.voice,customization:S.customization,lan:S.lan,wasmFallback:S.wasmFallback,generation:S.generation,sidebarCollapsed:S.sidebarCollapsed,showArchived:S.showArchived});
+    tx.objectStore('meta').put({id:'state_meta',savedAt:snap.savedAt,schemaVersion:11});
+    await new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||new Error('IndexedDB save failed'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB transaction aborted'))});
+    S.persistence.lastSaveAt=snap.savedAt;S.persistence.error='';localStorage.setItem('luma_idb_saved_at',String(snap.savedAt));
+  }catch(e){S.persistence.error=e?.message||String(e)}
+}
+function scheduleIDBSave(){clearTimeout(idbTimer);idbTimer=setTimeout(()=>persistIndexedDBNow(),650)}
+async function clearIndexedDB(){try{if(!db)await openLumaDB();const tx=db.transaction([...STORES,'meta'],'readwrite');for(const st of [...STORES,'meta'])tx.objectStore(st).clear();return await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error||new Error('Clear failed'))})}catch(e){S.persistence.error=e?.message||String(e)}}
+const legacySave=save;
+save=function(){
+  legacySave();
+  try{
+    const raw=JSON.parse(localStorage.getItem('luma_companion_v5')||'{}');
+    Object.assign(raw,{version:11,voice:S.voice,customization:S.customization,lan:S.lan,wasmFallback:S.wasmFallback,relationshipPoints:S.relationshipPoints,relationshipMilestones:S.relationshipMilestones,persistence:{...S.persistence,mode:'indexeddb'}});
+    localStorage.setItem('luma_companion_v5',JSON.stringify(raw));localStorage.setItem('luma_app_version','11');
+  }catch{}
+  scheduleIDBSave();
+};
+
+async function hydrateFromIndexedDB(){
+  try{
+    await openLumaDB();
+    const st=await txGet('app_state','main');
+    const localAt=Number(localStorage.getItem('luma_idb_saved_at')||0);
+    if(st?.savedAt && st.savedAt>localAt){
+      hydrating=true;
+      S={...S,...st};
+      S.comp={...defaults,...(st.comp||{})};
+      S.voice={language:'en-IN',inputMode:'push',localOnly:true,streamingTTS:true,autoRead:false,speakingStyle:'warm',voiceName:'auto',rate:.98,pitch:1,continuous:false,...(st.voice||{})};
+      S.customization={avatarDataUrl:'',expression:'neutral',preset:'Balanced',customPersonality:'',speakingQuirks:'',humorStyle:'light',emojiBehavior:'light',responseLength:'balanced',relationshipAutoProgress:false,...(st.customization||{})};
+      S.lan={enabled:false,provider:'ollama-openai',endpoint:'http://127.0.0.1:11434/v1/chat/completions',model:'',apiKey:'',lastTest:'',models:[],vision:false,...(st.lan||{})};
+      S.wasmFallback={enabled:false,url:'',loaded:false,provider:'wllama',...(st.wasmFallback||{})};
+      hydrating=false;save();renderChats();renderMessages();updateImageButton();if(document.querySelector('#settingsSheet')?.classList){};
+    }else if(!st){await persistIndexedDBNow();}
+    S.persistence.ready=true;save();
+  }catch(e){S.persistence.ready=false;S.persistence.error=e?.message||String(e)}
+}
+window.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistIndexedDBNow()});
+window.addEventListener('beforeunload',()=>{persistIndexedDBNow()});
+
+/* ---------- Phase 6 prompt overlay ---------- */
+const baseSystemPromptV10=systemPrompt;
+systemPrompt=function(c=S.comp,beforeIndex=null){
+  const comp=c||S.comp, x=S.customization||{};
+  let base=baseSystemPromptV10(comp,beforeIndex);
+  const styleMap={light:'Use a natural amount of emoji; never every sentence.',none:'Do not use emoji unless the user explicitly does.',playful:'Use playful emoji occasionally when they fit the tone.',expressive:'Use emoji fairly often when they add emotional nuance.'};
+  const lenMap={short:'Prefer concise replies, usually 1–4 short paragraphs.',balanced:'Use a natural conversational length; do not over-explain simple questions.',detailed:'Give more detail when useful, while still sounding like a person.'};
+  const humorMap={none:'Avoid jokes unless the user clearly invites humor.',light:'Use gentle humor when natural.',witty:'Use witty observations and wordplay sparingly.',cheesy:'Allow intentionally cheesy/cute humor when the relationship mode calls for it.'};
+  if(x.customPersonality)base+='\nCUSTOM PERSONALITY: '+String(x.customPersonality).trim().slice(0,1200);
+  if(x.speakingQuirks)base+='\nSPEAKING QUIRKS: '+String(x.speakingQuirks).trim().slice(0,800);
+  base+=`\nHUMOR STYLE: ${humorMap[x.humorStyle]||humorMap.light}\nEMOJI BEHAVIOR: ${styleMap[x.emojiBehavior]||styleMap.light}\nRESPONSE LENGTH: ${lenMap[x.responseLength]||lenMap.balanced}`;
+  if(comp.age==='18+' && /romantic|girlfriend|boyfriend|wife|husband|partner|spouse|soulmate|flirty|crush|roleplay/i.test(String(comp.role)+' '+String(comp.conversationMode))){
+    base+='\nADULT ROMANTIC MODE: You may be affectionate, romantic, flirty, playful, cheesy, and emotionally expressive when the user clearly welcomes it. Keep intimate content non-graphic and do not force sexual language into ordinary conversation.';
+  } else if(comp.age==='16+') base+='\nAGE-APPROPRIATE MODE: Keep romance non-sexual and age-appropriate.';
+  return base;
+};
+
+/* ---------- Phase 2 optional automatic relationship progression ---------- */
+function updateRelationshipProgress(){
+  if(!S.customization?.relationshipAutoProgress)return;
+  S.relationshipPoints=Math.min(1000,(Number(S.relationshipPoints)||0)+1);
+  const c=S.comp;let next=c.relationshipStage||'New connection';
+  if(S.relationshipPoints>=100)next='Long-term';else if(S.relationshipPoints>=50)next='Deep bond';else if(S.relationshipPoints>=20)next='Close';else if(S.relationshipPoints>=5)next='Getting familiar';
+  if(next!==c.relationshipStage){c.relationshipStage=next;S.relationshipMilestones=[...(S.relationshipMilestones||[]),{stage:next,at:Date.now()}].slice(-12)}
+  save();
+}
+const baseSendV10=send;
+send=async function(text){const before=current()?.messages?.length||0;const r=await baseSendV10(text);if((current()?.messages?.length||0)>before)updateRelationshipProgress();return r};
+
+/* ---------- Phase 3 voice ---------- */
+function voiceList(){return ('speechSynthesis' in window)?speechSynthesis.getVoices().slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))):[]}
+function voiceOptionsHtml(){
+  const list=voiceList(),v=S.voice||{};
+  return '<option value="auto" '+(v.voiceName==='auto'?'selected':'')+'>Auto · device default</option>'+list.map((x,i)=>`<option value="${esc(x.name)}" ${v.voiceName===x.name?'selected':''}>${esc(x.name)} · ${esc(x.lang||'')}</option>`).join('');
+}
+function ttsStyleValues(style){const m={warm:{rate:.96,pitch:1.04},calm:{rate:.9,pitch:.98},energetic:{rate:1.06,pitch:1.1},soft:{rate:.92,pitch:1.08},serious:{rate:.94,pitch:.92},storytelling:{rate:.93,pitch:1.02}};return m[style]||m.warm}
+function selectedVoice(){const name=S.voice?.voiceName;if(!name||name==='auto')return null;return voiceList().find(v=>v.name===name)||null}
+function speakText(text,{streaming=false}={}){
+  if(!('speechSynthesis' in window)||!text)return false;
+  const style=S.voice?.speakingStyle||'warm', defaults=ttsStyleValues(style),u=new SpeechSynthesisUtterance(String(text).replace(/```[\s\S]*?```/g,' code block '));
+  const customVoice=selectedVoice();if(customVoice)u.voice=customVoice;u.lang=S.voice?.language||customVoice?.lang||'en-IN';u.rate=Number(S.voice?.rate)||defaults.rate;u.pitch=Number(S.voice?.pitch)||defaults.pitch;speechSynthesis.speak(u);return true;
+}
+let voiceStreamState={key:'',spoken:0,queueing:false};
+function streamSpeakFromDOM(forceFinal=false){
+  const v=S.voice||{};if(!v.autoRead&&!v.streamingTTS)return;
+  const c=current();if(!c)return;const idx=c.messages.length-1,m=c.messages[idx];if(!m||m.role!=='assistant'||!m.content)return;
+  const key=c.id+':'+idx;
+  if(voiceStreamState.key!==key){voiceStreamState={key,spoken:0,queueing:false}}
+  const text=String(m.content),from=voiceStreamState.spoken;const tail=text.slice(from);
+  const matches=[];const rx=/([\s\S]*?[.!?](?:\s+|$)|[\s\S]*?\n)/g;let mm;while((mm=rx.exec(tail))&&matches.length<4){const seg=mm[1].trim();if(seg)matches.push(seg)}
+  if(forceFinal&&tail.trim()&&!matches.length)matches.push(tail.trim());
+  if(!v.streamingTTS && !forceFinal)return;
+  for(const seg of matches){speakText(seg,{streaming:true});voiceStreamState.spoken+=tail.indexOf(seg,voiceStreamState.spoken-from>=0?0:0)+seg.length;}
+  // Safer monotonic fallback: if speech segments were found, advance to the consumed prefix.
+  if(matches.length){const last=matches[matches.length-1];const p=tail.lastIndexOf(last)+last.length;voiceStreamState.spoken=from+p}
+}
+const baseSpeakV10=speakMsg;
+speakMsg=function(i){const c=current(),text=c?.messages[i]?.content;if(!text)return;baseSpeakV10(i)};
+const baseRenderMessagesV10=renderMessages;
+renderMessages=function(){baseRenderMessagesV10();decorateAvatars();try{const c=current(),last=c?.messages?.at(-1),gen=S.loading&&S.loadingKind==='generation';if(gen)streamSpeakFromDOM(false);else if(last?.role==='assistant'&&last.content&&S.voice?.autoRead){const k=(c?.id||'')+':'+((c?.messages?.length||1)-1);if(voiceStreamState.key!==k||voiceStreamState.spoken<last.content.length){voiceStreamState.key=k;voiceStreamState.spoken=last.content.length;speakText(last.content)}}}catch{}}
+function decorateAvatars(){
+  const c=S.comp||{},x=S.customization||{},url=x.avatarDataUrl;
+  const expr=x.expression||'neutral';const badge={neutral:'',happy:'☺',thinking:'…',blush:'♥',playful:'✦',calm:'•'}[expr]||'';
+  document.querySelectorAll('.assistant .msg-avatar').forEach(el=>{if(url)el.innerHTML=`<span class="avatar-expr"><img src="${esc(url)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover" alt="${esc(c.name||'Companion')}"><span class="expr-badge">${badge}</span></span>`;else el.textContent=initials()});
+  const side=$('sideAvatar');if(side){if(url)side.innerHTML=`<span class="avatar-expr"><img src="${esc(url)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover" alt=""><span class="expr-badge">${badge}</span></span>`;else side.textContent=initials()}
+}
+const baseStartVoiceV10=startVoice;
+startVoice=async function(){
+  const C=speechCtor();if(!C){alert('Voice input is not supported by this browser.');return}
+  if(recognizing){try{recognition?.stop()}catch{}return}
+  recognition=new C();recognition.lang=S.voice?.language||'en-IN';recognition.interimResults=true;recognition.continuous=!!S.voice?.continuous;recognition.maxAlternatives=1;
+  if('processLocally' in recognition)recognition.processLocally=!!S.voice?.localOnly;
+  recognition.onstart=()=>{recognizing=true;$('micBtn').classList.add('mic','active','voice-active');setStatus('Listening…')};
+  recognition.onresult=e=>{let text='';for(let i=e.resultIndex;i<e.results.length;i++)text+=e.results[i][0].transcript;if(text){$('input').value=text;resize()}};
+  recognition.onerror=e=>{if(e.error==='aborted')return;if(e.error==='language-not-supported'||e.error==='service-not-allowed'){if(S.voice?.localOnly)alert('On-device speech recognition is not available for this language in this browser. Turn off “Local speech only” to allow browser fallback.');else{try{recognition.processLocally=false;recognition.start()}catch{}}}else alert('Voice input: '+e.error)};
+  recognition.onend=()=>{recognizing=false;$('micBtn').classList.remove('active','voice-active');if(S.voice?.continuous&&!document.hidden){setTimeout(()=>{if(!recognizing)startVoice().catch(()=>{})},250)}else setStatus(S.engine?'Local AI ready':'Ready',!!S.engine)};
+  try{
+    let localOK=false;
+    if(S.voice?.localOnly&&C.available&&'processLocally' in recognition){const state=await C.available({langs:[recognition.lang],processLocally:true,quality:'dictation'}).catch(()=>null);if(state==='available')localOK=true;else if((state==='downloadable'||state==='downloading')&&C.install){const ok=await C.install({langs:[recognition.lang],processLocally:true,quality:'dictation'}).catch(()=>false);localOK=!!ok}}
+    if('processLocally' in recognition&&!localOK)recognition.processLocally=!!S.voice?.localOnly;
+    recognition.start();
+  }catch(e){alert('Could not start microphone: '+(e?.message||e))}
+};
+
+/* ---------- Phase 8 LAN / PC power mode ---------- */
+let lanAbortController=null;
+function lanEndpoint(){return String(S.lan?.endpoint||'').trim().replace(/\s+/g,'')}
+function lanHeaders(){const h={'Content-Type':'application/json','Accept':'application/json,text/event-stream'};if(S.lan?.apiKey)h.Authorization='Bearer '+S.lan.apiKey;return h}
+function lanOpenAIEndpoint(){return /chat\/completions/i.test(lanEndpoint()) || S.lan?.provider==='ollama-openai' || S.lan?.provider==='openai'}
+function lanMessage(m){
+  if(!m.image)return {role:m.role,content:m.content||''};
+  const b64=String(m.image).replace(/^data:image\/[^;]+;base64,/,'');
+  if(S.lan?.provider==='ollama-native')return {role:m.role,content:m.content||'',images:[b64]};
+  return {role:m.role,content:[{type:'text',text:m.content||'Please inspect this image.'},{type:'image_url',image_url:{url:m.image}}]};
+}
+function parseLanLine(line){
+  let t=line.trim();if(!t)return null;if(t.startsWith('data:'))t=t.slice(5).trim();if(t==='[DONE]')return {done:true};try{const j=JSON.parse(t);if(j.done)return {done:true};return {text:j.choices?.[0]?.delta?.content||j.message?.content||j.response||'',usage:j.usage||null}}catch{return null}}
+async function fetchLanModels(){
+  const ep=lanEndpoint();if(!ep)return [];
+  let url=ep;
+  if(S.lan.provider==='ollama-native'){url=ep.replace(/\/api\/chat\/?$/,'/api/tags');if(!/\/api\/tags/.test(url))url=ep.replace(/\/$/,'')+'/api/tags'}
+  else if(S.lan.provider==='ollama-openai'||S.lan.provider==='openai'){url=ep.replace(/\/chat\/completions\/?$/,'/models')}
+  const r=await fetch(url,{headers:lanHeaders(),cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();
+  return (j.models||j.data||[]).map(x=>x.name||x.id).filter(Boolean);
+}
+async function testLanConnection(){
+  try{const ms=await fetchLanModels();S.lan.models=ms;if(!S.lan.model&&ms[0])S.lan.model=ms[0];S.lan.lastTest='Connected · '+new Date().toLocaleTimeString();save();return true}catch(e){S.lan.lastTest='Failed · '+(e?.message||e);save();return false}
+}
+async function generateLan(history,target){
+  if(!S.lan.enabled)return false;const endpoint=lanEndpoint(),model=String(S.lan.model||'').trim();
+  if(!endpoint||!model){target.error=true;target.errorMessage='LAN mode needs an endpoint and model in Settings → Data → LAN / PC mode.';renderMessages();return false}
+  const c=current(),idx=c?c.messages.indexOf(target):-1;S.loading=true;S.loadingKind='generation';S.generatingMessageKey=c&&idx>=0?`${c.id}:${idx}`:null;renderSendState();setStatus('LAN · Generating…',true);renderMessages();
+  lanAbortController=new AbortController();
+  try{
+    const msgs=history.map(lanMessage);const openai=lanOpenAIEndpoint();
+    const body=openai?{model,messages:msgs,stream:true,temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,max_tokens:responseTokenBudget()}
+      :{model,messages:msgs,stream:true,options:{temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,num_predict:responseTokenBudget()}};
+    const res=await fetch(endpoint,{method:'POST',headers:lanHeaders(),body:JSON.stringify(body),signal:lanAbortController.signal});if(!res.ok)throw new Error(`HTTP ${res.status} from LAN model server`);if(!res.body)throw new Error('LAN server returned no streaming body');
+    const reader=res.body.getReader(),decoder=new TextDecoder();let buf='';
+    while(true){const {value,done}=await reader.read();if(done)break;buf+=decoder.decode(value,{stream:true});const lines=buf.split(/\r?\n/);buf=lines.pop()||'';for(const line of lines){const part=parseLanLine(line);if(part?.done){reader.cancel().catch(()=>{});break}if(part?.text)safeAssistantChunk(target,part.text);renderMessages();if(!S.loading){reader.cancel().catch(()=>{});break}}if(!S.loading)break}
+    target.content=sanitizeAssistantText(target.content);if(c)updateConversationSummary(c);return true;
+  }catch(e){if(e?.name==='AbortError'){target.partial=!!target.content;return true}target.error=true;target.content='';target.errorMessage=(String(e?.message||e).includes('Failed to fetch')?'Could not reach the LAN model. Check the PC server, CORS, endpoint, and whether an HTTPS page is calling an HTTP LAN URL.':String(e?.message||e));renderMessages();return false}
+  finally{lanAbortController=null;S.loading=false;S.loadingKind='idle';S.generatingMessageKey=null;renderSendState();setStatus('LAN · Ready',true);save()}
+}
+const baseGenerateV10=generate;
+generate=async function(history,target){
+  if(S.lan?.enabled)return generateLan(history,target);
+  if(!navigator.gpu&&S.wasmFallback?.enabled&&S.wasmFallback?.url)return generateWasmFallback(history,target);
+  return baseGenerateV10(history,target);
+};
+const baseInterruptV10=interruptGeneration;
+interruptGeneration=function(){if(lanAbortController){try{lanAbortController.abort()}catch{};lanAbortController=null}return baseInterruptV10()}
+
+/* ---------- Phase 4 optional WASM fallback using Wllama V3 ---------- */
+let WLLAMA_RUNTIME=null,WASM_ENGINE=null;
+async function importWllama(){if(!WLLAMA_RUNTIME)WLLAMA_RUNTIME=await import('https://esm.sh/@wllama/wllama@3.6.1');return WLLAMA_RUNTIME}
+async function loadWasmFallback(){
+  if(WASM_ENGINE)return true;const url=String(S.wasmFallback?.url||'').trim();if(!url)throw new Error('Set a GGUF model URL first.');
+  const w=await importWllama();const W=w.Wllama||w.default; if(!W)throw new Error('Wllama runtime was not found.');
+  const instance=new W({default:'https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/wasm/wllama.wasm'});
+  setStatus('Loading WASM fallback…',true);S.loading=true;S.loadingKind='model';renderSendState();
+  try{await instance.loadModelFromUrl(url,{n_ctx:Math.min(Number(S.generation.contextWindow)||2048,4096),n_gpu_layers:0,progressCallback:o=>{const p=o?.total?o.loaded/o.total:null;setModelProgress(true,'WASM fallback model…','Loading custom GGUF model.',p,false,false)}});WASM_ENGINE=instance;S.wasmFallback.loaded=true;save();return true}
+  finally{S.loading=false;S.loadingKind='idle';renderSendState()}
+}
+async function unloadWasmFallback(){try{await WASM_ENGINE?.exit?.()}catch{}WASM_ENGINE=null;S.wasmFallback.loaded=false;save()}
+async function generateWasmFallback(history,target){
+  if(!WASM_ENGINE){try{await loadWasmFallback()}catch(e){target.error=true;target.errorMessage='WASM fallback could not load: '+(e?.message||e);renderMessages();return false}}
+  const c=current(),idx=c?c.messages.indexOf(target):-1;S.loading=true;S.loadingKind='generation';S.generatingMessageKey=c&&idx>=0?`${c.id}:${idx}`:null;renderSendState();setStatus('WASM · Generating…',true);lanAbortController=new AbortController();renderMessages();
+  try{let currentText='';await WASM_ENGINE.createChatCompletion({messages:history,max_tokens:responseTokenBudget(),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,stream:true,abortSignal:lanAbortController.signal},);/* some Wllama builds expose streaming via async iterable; use direct call again if needed below */
+    return true;
+  }catch(e){try{const res=await WASM_ENGINE.createChatCompletion({messages:history,max_tokens:responseTokenBudget(),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9});target.content=sanitizeAssistantText(res?.choices?.[0]?.message?.content||res?.choices?.[0]?.text||'');if(!target.content)throw e;return true}catch(e2){target.error=true;target.content='';target.errorMessage=e2?.message||e?.message||String(e2);return false}}
+  finally{S.loading=false;S.loadingKind='idle';S.generatingMessageKey=null;renderSendState();setStatus('WASM · Ready',true);save()}
+}
+
+/* ---------- UI extension helpers ---------- */
+const presets={
+ Balanced:{warmth:82,humor:62,energy:55,formality:18,proactivity:38,emoji:25,mode:'Casual',humorStyle:'light',emojiBehavior:'light',responseLength:'balanced'},
+ 'Warm friend':{warmth:96,humor:48,energy:46,formality:10,proactivity:48,emoji:30,mode:'Supportive',humorStyle:'light',emojiBehavior:'expressive',responseLength:'balanced'},
+ Playful:{warmth:82,humor:90,energy:76,formality:8,proactivity:58,emoji:42,mode:'Playful',humorStyle:'witty',emojiBehavior:'playful',responseLength:'short'},
+ Romantic:{warmth:98,humor:72,energy:60,formality:5,proactivity:55,emoji:34,mode:'Romantic',humorStyle:'cheesy',emojiBehavior:'expressive',responseLength:'balanced'},
+ 'Study coach':{warmth:70,humor:38,energy:52,formality:38,proactivity:40,emoji:10,mode:'Serious',humorStyle:'none',emojiBehavior:'none',responseLength:'detailed'},
+ 'Quiet listener':{warmth:92,humor:25,energy:28,formality:10,proactivity:12,emoji:5,mode:'Quiet',humorStyle:'none',emojiBehavior:'none',responseLength:'short'}
+};
+function applyPreset(name){const p=presets[name];if(!p)return;Object.assign(S.comp,{warmth:p.warmth,humor:p.humor,energy:p.energy,formality:p.formality,proactivity:p.proactivity,emoji:p.emoji,conversationMode:p.mode});Object.assign(S.customization,{preset:name,humorStyle:p.humorStyle,emojiBehavior:p.emojiBehavior,responseLength:p.responseLength});save();openSettings('companion')}
+async function resizeAvatarFile(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas'),max=256,scale=Math.min(1,max/Math.max(img.width,img.height));c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));const x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.82))};img.onerror=reject;img.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
+function avatarFallbackHtml(){return S.customization?.avatarDataUrl?`<img src="${esc(S.customization.avatarDataUrl)}" alt="${esc(S.comp.name||'Companion')} avatar">`:`<div class="avatar-fallback">${esc(initials())}</div>`}
+function voicePanelHtml(){return `<div class="phase3-card"><strong>Voice & speech</strong><p>Browser voice input can use on-device speech recognition where the browser exposes it. TTS stays on the device when the chosen voice is installed.</p><div class="phase-grid"><div><label class="field-label">Recognition language</label><select class="field" id="voiceLanguage">${['en-IN','en-US','en-GB','hi-IN','te-IN'].map(v=>`<option ${S.voice.language===v?'selected':''}>${v}</option>`).join('')}</select></div><div><label class="field-label">Speaking style</label><select class="field" id="voiceStyle">${['warm','calm','energetic','soft','serious','storytelling'].map(v=>`<option ${S.voice.speakingStyle===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></div></div><label class="field-label" style="margin-top:8px">Device voice</label><select class="field" id="voiceName">${voiceOptionsHtml()}</select><div class="phase-grid" style="margin-top:8px"><div><label class="field-label">Speech rate</label><div class="range-compact"><input type="range" id="voiceRate" min="0.6" max="1.3" step="0.01" value="${S.voice.rate}"><output id="voiceRateOut">${Number(S.voice.rate).toFixed(2)}</output></div></div><div><label class="field-label">Pitch</label><div class="range-compact"><input type="range" id="voicePitch" min="0.7" max="1.3" step="0.01" value="${S.voice.pitch}"><output id="voicePitchOut">${Number(S.voice.pitch).toFixed(2)}</output></div></div></div><div style="margin-top:8px;display:grid;gap:6px"><label style="font-size:11px"><input type="checkbox" id="voiceLocalOnly" ${S.voice.localOnly?'checked':''}> Local speech recognition only</label><label style="font-size:11px"><input type="checkbox" id="voiceContinuous" ${S.voice.continuous?'checked':''}> Continuous listening</label><label style="font-size:11px"><input type="checkbox" id="voiceStreamingTTS" ${S.voice.streamingTTS?'checked':''}> Streaming read-aloud while Luma generates</label><label style="font-size:11px"><input type="checkbox" id="voiceAutoRead" ${S.voice.autoRead?'checked':''}> Automatically read assistant replies</label></div><div class="inline-actions" style="margin-top:8px"><button class="mini-btn" id="refreshVoiceList" type="button">Refresh voices</button><button class="mini-btn" id="testVoice" type="button">Test voice</button></div></div>`}
+function customizationPanelHtml(){return `<details class="settings-details"><summary>Personality presets & appearance</summary><div class="details-body"><div class="phase6-card"><strong>Preset</strong><p>Presets adjust the existing personality sliders and conversation mode. You can fine-tune everything afterward.</p><select class="field" id="personalityPreset">${Object.keys(presets).map(v=>`<option ${S.customization.preset===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="phase6-card"><strong>Avatar</strong><div class="avatar-preview" style="margin-top:7px">${avatarFallbackHtml()}<div style="min-width:0;flex:1"><div style="font-size:11px">${esc(S.comp.name||'Companion')}</div><div class="field-help">Stored locally with your companion profile.</div></div></div><div class="inline-actions" style="margin-top:8px"><button class="mini-btn" id="changeAvatar" type="button">Choose avatar</button><button class="mini-btn" id="removeAvatar" type="button" ${S.customization.avatarDataUrl?'':'disabled'}>Remove</button></div><label class="field-label" style="margin-top:8px">Expression</label><select class="field" id="avatarExpression">${['neutral','happy','thinking','blush','playful','calm'].map(v=>`<option ${S.customization.expression===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="phase6-card"><strong>Custom personality</strong><textarea class="field" id="customPersonality" rows="3" placeholder="Describe how this companion should feel and speak.">${esc(S.customization.customPersonality||'')}</textarea><label class="field-label" style="margin-top:7px">Speaking quirks</label><textarea class="field" id="speakingQuirks" rows="2" placeholder="e.g. occasionally says 'hmm', uses short pauses.">${esc(S.customization.speakingQuirks||'')}</textarea></div><div class="phase-grid" style="margin-top:8px"><div><label class="field-label">Humor style</label><select class="field" id="humorStyle">${['none','light','witty','cheesy'].map(v=>`<option ${S.customization.humorStyle===v?'selected':''}>${v}</option>`).join('')}</select></div><div><label class="field-label">Response length</label><select class="field" id="responseLength">${['short','balanced','detailed'].map(v=>`<option ${S.customization.responseLength===v?'selected':''}>${v}</option>`).join('')}</select></div><div><label class="field-label">Emoji behavior</label><select class="field" id="emojiBehavior">${['none','light','playful','expressive'].map(v=>`<option ${S.customization.emojiBehavior===v?'selected':''}>${v}</option>`).join('')}</select></div><div><label class="field-label">Automatic relationship progression</label><select class="field" id="relationshipProgress"><option value="0" ${!S.customization.relationshipAutoProgress?'selected':''}>Manual stage</option><option value="1" ${S.customization.relationshipAutoProgress?'selected':''}>Auto after conversation milestones</option></select></div></div><p class="phase2-note">Automatic progression is optional and only changes the stage after accumulated interaction milestones.</p></div></details>`}
+function diagnosticsHtml(){const gpu=navigator.gpu?true:false;const speech=!!speechCtor();const idb=!!window.indexedDB;const pwa='serviceWorker' in navigator;const lan=S.lan?.enabled;return `<div class="diagnostic-card"><strong>Local capability & architecture</strong><p>Cross-check these without starting a model download.</p><div class="diagnostic-grid"><div class="diag ${gpu?'ok':'off'}"><b>${gpu?'Available':'Unavailable'}</b><span>WebGPU</span></div><div class="diag ${idb?'ok':'off'}"><b>${idb?'Available':'Unavailable'}</b><span>IndexedDB local data</span></div><div class="diag ${speech?'ok':'warn'}"><b>${speech?'Available':'Unavailable'}</b><span>Browser speech recognition</span></div><div class="diag ${pwa?'ok':'warn'}"><b>${pwa?'Available':'Unavailable'}</b><span>Service worker / PWA</span></div><div class="diag ${lan?'ok':'warn'}"><b>${lan?'Enabled':'Off'}</b><span>LAN / PC mode</span></div><div class="diag ${S.wasmFallback?.enabled?'ok':'warn'}"><b>${S.wasmFallback?.enabled?'Enabled':'Optional'}</b><span>WASM fallback</span></div></div></div>`}
+function lanPanelHtml(){return `<div class="phase8-card"><strong>LAN / PC Power Mode</strong><p>Use a local PC model server such as Ollama from the same network. The browser must be allowed by the server's CORS policy. An HTTPS GitHub Pages page cannot normally call an HTTP LAN URL because browsers enforce mixed-content security; use HTTPS on the LAN endpoint or use a local HTTP development page.</p><label style="font-size:11px"><input type="checkbox" id="lanEnabled" ${S.lan.enabled?'checked':''}> Use PC/LAN model instead of browser WebGPU</label><div class="phase-grid" style="margin-top:8px"><div><label class="field-label">Provider</label><select class="field" id="lanProvider"><option value="ollama-openai" ${S.lan.provider==='ollama-openai'?'selected':''}>Ollama · OpenAI compatible</option><option value="ollama-native" ${S.lan.provider==='ollama-native'?'selected':''}>Ollama · native API</option><option value="openai" ${S.lan.provider==='openai'?'selected':''}>OpenAI-compatible local server</option></select></div><div><label class="field-label">Model</label><input class="field" id="lanModel" value="${esc(S.lan.model||'')}" placeholder="e.g. llama3.2:3b"><div class="field-help" id="lanModelHelp">${esc(S.lan.models?.length?S.lan.models.join(', '):'Use Refresh PC models to discover local models.')}</div></div></div><label class="field-label">Endpoint</label><input class="field" id="lanEndpoint" value="${esc(S.lan.endpoint)}" placeholder="http://192.168.1.20:11434/v1/chat/completions"><label class="field-label">API key (optional)</label><input class="field" id="lanApiKey" type="password" value="${esc(S.lan.apiKey||'')}" placeholder="Only if your local endpoint requires one"><div class="inline-actions" style="margin-top:8px"><button class="mini-btn" id="testLan" type="button">Test connection</button><button class="mini-btn" id="refreshLanModels" type="button">Refresh PC models</button></div><div class="field-help" id="lanStatus" style="margin-top:6px">${esc(S.lan.lastTest||'LAN mode is optional and off by default.')}</div></div>`}
+function wasmPanelHtml(){return `<div class="phase8-card"><strong>Phase 4 · WASM fallback (experimental)</strong><p>Uses Wllama/llama.cpp in the browser when WebGPU is unavailable. Supply a small GGUF URL. Wllama supports browser-side WASM inference and can also use WebGPU on supported browsers; this fallback path forces CPU/WASM layers.</p><label style="font-size:11px"><input type="checkbox" id="wasmEnabled" ${S.wasmFallback.enabled?'checked':''}> Enable automatic WASM fallback when WebGPU is unavailable</label><label class="field-label" style="margin-top:8px">GGUF model URL</label><input class="field" id="wasmUrl" value="${esc(S.wasmFallback.url||'')}" placeholder="https://example.com/model.gguf"><div class="inline-actions" style="margin-top:8px"><button class="mini-btn" id="testWasmFallback" type="button">Load / test fallback</button><button class="mini-btn" id="unloadWasmFallback" type="button" ${WASM_ENGINE?'':'disabled'}>Unload fallback</button></div><div class="field-help">For reliable offline use, self-host the GGUF and Wllama assets in your deployment rather than depending on a remote CDN.</div></div>`}
+
+/* Wrap settings markup without redesigning the existing v10 UI. */
+const baseSettingsV10=settingsHTML;
+settingsHTML=function(tab='companion'){
+  let html=baseSettingsV10(tab);
+  if(tab==='companion'){
+    const marker='<label class="field-label">Companion name</label>';
+    html=html.replace(marker,`${customizationPanelHtml()}${voicePanelHtml()}${marker}`);
+    html=html.replace('</div>\n   <div class="pane',`${''}</div>\n   <div class="pane`); // no-op, retains v10 structure
+  }
+  if(tab==='data'){
+    const marker='<div class="pane active" data-pane="data">';
+    const extras=lanPanelHtml()+wasmPanelHtml()+diagnosticsHtml();
+    html=html.replace(marker,marker+extras);
+  }
+  return html;
+};
+
+/* Settings binding extension: call after v10 bindings. */
+const baseBindSettingsV10=bindSettings;
+bindSettings=function(){
+  baseBindSettingsV10();
+  $('personalityPreset')?.addEventListener('change',e=>applyPreset(e.target.value));
+  $('avatarExpression')?.addEventListener('change',e=>{S.customization.expression=e.target.value;save();decorateAvatars()});
+  $('customPersonality')?.addEventListener('input',e=>{S.customization.customPersonality=e.target.value;save()});
+  $('speakingQuirks')?.addEventListener('input',e=>{S.customization.speakingQuirks=e.target.value;save()});
+  $('humorStyle')?.addEventListener('change',e=>{S.customization.humorStyle=e.target.value;save()});
+  $('responseLength')?.addEventListener('change',e=>{S.customization.responseLength=e.target.value;save()});
+  $('emojiBehavior')?.addEventListener('change',e=>{S.customization.emojiBehavior=e.target.value;save()});
+  $('relationshipProgress')?.addEventListener('change',e=>{S.customization.relationshipAutoProgress=e.target.value==='1';save()});
+  $('changeAvatar')?.addEventListener('click',()=>{const input=document.createElement('input');input.type='file';input.accept='image/*';input.onchange=async()=>{const f=input.files?.[0];if(!f)return;try{S.customization.avatarDataUrl=await resizeAvatarFile(f);save();openSettings('companion')}catch(e){alert('Could not use that image: '+(e?.message||e))}};input.click()});
+  $('removeAvatar')?.addEventListener('click',()=>{S.customization.avatarDataUrl='';save();openSettings('companion')});
+  $('voiceLanguage')?.addEventListener('change',e=>{S.voice.language=e.target.value;save()});
+  $('voiceStyle')?.addEventListener('change',e=>{S.voice.speakingStyle=e.target.value;const d=ttsStyleValues(e.target.value);S.voice.rate=d.rate;S.voice.pitch=d.pitch;save();openSettings('companion')});
+  $('voiceName')?.addEventListener('change',e=>{S.voice.voiceName=e.target.value;save()});
+  $('voiceRate')?.addEventListener('input',e=>{S.voice.rate=+e.target.value;$('voiceRateOut').textContent=S.voice.rate.toFixed(2);save()});
+  $('voicePitch')?.addEventListener('input',e=>{S.voice.pitch=+e.target.value;$('voicePitchOut').textContent=S.voice.pitch.toFixed(2);save()});
+  $('voiceLocalOnly')?.addEventListener('change',e=>{S.voice.localOnly=e.target.checked;save()});
+  $('voiceContinuous')?.addEventListener('change',e=>{S.voice.continuous=e.target.checked;save()});
+  $('voiceStreamingTTS')?.addEventListener('change',e=>{S.voice.streamingTTS=e.target.checked;save()});
+  $('voiceAutoRead')?.addEventListener('change',e=>{S.voice.autoRead=e.target.checked;save()});
+  $('refreshVoiceList')?.addEventListener('click',()=>{openSettings('companion')});
+  $('testVoice')?.addEventListener('click',()=>speakText(`Hi ${addressName()}, I'm ${S.comp.name}. This is the ${S.voice.speakingStyle} voice style.`));
+  /* LAN */
+  $('lanProvider')?.addEventListener('change',e=>{S.lan.provider=e.target.value;if(e.target.value==='ollama-native'&&!/\/api\/chat/.test(S.lan.endpoint))S.lan.endpoint='http://127.0.0.1:11434/api/chat';else if(e.target.value==='ollama-openai'&&!/\/v1\/chat\/completions/.test(S.lan.endpoint))S.lan.endpoint='http://127.0.0.1:11434/v1/chat/completions';save();openSettings('data')});
+  $('lanEnabled')?.addEventListener('change',async e=>{S.lan.enabled=e.target.checked;save();updateImageButton();if(S.lan.enabled&&S.engine){await unloadEngine()}renderSendState()});
+  $('lanEndpoint')?.addEventListener('change',e=>{S.lan.endpoint=e.target.value.trim();save()});
+  $('lanModel')?.addEventListener('change',e=>{S.lan.model=e.target.value.trim();save()});
+  $('lanApiKey')?.addEventListener('change',e=>{S.lan.apiKey=e.target.value;save()});
+  $('testLan')?.addEventListener('click',async()=>{S.lan.endpoint=$('lanEndpoint').value.trim();S.lan.model=$('lanModel').value.trim();const b=$('testLan');b.disabled=true;b.textContent='Testing…';const ok=await testLanConnection();b.disabled=false;b.textContent='Test connection';const st=$('lanStatus');if(st)st.textContent=S.lan.lastTest+(ok?'':' — check CORS/endpoint');});
+  $('refreshLanModels')?.addEventListener('click',async()=>{S.lan.endpoint=$('lanEndpoint').value.trim();const b=$('refreshLanModels');b.disabled=true;b.textContent='Refreshing…';try{S.lan.models=await fetchLanModels();if(!S.lan.model&&S.lan.models[0])S.lan.model=S.lan.models[0];save();openSettings('data')}catch(e){const st=$('lanStatus');if(st)st.textContent='Failed: '+(e?.message||e)}finally{b.disabled=false}});
+  /* WASM */
+  $('wasmEnabled')?.addEventListener('change',e=>{S.wasmFallback.enabled=e.target.checked;save()});
+  $('wasmUrl')?.addEventListener('change',e=>{S.wasmFallback.url=e.target.value.trim();save()});
+  $('testWasmFallback')?.addEventListener('click',async()=>{S.wasmFallback.url=$('wasmUrl').value.trim();S.wasmFallback.enabled=true;save();const b=$('testWasmFallback');b.disabled=true;b.textContent='Loading…';try{await loadWasmFallback();b.textContent='Fallback loaded';}catch(e){b.textContent='Load failed';alert(e?.message||e)}finally{b.disabled=false}});
+  $('unloadWasmFallback')?.addEventListener('click',async()=>{await unloadWasmFallback();openSettings('data')});
+  /* Make full backup include the v11 extensions. */
+  const ex=$('exportData');if(ex&&!ex.dataset.v11){const c=ex.cloneNode(true);c.dataset.v11='1';ex.replaceWith(c);c.onclick=()=>{const blob=new Blob([JSON.stringify({...snapshotState(),models:MODELS},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='luma-v11-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}}
+  const imp=$('importData');if(imp&&!imp.dataset.v11){const c=imp.cloneNode(true);c.dataset.v11='1';imp.replaceWith(c);c.onclick=()=>$('fileInput').click()}
+  const clear=$('clearData');if(clear&&!clear.dataset.v11){const c=clear.cloneNode(true);c.dataset.v11='1';clear.replaceWith(c);c.onclick=async()=>{if(!confirm('Clear Luma conversations, companion settings, memories and app data? Downloaded AI models will be kept.'))return;await clearIndexedDB();const keep={version:11,model:S.model,loadedModel:null,cacheStates:S.cacheStates,modelCacheMeta:S.modelCacheMeta,modelDownload:{active:false,id:null,progress:null,label:'',note:'',error:false,done:false,startedAt:null},cacheRecoveryPending:false};localStorage.setItem('luma_companion_v5',JSON.stringify(keep));location.reload()}}
+};
+
+/* v11 import handler: restore all local data except model weights. */
+$('fileInput').onchange=async function(){const f=$('fileInput').files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(x.comp)S.comp={...defaults,...x.comp};if(Array.isArray(x.chats))S.chats=x.chats.map(c=>({...c,pinned:!!c.pinned,archived:!!c.archived,messages:Array.isArray(c.messages)?c.messages:[]}));if(x.model)S.model=x.model;if(x.generation)S.generation={...generationDefaults,...x.generation};if(x.modelBenchmarks)S.modelBenchmarks=x.modelBenchmarks;if(x.modelCacheMeta)S.modelCacheMeta={...S.modelCacheMeta,...x.modelCacheMeta};if(x.voice)S.voice={...S.voice,...x.voice};if(x.customization)S.customization={...S.customization,...x.customization};if(x.lan)S.lan={...S.lan,...x.lan};if(x.wasmFallback)S.wasmFallback={...S.wasmFallback,...x.wasmFallback};if(Number.isFinite(x.relationshipPoints))S.relationshipPoints=x.relationshipPoints;if(Array.isArray(x.relationshipMilestones))S.relationshipMilestones=x.relationshipMilestones;S.active=x.active||S.chats[0]?.id||null;save();renderChats();renderMessages();$('sideName').textContent=S.comp.name;$('sideAvatar').textContent=initials();alert('Luma backup imported. Downloaded model files are not part of the backup.')}catch(e){alert('Could not import backup: '+e.message)}$('fileInput').value=''};
+
+/* Better vision detection: use the parsed WebLLM model record rather than label-only heuristics. */
+currentModelSupportsVision=function(){const m=modelRecord(S.loadedModel||S.model);return !!m&&modelSupportsVision(m)};
+updateImageButton();
+
+/* PWA enhancements: update prompt + explicit shell diagnostics. */
+function showUpdateToast(reg){
+  if($('lumaUpdateToast'))return;const t=document.createElement('div');t.id='lumaUpdateToast';t.style.cssText='position:fixed;left:50%;top:68px;transform:translateX(-50%);z-index:50;padding:9px 12px;border:1px solid var(--line);border-radius:11px;background:var(--surface);box-shadow:0 8px 30px rgba(0,0,0,.16);font-size:11px';t.innerHTML='<span>New Luma version available.</span> <button id="applyLumaUpdate" style="font-weight:600;text-decoration:underline">Reload</button>';document.body.appendChild(t);$('applyLumaUpdate').onclick=()=>{reg.waiting?.postMessage({type:'SKIP_WAITING'});setTimeout(()=>location.reload(),150)}
+}
+function initPWAEnhancements(){
+  if(!('serviceWorker' in navigator))return;
+  navigator.serviceWorker.ready.then(reg=>{if(reg.waiting)showUpdateToast(reg);reg.addEventListener('updatefound',()=>{const w=reg.installing;if(!w)return;w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)showUpdateToast(reg)})})}).catch(()=>{});
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!window.__lumaReloading){window.__lumaReloading=true;location.reload()}});
+  if('speechSynthesis' in window)speechSynthesis.addEventListener('voiceschanged',()=>{if(document.querySelector('[data-pane="companion"] .phase3-card')){/* refresh only when settings is open */}});
+}
+initPWAEnhancements();
+
+/* Startup IDB migration/hydration. */
+setTimeout(()=>hydrateFromIndexedDB().catch(()=>{}),0);
+
+
+/* ---------- v12 final hardening ---------- */
+S.appVersion='13.0';
+S.downloadHistory=Array.isArray(S.downloadHistory)?S.downloadHistory:[];
+S.selfTest=S.selfTest||null;S.distributionVersion='13';
+S.addressUseCount=Number(S.addressUseCount)||0;
+
+/* WebLLM cache truth: hasModelInCache() is authoritative for cached model tensors. We do not
+   downgrade a real cached model just because OPFS/Cache API internals are not enumerable. */
+const v12OriginalIsModelDownloaded=isModelDownloaded;
+const v12OriginalProbeCacheArtifacts=probeCacheArtifacts;
+const v12OriginalVerifyOneModel=verifyOneModel;
+const v12OriginalRefreshCacheStates=refreshCacheStates;
+const v12OriginalDownloadModelOnly=downloadModelOnly;
+const v12OriginalLoadEngine=loadEngine;
+function v12ModelMetaDownloaded(id){const st=S.modelCacheMeta?.[id]?.status;return st==='downloaded'||st==='verified'}
+isModelDownloaded=function(id){return !!(S.loadedModel===id || S.cacheStates?.[id]===true || v12ModelMetaDownloaded(id))};
+probeCacheArtifacts=async function(id){
+  const m=modelRecord(id);if(!m)return {status:'missing',weights:false,config:null,wasm:null,api:false};
+  let weights=null,api=false,error='';
+  try{const w=await importWebLLM();api=typeof w.hasModelInCache==='function';if(api)weights=!!(await w.hasModelInCache(id));}
+  catch(e){error=e?.message||String(e)}
+  /* hasModelInCache() is intentionally treated as the reliable model-tensor signal. WebLLM
+     0.2.85 can use OPFS, so directly inspecting Cache Storage is not a complete verifier. */
+  if(weights===true)return {status:'weights-cached',weights:true,config:null,wasm:null,api:true,error:''};
+  if(weights===false)return {status:'missing',weights:false,config:null,wasm:null,api:true,error:''};
+  return {status:'unknown',weights:null,config:null,wasm:null,api,error};
+};
+verifyOneModel=async function(id){
+  const r=await probeCacheArtifacts(id);
+  if(r.status==='weights-cached'){
+    markModelVerified(id,'WebLLM confirmed the model tensor cache. Runtime/config artifacts are verified when the model is loaded.');
+    return r;
+  }
+  if(r.status==='missing'){
+    S.cacheStates[id]=false;
+    if(S.modelCacheMeta?.[id])S.modelCacheMeta[id]={...S.modelCacheMeta[id],status:'missing',lastVerifiedAt:Date.now(),verification:'WebLLM hasModelInCache() returned false.'};
+    save();return r;
+  }
+  /* Preserve durable download state if verification itself failed. */
+  if(S.modelCacheMeta?.[id])S.modelCacheMeta[id]={...S.modelCacheMeta[id],verification:'Cache verification unavailable; durable download record preserved.',lastVerifiedAt:Date.now()};
+  save();return r;
+};
+refreshCacheStates=async function(opts={}){
+  const forceAll=!!opts.forceAll;
+  const ids=(forceAll?MODELS.map(m=>m.id):MODELS.filter(m=>isModelDownloaded(m.id)).map(m=>m.id));
+  for(const id of ids){try{await verifyOneModel(id)}catch{}}
+  S.cacheRecoveryPending=false;save();
+  if(document.querySelector('[data-pane="model"]')){
+    const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;
+    $('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();
+    const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll;
+  }
+};
+
+/* Download once, cache once, unload once. We validate the real WebLLM tensor cache both before and
+   after the download and never confuse runtime VRAM with download size. */
+downloadModelOnly=async function(id){
+  if(S.loading)return false;if(!navigator.gpu){alert('Local WebGPU AI is not available in this browser.');return false}
+  const model=modelRecord(id);if(!model)return false;
+  S.model=model.id;save();
+  S.loading=true;S.loadingKind='model';
+  S.modelDownload={active:true,id:model.id,progress:0,label:'Preparing download…',note:`Preparing ${model.label}. Download and caching may take a while.`,error:false,done:false,startedAt:Date.now()};
+  persistModelDownload();renderSendState();renderModelProgress();setStatus('Preparing model…');
+  try{
+    if(!browserOnline()){setModelProgress(false,'Download requires internet','Connect once to download this model. Once cached, you can use it offline.',0,true,false);S.modelDownload.error=true;return false}
+    const w=await importWebLLM();
+    const before=typeof w.hasModelInCache==='function'?await w.hasModelInCache(model.id).catch(()=>false):false;
+    if(before){
+      markModelVerified(model.id,'WebLLM confirmed this model is already cached.');
+      S.modelDownload={active:false,id:model.id,progress:1,label:'Already downloaded',note:'Model weights are already cached on this device. Use Load.',error:false,done:true,startedAt:S.modelDownload.startedAt};
+      setModelProgress(false,'Already downloaded','Model weights are already cached. Use Load to start it.',1,false,true);setStatus('Model already downloaded',true);save();return true;
+    }
+    setModelProgress(true,'Downloading & caching…',`Downloading ${model.label}. Approximate GPU memory is ${model.size}; this is not the network download size.`,0,false,false);setStatus('Downloading model…');
+    const started=Date.now();
+    const temp=await w.CreateMLCEngine(model.id,{initProgressCallback:p=>{
+      const n=p?.progress!=null?Math.max(0,Math.min(1,Number(p.progress))):null;
+      const phase=n!=null&&n>=.995?'Finalizing cache…':'Downloading & caching…';
+      setModelProgress(true,phase,p?.text||'Caching model files for local use.',n,false,false);
+      if(n!=null)setStatus(`Downloading ${Math.round(n*100)}%`,true);
+    },logLevel:'ERROR'},{context_window_size:Math.min(modelContextLimit(model.id),Number(S.generation.contextWindow)||4096),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,repetition_penalty:Number(S.generation.repetitionPenalty)||1.08});
+    try{await temp.unload()}catch{}
+    const after=typeof w.hasModelInCache==='function'?await w.hasModelInCache(model.id).catch(()=>null):null;
+    if(after===false)throw new Error('WebLLM finished initialization but did not confirm the model in its persistent cache. Use Re-download to try again.');
+    markModelVerified(model.id,'Download completed and WebLLM confirmed the model tensor cache.');
+    S.downloadHistory=[...(S.downloadHistory||[]),{id:model.id,at:Date.now(),ms:Date.now()-started}].slice(-12);
+    S.modelDownload={active:false,id:model.id,progress:1,label:'Download complete',note:'Model is cached locally and is not loaded into GPU memory.',error:false,done:true,startedAt:S.modelDownload.startedAt};
+    setModelProgress(false,'Download complete','Model is cached locally. It is not loaded into GPU memory.',1,false,true);setStatus('Model downloaded',true);localStorage.removeItem('luma_model_ready');save();return true;
+  }catch(e){
+    setModelProgress(false,'Model download failed',e?.message||'Could not download the model.',null,true,false);S.modelDownload={...(S.modelDownload||{}),active:false,error:true,done:false,note:e?.message||'Download failed'};setStatus('Model download failed');save();return false;
+  }finally{
+    S.loading=false;S.loadingKind='idle';renderSendState();save();
+    if(document.querySelector('[data-pane="model"]')){const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;$('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll}
+  }
+};
+
+/* Loading is explicit. A model must have a durable downloaded record first. */
+loadEngine=async function(id){
+  if(S.loading)return false;if(!navigator.gpu){setStatus('WebGPU unavailable');return false}
+  const model=modelRecord(id);if(!model)return false;
+  if(!isModelDownloaded(model.id)){
+    setModelProgress(false,'Model not downloaded','Use Download from the Model catalogue first. Load never starts a new model download.',0,true,false);setStatus('Model not downloaded');return false;
+  }
+  S.model=model.id;save();
+  if(S.engine&&S.loadedModel===model.id){setStatus('Local AI ready',true);return true}
+  S.loading=true;S.loadingKind='model';renderSendState();setStatus('Loading cached model…');setModelProgress(true,'Loading cached model…','Preparing the local WebGPU runtime. No new model download is started by Luma.',0,false,false);
+  try{
+    if(S.engine){try{await S.engine.unload()}catch{}S.engine=null;S.loadedModel=null}
+    const webllm=await importWebLLM();
+    const init=report=>{const p=report?.progress!=null?Math.max(0,Math.min(1,Number(report.progress))):null;setModelProgress(true,'Loading cached model…',report?.text||'Preparing local WebGPU runtime.',p,false,false)};
+    S.engine=await webllm.CreateMLCEngine(model.id,{initProgressCallback:init,logLevel:'ERROR'},{context_window_size:Math.min(modelContextLimit(model.id),Number(S.generation.contextWindow)||4096),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,repetition_penalty:Number(S.generation.repetitionPenalty)||1.08});
+    S.loadedModel=model.id;markModelVerified(model.id,'Model loaded successfully through WebLLM.');updateImageButton();setModelProgress(false,'Model ready','Loaded into WebGPU. The model stays cached for offline use.',1,false,true);setStatus('Local AI ready',true);localStorage.setItem('luma_model_ready','1');save();return true;
+  }catch(e){S.engine=null;S.loadedModel=null;setModelProgress(false,'Model load failed',e?.message||'Could not load the cached model. If runtime artifacts were not cached yet, connect once and try Load again.',null,true,false);setStatus('Model unavailable');return false}
+  finally{S.loading=false;S.loadingKind='idle';renderSendState();updateImageButton()}
+};
+
+/* Keep generated assistant output clean. Small local models are especially prone to transcript drift. */
+const v12BaseSystemPrompt=systemPrompt;
+systemPrompt=function(c=S.comp,beforeIndex=null){
+  const base=v12BaseSystemPrompt(c,beforeIndex);
+  const x=S.customization||{};let add='';
+  add+='\nIDENTITY RULES: You are the companion only. The user is a separate person. Never write the user\'s lines, thoughts, feelings, decisions, or actions for them. Never simulate a conversation by prefixing lines with User:, Assistant:, You:, or role names.';
+  add+='\nREALITY RULES: You do not have web access, browsing, live weather, live time, camera access, or microphone access. Never pretend you checked them. When the user asks for current external facts you cannot verify locally, say so briefly and naturally.';
+  add+='\nCHAT STYLE: This is ordinary conversation unless Roleplay mode is selected. Avoid assistant-like disclaimers, canned greetings, repetitive questions, and long essays for simple remarks. Respond to what the user actually said.';
+  if(c.age==='18+'&&/romantic|girlfriend|boyfriend|wife|husband|partner|spouse|soulmate|flirty|crush|roleplay/i.test(`${c.role} ${c.conversationMode}`))add+='\nADULT ROMANTIC TONE: When the user clearly invites romance, you may be affectionate, cheesy, cringe-cute, teasing, flirty, and emotionally expressive. Keep intimate content non-graphic and do not inject sexual wording into unrelated messages.';
+  if(c.age==='16+')add+='\n16+ MODE: Romance may be sweet and affectionate, but keep it non-sexual and age-appropriate.';
+  if(x.relationshipAutoProgress)add+='\nRELATIONSHIP PROGRESSION: Treat shared experiences as a gradual relationship history; do not jump stages in one message.';
+  return base+add;
+};
+
+/* Phase 3: local-first speech recognition + device TTS. Remote speech recognition is opt-in only. */
+const v12SpeechCtor=speechCtor;
+startVoice=async function(){
+  const C=v12SpeechCtor();if(!C){alert('Voice input is not supported by this browser.');return}
+  if(recognizing){try{recognition?.stop()}catch{}return}
+  recognition=new C();recognition.lang=S.voice?.language||'en-IN';recognition.interimResults=true;recognition.continuous=!!S.voice?.continuous;recognition.maxAlternatives=1;
+  if('processLocally' in recognition)recognition.processLocally=!!S.voice?.localOnly;
+  recognition.onstart=()=>{recognizing=true;$('micBtn')?.classList.add('mic','active','voice-active');setStatus('Listening…',true)};
+  recognition.onresult=e=>{let text='';for(let i=e.resultIndex;i<e.results.length;i++)text+=e.results[i][0].transcript;if(text){$('input').value=text;resize()}};
+  recognition.onerror=e=>{if(e.error==='aborted')return;if(e.error==='language-not-supported'||e.error==='service-not-allowed'){if(S.voice?.localOnly)alert('On-device speech recognition is not available for this language/browser. Turn off “Local speech only” if you want browser fallback.');else{try{recognition.processLocally=false;recognition.start()}catch{}}}else alert('Voice input: '+e.error)};
+  recognition.onend=()=>{recognizing=false;$('micBtn')?.classList.remove('active','voice-active');if(S.voice?.continuous&&!document.hidden)setTimeout(()=>{if(!recognizing)startVoice().catch(()=>{})},250);else setStatus(S.engine?'Local AI ready':'Ready',!!S.engine)};
+  try{
+    let localReady=false;
+    if(S.voice?.localOnly){
+      if(!C.available||!'processLocally' in recognition)throw new Error('This browser does not expose on-device speech recognition for this language.');
+      const st=await C.available({langs:[recognition.lang],processLocally:true,quality:'dictation'}).catch(()=>null);
+      if(st==='available')localReady=true;
+      else if((st==='downloadable'||st==='downloading')&&C.install){setStatus('Installing local speech language pack…',true);localReady=!!(await C.install({langs:[recognition.lang],processLocally:true,quality:'dictation'}).catch(()=>false))}
+      if(!localReady)throw new Error('On-device speech language pack is not available yet.');
+      recognition.processLocally=true;
+    }
+    recognition.start();
+  }catch(e){alert(e?.message||'Could not start microphone.');recognizing=false;$('micBtn')?.classList.remove('active','voice-active')}
+};
+function v12SelectedVoice(){const name=S.voice?.voiceName;if(!name||name==='auto')return null;return voiceList().find(v=>v.name===name)||null}
+function speakText(text,{queue=false}={}){
+  if(!('speechSynthesis' in window)||!text)return false;
+  const q=speechSynthesis;
+  if(!queue)q.cancel();
+  const u=new SpeechSynthesisUtterance(String(text).replace(/```[\s\S]*?```/g,' code block '));
+  const v=S.voice||{};const d=ttsStyleValues(v.speakingStyle||'warm');const cv=v12SelectedVoice();
+  if(cv)u.voice=cv;
+  u.lang=v.language||cv?.lang||'en-IN';u.rate=Number(v.rate)||d.rate;u.pitch=Number(v.pitch)||d.pitch;
+  q.speak(u);return true;
+}
+/* Replace the previous streaming-TTS helper with a single sentence queue. */
+let v12TTS={key:'',buffer:'',spoken:0};
+function streamSpeakFromDOM(){}
+function v12StartTTS(c,target){v12TTS={key:`${c?.id||''}:${c?.messages?.indexOf(target)||-1}`,buffer:'',spoken:0};if('speechSynthesis' in window)speechSynthesis.cancel()}
+function v12FeedTTS(delta){if(!S.voice?.autoRead||!S.voice?.streamingTTS||!delta)return;v12TTS.buffer+=String(delta);let m;const rx=/([\s\S]*?[.!?](?:\s+|$))/g;let consumed=0;while((m=rx.exec(v12TTS.buffer))){const seg=m[1].trim();if(seg)speakText(seg,{queue:true});consumed=m.index+m[1].length}if(consumed){v12TTS.buffer=v12TTS.buffer.slice(consumed);v12TTS.spoken+=consumed}}
+function v12FlushTTS(){if(!S.voice?.autoRead)return;if(v12TTS.buffer.trim()){speakText(v12TTS.buffer.trim(),{queue:true});v12TTS.spoken+=v12TTS.buffer.length;v12TTS.buffer=''}}
+const v12BaseSafeAssistantChunk=safeAssistantChunk;
+safeAssistantChunk=function(target,delta){v12BaseSafeAssistantChunk(target,delta);if(S.loading&&S.loadingKind==='generation'&&S.voice?.autoRead&&S.voice?.streamingTTS)v12FeedTTS(delta)};
+const v12BaseGenerate=generate;
+generate=async function(history,target){const c=current();if(S.voice?.autoRead)v12StartTTS(c,target);try{return await v12BaseGenerate(history,target)}finally{v12FlushTTS();if(S.voice?.autoRead&&c){v12TTS.key=`${c.id}:${c.messages.indexOf(target)}`;v12TTS.spoken=String(target.content||'').length}}};
+const v12BaseInterrupt=interruptGeneration;
+interruptGeneration=function(){if('speechSynthesis' in window&&S.loadingKind==='generation')speechSynthesis.cancel();return v12BaseInterrupt()};
+
+/* Phase 4 experimental WASM fallback, wired with Wllama's documented streaming API. */
+generateWasmFallback=async function(history,target){
+  if(!WASM_ENGINE){try{await loadWasmFallback()}catch(e){target.error=true;target.errorMessage='WASM fallback could not load: '+(e?.message||e);renderMessages();return false}}
+  const c=current(),idx=c?c.messages.indexOf(target):-1;S.loading=true;S.loadingKind='generation';S.generatingMessageKey=c&&idx>=0?`${c.id}:${idx}`:null;renderSendState();setStatus('WASM · Generating…',true);renderMessages();lanAbortController=new AbortController();
+  try{const stream=await WASM_ENGINE.createChatCompletion({messages:history,max_tokens:responseTokenBudget(),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,stream:true,abortSignal:lanAbortController.signal});for await(const chunk of stream){const d=chunk?.choices?.[0]?.delta?.content||'';if(d)safeAssistantChunk(target,d);renderMessages();if(!S.loading)break}target.content=sanitizeAssistantText(target.content);target.partial=!S.loading&&!!target.content.trim();return true}
+  catch(e){if(e?.name==='AbortError'){target.partial=!!target.content;return true}target.error=true;target.content='';target.errorMessage=e?.message||String(e);renderMessages();return false}
+  finally{lanAbortController=null;S.loading=false;S.loadingKind='idle';S.generatingMessageKey=null;renderSendState();setStatus('WASM · Ready',true);save()}
+};
+
+/* Phase 6 / relationship progression: reward consistent interaction, not individual flirty phrases. */
+function updateRelationshipProgress(){
+  const c=current();if(!c||!S.customization?.relationshipAutoProgress)return;
+  const turns=(c.messages||[]).filter(m=>m.role==='user').length;S.relationshipPoints=Number(S.relationshipPoints)||0;
+  if(turns>0&&turns%5===0){S.relationshipPoints++;}
+  const old=c.relationshipStage;let next=old||'New connection';
+  if(S.relationshipPoints>=20)next='Long-term';else if(S.relationshipPoints>=10)next='Deep bond';else if(S.relationshipPoints>=5)next='Close';else if(S.relationshipPoints>=2)next='Getting familiar';
+  if(next!==old){c.relationshipStage=next;S.relationshipMilestones=[...(S.relationshipMilestones||[]),{stage:next,at:Date.now(),chatId:c.id}].slice(-16)}save();
+}
+const v12BaseSend=send;
+send=async function(text){const before=current()?.messages?.length||0;const r=await v12BaseSend(text);if((current()?.messages?.length||0)>before)updateRelationshipProgress();return r};
+
+/* Make chat scrolling behave like a normal streaming messenger. */
+const v12BaseRenderMessages=renderMessages;
+renderMessages=function(){v12BaseRenderMessages();try{const m=$('messages');const jump=$('jumpLatest');if(jump)jump.hidden=atBottom(m)}catch{}};
+
+/* Phase 7: finish IndexedDB cleanup and persist final extension fields. */
+const v12BaseClearIndexedDB=clearIndexedDB;
+clearIndexedDB=async function(){const r=await v12BaseClearIndexedDB();localStorage.removeItem('luma_idb_saved_at');return r};
+/* Override save once more so all phase state is included in the synchronous recovery copy. */
+const v12BaseSave=save;
+save=function(){legacySave();try{const raw=JSON.parse(localStorage.getItem('luma_companion_v5')||'{}');Object.assign(raw,{version:13,appVersion:'13.0',voice:S.voice,customization:S.customization,lan:S.lan,wasmFallback:S.wasmFallback,relationshipPoints:S.relationshipPoints,relationshipMilestones:S.relationshipMilestones,downloadHistory:S.downloadHistory,addressUseCount:S.addressUseCount,persistence:{...S.persistence,mode:'indexeddb'}});localStorage.setItem('luma_companion_v5',JSON.stringify(raw));localStorage.setItem('luma_app_version','13')}catch{}scheduleIDBSave()};
+
+/* Use the same durable state on IndexedDB hydration and preserve any extension fields. */
+const v12BaseSnapshot=snapshotState;
+snapshotState=function(){return {...v12BaseSnapshot(),version:13,appVersion:'13.0',downloadHistory:S.downloadHistory,addressUseCount:S.addressUseCount}};
+
+/* Phase 9: install UX is explicit and truthful. */
+function renderInstallState(){const status=pwaStateText();const a=$('installStatus'),d=$('installDescription'),b=$('installLumaBtn');if(a)a.textContent=status;if(d)d.textContent='Install status: '+status;if(b){const installed=/Installed/i.test(status)||window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true;b.disabled=!!installed;b.textContent=installed?'Installed':(isIOS()?'How to install':'Install Luma')}}
+
+/* Cleaner Phase 8 cards: optional and collapsed, keeping Data settings readable. */
+lanPanelHtml=function(){return `<details class="settings-details"><summary>LAN / PC Power Mode</summary><div class="details-body"><div class="phase8-card"><strong>Use a local PC model server</strong><p>Route chat to Ollama or another OpenAI-compatible local endpoint. This is optional. An HTTPS GitHub Pages page cannot call an HTTP LAN URL in normal browser security rules; use HTTPS for the LAN endpoint or a local HTTP development origin.</p><label style="font-size:11px"><input type="checkbox" id="lanEnabled" ${S.lan.enabled?'checked':''}> Use PC/LAN model instead of browser WebGPU</label><div class="phase-grid" style="margin-top:8px"><div><label class="field-label">Provider</label><select class="field" id="lanProvider"><option value="ollama-openai" ${S.lan.provider==='ollama-openai'?'selected':''}>Ollama · OpenAI compatible</option><option value="ollama-native" ${S.lan.provider==='ollama-native'?'selected':''}>Ollama · native API</option><option value="openai" ${S.lan.provider==='openai'?'selected':''}>OpenAI-compatible local server</option></select></div><div><label class="field-label">Model</label><input class="field" id="lanModel" value="${esc(S.lan.model||'')}" placeholder="e.g. llama3.2:3b"><div class="field-help" id="lanModelHelp">${esc(S.lan.models?.length?S.lan.models.join(', '):'Refresh to discover PC models.')}</div></div></div><label class="field-label">Endpoint</label><input class="field" id="lanEndpoint" value="${esc(S.lan.endpoint)}"><label class="field-label">API key (optional)</label><input class="field" id="lanApiKey" type="password" value="${esc(S.lan.apiKey||'')}"><div class="inline-actions" style="margin-top:8px"><button class="mini-btn" id="testLan" type="button">Test connection</button><button class="mini-btn" id="refreshLanModels" type="button">Refresh PC models</button></div><div class="field-help" id="lanStatus" style="margin-top:6px">${esc(S.lan.lastTest||'LAN mode is optional and off by default.')}</div></div></div></details>`};
+wasmPanelHtml=function(){return `<details class="settings-details"><summary>WASM fallback · experimental</summary><div class="details-body"><div class="phase8-card"><strong>Phase 4 CPU/WASM fallback</strong><p>Optional Wllama/llama.cpp browser inference when WebGPU is unavailable. Supply a small GGUF URL. This remains experimental and is not bundled with the normal WebLLM model catalogue.</p><label style="font-size:11px"><input type="checkbox" id="wasmEnabled" ${S.wasmFallback.enabled?'checked':''}> Enable automatic WASM fallback when WebGPU is unavailable</label><label class="field-label" style="margin-top:8px">GGUF model URL</label><input class="field" id="wasmUrl" value="${esc(S.wasmFallback.url||'')}" placeholder="https://example.com/model.gguf"><div class="inline-actions" style="margin-top:8px"><button class="mini-btn" id="testWasmFallback" type="button">Load / test fallback</button><button class="mini-btn" id="unloadWasmFallback" type="button" ${WASM_ENGINE?'':'disabled'}>Unload fallback</button></div><div class="field-help">For true offline fallback use, self-host the GGUF and Wllama runtime assets.</div></div></div></details>`};
+
+diagnosticsHtml=function(){const gpu=!!navigator.gpu,speech=!!speechCtor(),idb=!!window.indexedDB,pwa='serviceWorker'in navigator;return `<details class="settings-details"><summary>Diagnostics & self-test</summary><div class="details-body"><div class="diagnostic-card" style="margin-top:0"><strong>Local capability</strong><div class="diagnostic-grid"><div class="diag ${gpu?'ok':'off'}"><b>${gpu?'Available':'Unavailable'}</b><span>WebGPU</span></div><div class="diag ${idb?'ok':'off'}"><b>${idb?'Available':'Unavailable'}</b><span>IndexedDB</span></div><div class="diag ${speech?'ok':'warn'}"><b>${speech?'Available':'Unavailable'}</b><span>Browser speech recognition</span></div><div class="diag ${pwa?'ok':'warn'}"><b>${pwa?'Available':'Unavailable'}</b><span>Service worker</span></div></div></div><div class="v12-action"><button class="mini-btn" id="runSelfTest" type="button">Run Luma self-test</button></div><div id="selfTestResults"><div class="field-help" style="margin-top:8px">Runs local checks without downloading a model.</div></div></div></details>`};
+
+/* Built-in cross-checks for the user/device. */
+async function runSelfTest(){
+  const out=$('selfTestResults');if(!out)return;out.innerHTML='<div class="field-help">Running local checks…</div>';
+  const r=[];const ok=(name,detail=true)=>r.push({name,pass:!!detail,detail:detail===true?'Passed':String(detail)});const warn=(name,detail)=>r.push({name,pass:null,detail});
+  try{localStorage.setItem('__luma_test','1');localStorage.removeItem('__luma_test');ok('Local settings storage',true)}catch(e){ok('Local settings storage',e?.message||e)}
+  ok('IndexedDB available',!!window.indexedDB);
+  try{await openLumaDB();ok('IndexedDB database opens',!!db)}catch(e){ok('IndexedDB database opens',e?.message||e)}
+  ok('Companion profile is valid',!!S.comp?.name&&Array.isArray(S.comp?.memories));
+  ok('Conversation store is valid',Array.isArray(S.chats));
+  ok('Memory candidate extractor',!!memoryCandidateFromText('My name is LumaTest'));
+  ok('Markdown/code renderer',/tok-key|code-wrap/.test(markdown('```js\\nconst x=1\\n```')));
+  ok('Math renderer',/math-rendered/.test(markdown('$$x^2$$')));
+  ok('Image capability gate',typeof currentModelSupportsVision==='function');
+  ok('Copy pipeline',typeof copyToClipboard==='function'&&typeof copyText==='function');
+  ok('Chat actions wired',typeof renameChat==='function'&&typeof togglePin==='function'&&typeof toggleArchive==='function'&&typeof deleteChat==='function');
+  ok('Edit/regenerate/branch wired',typeof editMessage==='function'&&typeof regenerateFromUser==='function'&&typeof branchFrom==='function');
+  ok('Stop generation wired',typeof interruptGeneration==='function');
+  ok('Model cache controls wired',typeof downloadModelOnly==='function'&&typeof loadEngine==='function'&&typeof deleteDownloadedModel==='function');
+  ok('WebLLM catalogue loaded',MODELS.length>0);
+  warn('WebGPU device',navigator.gpu?'Available on this browser':'Unavailable on this browser');
+  warn('On-device speech',('SpeechRecognition'in window||'webkitSpeechRecognition'in window)&&('processLocally'in (window.SpeechRecognition?new window.SpeechRecognition():window.webkitSpeechRecognition?new window.webkitSpeechRecognition():{}))?'Browser exposes local speech controls':'Browser may require remote speech or does not expose local speech controls');
+  warn('PWA support','serviceWorker'in navigator?'Service worker API available':'Service worker API unavailable');
+  warn('Model cache',S.loadedModel?`Loaded: ${S.loadedModel}`:(Object.keys(S.modelCacheMeta||{}).filter(v12ModelMetaDownloaded).length?`${Object.keys(S.modelCacheMeta||{}).filter(v12ModelMetaDownloaded).length} durable download record(s)`:'No durable model record yet'));
+  S.selfTest={at:Date.now(),results:r};save();out.innerHTML='<div class="v12-test-list">'+r.map(x=>`<div class="v12-test"><b class="${x.pass===true?'v12-pass':x.pass===false?'v12-fail':'v12-warn'}">${x.pass===true?'PASS':x.pass===false?'CHECK':'INFO'}</b><span>${esc(x.name)} — ${esc(x.detail)}</span></div>`).join('')+'</div>';
+}
+/* Add self-test binding on every settings render, without disturbing existing controls. */
+const v12BaseBindSettings=bindSettings;
+bindSettings=function(){
+  v12BaseBindSettings();
+  $('runSelfTest')?.addEventListener('click',()=>runSelfTest());
+  const mode=$('cMode');if(mode)mode.addEventListener('change',()=>{S.comp.conversationMode=mode.value;save()});
+  const age=$('cAge');if(age)age.addEventListener('change',()=>{S.comp.age=age.value;save()});
+};
+
+/* Persist the new state fields on app hydration. */
+const v12BaseHydrate=hydrateFromIndexedDB;
+hydrateFromIndexedDB=async function(){await v12BaseHydrate();S.downloadHistory=Array.isArray(S.downloadHistory)?S.downloadHistory:[];S.addressUseCount=Number(S.addressUseCount)||0;S.selfTest=S.selfTest||null;save()};
+
+})();
+
+</script>
+
 </body>
 </html>

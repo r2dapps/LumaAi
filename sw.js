@@ -1,16 +1,9 @@
-const CACHE='luma-shell-v10';
-const PRECACHE=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(PRECACHE)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{
-  if(e.request.method!=='GET')return;
-  const u=new URL(e.request.url);
-  if(u.origin===location.origin){
-    e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});return r}).catch(()=>caches.match('./index.html'))));
-    return;
-  }
-  // Cache the small ESM runtime shell, but never duplicate multi-GB model weights here.
-  if(u.origin==='https://esm.run'){
-    e.respondWith(caches.open(CACHE).then(c=>c.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{c.put(e.request,r.clone()).catch(()=>{});return r}))));
-  }
+const CACHE='luma-shell-v13';
+const CORE=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
+self.addEventListener('install',event=>{event.waitUntil((async()=>{const c=await caches.open(CACHE);for(const url of CORE){try{await c.add(url)}catch{}}self.skipWaiting()})())});
+self.addEventListener('activate',event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('luma-shell-')&&k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim()})())});
+self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting()});
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;const url=new URL(req.url);
+  if(req.mode==='navigate'){event.respondWith((async()=>{try{return await fetch(req,{cache:'no-store'})}catch{return (await caches.match('./index.html'))||Response.error()}})());return;}
+  if(url.origin===location.origin){event.respondWith((async()=>{const cached=await caches.match(req);if(cached)return cached;try{const r=await fetch(req);if(r.ok){const c=await caches.open(CACHE);c.put(req,r.clone()).catch(()=>{})}return r}catch{return Response.error()}})());}
 });
