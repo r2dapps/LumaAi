@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#212121">
+<meta name="description" content="Luma is a private, local AI companion that runs supported language models in your browser with WebGPU. Personalize your companion, keep memories locally, and chat without an account.">
+<meta name="author" content="Luma">
+<meta name="application-name" content="Luma">
+<meta name="keywords" content="Luma AI companion, private AI companion, local AI, offline AI, WebGPU AI, browser LLM, WebLLM, local language model, AI companion, privacy-first chatbot">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Luma">
+<meta property="og:title" content="Luma — Private Local AI Companion">
+<meta property="og:description" content="A private AI companion powered by local browser inference. Personalize your companion, use WebGPU models, and keep conversations in your browser.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' rx='48' fill='%23212121'/%3E%3Crect x='488' y='164' width='224' height='184' rx='56' fill='%2310a37f'/%3E%3Cpath d='M535 220h130M535 275h92' stroke='white' stroke-width='22' stroke-linecap='round'/%3E%3Cpath d='M528 348l-30 48 70-48' fill='%2310a37f'/%3E%3Ctext x='600' y='500' text-anchor='middle' fill='white' font-family='Arial,sans-serif' font-size='76' font-weight='700'%3ELuma%3C/text%3E%3C/svg%3E">
+<meta property="og:image:alt" content="Luma private local AI companion">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Luma — Private Local AI Companion">
+<meta name="twitter:description" content="A private browser-based AI companion powered by local WebGPU inference.">
+<meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' rx='48' fill='%23212121'/%3E%3Crect x='488' y='164' width='224' height='184' rx='56' fill='%2310a37f'/%3E%3Cpath d='M535 220h130M535 275h92' stroke='white' stroke-width='22' stroke-linecap='round'/%3E%3Cpath d='M528 348l-30 48 70-48' fill='%2310a37f'/%3E%3Ctext x='600' y='500' text-anchor='middle' fill='white' font-family='Arial,sans-serif' font-size='76' font-weight='700'%3ELuma%3C/text%3E%3C/svg%3E">
+<meta name="twitter:image:alt" content="Luma private local AI companion">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2310a37f'/%3E%3Cpath d='M17 25.5c0-6.1 4.9-11 11-11h4c6.1 0 11 4.9 11 11v1c0 6.1-4.9 11-11 11h-5.5l-6.8 5v-5.6A11 11 0 0 1 17 26.5v-1Z' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M23 27h14M28 32h7' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Luma","applicationCategory":"CommunicationApplication","operatingSystem":"Web Browser","description":"A private local AI companion that runs supported language models in the browser with WebGPU.","softwareVersion":"1.0","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Local browser AI inference","WebGPU acceleration","Companion customization","Local conversation memory","Voice input","Read aloud","Offline-capable cached models"],"publisher":{"@type":"Organization","name":"Luma"}}</script>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Luma — Private Local AI Companion</title>
+<style>
+:root{--bg:#fff;--sidebar:#f7f7f8;--surface:#fff;--surface2:#f4f4f4;--text:#0d0d0d;--muted:#676767;--line:#e5e5e5;--hover:#ececec;--accent:#10a37f;--danger:#c0392b;--composer:#fff;--user:#f4f4f4;--radius:12px;--sidebar-w:260px;--content:768px}
+@media(prefers-color-scheme:dark){:root{--bg:#212121;--sidebar:#171717;--surface:#212121;--surface2:#2f2f2f;--text:#ececec;--muted:#a0a0a0;--line:#3b3b3b;--hover:#2b2b2b;--composer:#2f2f2f;--user:#2f2f2f}}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}button,input,textarea,select{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer}svg{display:block}.app{height:100dvh;display:flex;background:var(--bg)}
+/* Sidebar */
+.sidebar{width:var(--sidebar-w);flex:0 0 var(--sidebar-w);background:var(--sidebar);display:flex;flex-direction:column;padding:8px;position:relative;z-index:30}.side-top{display:flex;align-items:center;gap:4px;height:40px;padding:0 4px;margin-bottom:4px}.brand{font-weight:600;font-size:15px;flex:1;padding-left:5px}.collapse{width:32px;height:32px;border-radius:8px;display:grid;place-items:center}.collapse:hover,.side-btn:hover,.side-item:hover,.icon:hover,.model-btn:hover{background:var(--hover)}.new-chat{display:flex;align-items:center;gap:11px;width:100%;padding:10px 11px;border-radius:9px;text-align:left;margin:3px 0 9px;font-size:14px}.new-chat:hover{background:var(--hover)}.side-search{height:36px;display:flex;align-items:center;gap:9px;padding:0 10px;border-radius:9px;color:var(--muted);margin-bottom:10px}.side-search:hover{background:var(--hover)}.side-search input{border:0;outline:0;background:transparent;width:100%;font-size:13px;color:var(--text)}.history-label{font-size:11px;color:var(--muted);padding:7px 10px 5px}.chat-list{flex:1;min-height:0;overflow:auto;padding:0 1px}.chat-item{display:flex;align-items:center;gap:8px;width:100%;padding:9px 9px;border-radius:8px;text-align:left;font-size:13px;line-height:1.25}.chat-item.active{background:var(--hover)}.chat-title{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chat-more{opacity:0;width:26px;height:26px;border-radius:6px;display:grid;place-items:center}.chat-item:hover .chat-more,.chat-item.active .chat-more{opacity:1}.side-bottom{border-top:1px solid var(--line);padding-top:7px;margin-top:5px}.profile-btn{display:flex;align-items:center;gap:9px;width:100%;padding:8px;border-radius:8px;text-align:left}.profile-btn:hover{background:var(--hover)}.avatar{width:28px;height:28px;border-radius:50%;background:#6f6f6f;color:white;display:grid;place-items:center;font-size:11px;font-weight:600;flex:0 0 28px}.profile-name{font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.side-meta{font-size:10px;color:var(--muted)}
+/* Main */
+.main{min-width:0;flex:1;height:100%;display:flex;flex-direction:column;position:relative;background:var(--bg)}.topbar{height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;z-index:10}.top-left,.top-right{display:flex;align-items:center;gap:4px;min-width:0}.chat-titlebar{font-size:14px;font-weight:500;color:var(--text);padding:8px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}.mobile-menu{display:none}.model-btn{display:flex;align-items:center;gap:5px;padding:8px 9px;border-radius:8px;font-size:14px;font-weight:600;max-width:240px}.model-btn .chev{color:var(--muted)}.status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);margin-left:3px}.status-dot{width:6px;height:6px;border-radius:50%;background:#aaa}.status-dot.ok{background:#10a37f}.icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}.icon:hover{background:var(--hover)}
+.messages{flex:1;min-height:0;overflow:auto;scroll-behavior:smooth;padding:8px 16px 145px}.message-stack{width:min(var(--content),100%);margin:0 auto}.welcome{min-height:calc(100dvh - 220px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 0 80px}.welcome-logo{width:48px;height:48px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;margin-bottom:20px}.welcome h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;font-weight:600;margin:0 0 8px;text-align:center}.welcome p{font-size:14px;color:var(--muted);margin:0;text-align:center}.suggestions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:min(680px,100%);margin-top:26px}.suggestion{padding:12px 13px;border:1px solid var(--line);border-radius:11px;text-align:left;background:var(--surface);font-size:13px;line-height:1.35}.suggestion:hover{background:var(--hover)}
+/* Messages */
+.msg{display:flex;gap:12px;margin:25px 0;max-width:100%;position:relative}.msg.user{justify-content:flex-end}.msg-avatar{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:600}.assistant .msg-avatar{background:var(--text);color:var(--bg)}.user .msg-avatar{background:#777;color:#fff;order:2}.msg-body{min-width:0;max-width:calc(100% - 40px);font-size:15px;line-height:1.65}.user .msg-body{max-width:min(75%,620px)}.user .bubble{background:var(--user);padding:9px 13px;border-radius:18px;overflow-wrap:anywhere}.bubble{overflow-wrap:anywhere}.bubble p{margin:.15em 0 .75em}.bubble p:last-child{margin-bottom:0}.bubble h1,.bubble h2,.bubble h3{line-height:1.3;margin:1em 0 .45em}.bubble ul,.bubble ol{padding-left:22px}.bubble code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--surface2);border-radius:5px;padding:2px 5px}.code-wrap{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:10px 0}.code-head{height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:var(--surface2);font-size:11px;color:var(--muted)}pre.code{margin:0;padding:12px;overflow:auto;background:transparent;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre}.msg-actions{display:flex;gap:1px;margin-top:4px;opacity:0;transition:opacity .12s}.msg:hover .msg-actions,.msg:focus-within .msg-actions{opacity:1}.msg-actions button{height:28px;min-width:28px;border-radius:7px;color:var(--muted);display:grid;place-items:center}.msg-actions button:hover{background:var(--hover);color:var(--text)}.typing{display:inline-flex;gap:4px;padding:5px 0}.typing i{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:b 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes b{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+/* Composer */
+.composer-area{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 15px;background:linear-gradient(transparent,var(--bg) 25%);z-index:5}.composer{width:min(var(--content),100%);margin:0 auto;background:var(--composer);border:1px solid var(--line);border-radius:24px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;align-items:flex-end;gap:7px;padding:7px 8px 7px 12px}.composer:focus-within{border-color:#b5b5b5;box-shadow:0 2px 8px rgba(0,0,0,.07)}.attach{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:0 0 34px}.attach:hover{background:var(--hover)}.attach.mic{position:relative}.composer textarea{flex:1;min-width:0;max-height:180px;min-height:34px;resize:none;outline:0;border:0;background:transparent;padding:7px 0;line-height:1.4;font-size:15px;color:var(--text)}.send{width:34px;height:34px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;flex:0 0 34px}.send:disabled{background:#ddd;color:#999}.composer-note{text-align:center;font-size:10px;color:var(--muted);margin-top:6px}
+.mic.active{background:#ef4444;color:#fff;animation:pulseMic 1.15s infinite}.mic.unsupported{opacity:.45}@keyframes pulseMic{50%{box-shadow:0 0 0 6px rgba(239,68,68,.14)}}
+.setup-card{width:min(430px,calc(100vw - 32px));padding:22px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.25);margin:auto}.setup-card h2{margin:0 0 7px;font-size:20px}.setup-card p{font-size:13px;color:var(--muted);line-height:1.55;margin:7px 0}.setup-model{margin:16px 0;padding:13px;border-radius:11px;background:var(--surface2)}.setup-model strong{display:block;font-size:14px}.setup-model span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.setup-actions{display:flex;gap:8px;margin-top:16px}.setup-actions button{flex:1;padding:10px;border-radius:9px}.setup-primary{background:var(--text);color:var(--bg)}.setup-secondary{background:var(--surface2)}.model-catalog{max-height:290px;overflow:auto;border:1px solid var(--line);border-radius:11px;padding:0 10px;margin-top:4px}.model-catalog .cache-row:first-child{border-top:0}.cache-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}.cache-row:last-child{border-bottom:0}.memory-list{display:flex;flex-direction:column;gap:8px;margin:8px 0 12px}.memory-card{padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface2)}.memory-card strong{display:block;font-size:12px}.memory-card small{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:3px}.memory-card button{margin-top:7px;color:var(--muted);font-size:11px;padding:4px 7px;border-radius:6px}.memory-card button:hover{background:var(--hover);color:var(--text)}.cache-info{min-width:0}.cache-info strong{display:block;font-size:13px}.cache-info small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.cache-state{font-size:11px;color:var(--muted);white-space:nowrap}.cache-state.ready{color:var(--accent)}
+.model-progress{display:none;margin:12px 0 4px;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:var(--surface2)}
+.model-progress.show{display:block}
+.model-progress-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:8px}
+.model-progress-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.model-progress-pct{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.model-progress-track{height:7px;border-radius:999px;background:var(--line);overflow:hidden}
+.model-progress-bar{height:100%;width:0%;background:var(--text);border-radius:999px;transition:width .16s ease}
+.model-progress-note{font-size:11px;color:var(--muted);line-height:1.4;margin-top:7px}
+.model-progress.error{border-color:#a33}
+.model-progress.error .model-progress-bar{background:#a33}
+
+/* Menus / sheets */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.42);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .16s;z-index:50}.backdrop.show{opacity:1;pointer-events:auto}
+#setupBackdrop{display:flex;align-items:center;justify-content:center;padding:20px}
+#setupBackdrop .setup-card{max-height:calc(100dvh - 40px);overflow:auto}.sheet{position:absolute;background:var(--surface);box-shadow:0 14px 45px rgba(0,0,0,.22);border:1px solid var(--line);border-radius:14px}.model-menu{top:50px;left:15px;width:300px;padding:6px}.model-option{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:9px;text-align:left}.model-option:hover{background:var(--hover)}.model-option.selected{background:var(--hover)}.model-option .mtext{min-width:0;flex:1}.model-option strong{display:block;font-size:13px}.model-option small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.check{font-size:13px;color:var(--accent)}.settings-sheet{display:flex;flex-direction:column;overflow:hidden;position:absolute;right:0;top:0;height:100%;width:min(460px,100vw);background:var(--surface);color:var(--text);border-left:1px solid var(--line);border-radius:0;padding:24px 24px 30px;overflow:auto;transform:translateX(100%);transition:transform .18s;box-shadow:-18px 0 50px rgba(0,0,0,.16);overscroll-behavior:contain}.backdrop.show .settings-sheet{display:flex;flex-direction:column;overflow:hidden;transform:none}.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.sheet-head h2{font-size:20px;margin:0;letter-spacing:-.01em}.close{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-size:21px}.close:hover{background:var(--hover)}.tabs{display:flex;border-bottom:1px solid var(--line);gap:2px;margin-bottom:18px}.tab{padding:9px 10px;color:var(--muted);font-size:13px;border-bottom:2px solid transparent}.tab.active{color:var(--text);border-bottom-color:var(--text)}.pane{display:none;min-height:0;overflow:auto;flex:1}.pane.active{display:block}.field-label{display:block;font-size:12px;color:var(--muted);margin:15px 0 6px}.field{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:9px 10px;outline:0}.field:focus{border-color:#999}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.section-divider{height:1px;background:var(--line);margin:20px 0}
+.field-help{font-size:11px;color:var(--muted);line-height:1.45;margin:-2px 0 8px}
+.role-custom{display:none;margin-top:8px}.role-custom.show{display:block}.range-row{display:grid;grid-template-columns:1fr 48px;gap:10px;align-items:center;margin:13px 0}.range-row span{font-size:12px;color:var(--muted);text-align:right}.range-row input{width:100%}.word-list{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.word{display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:7px;background:var(--surface2);font-size:12px}.word button{color:var(--muted);font-size:14px}.add-row{display:flex;gap:7px}.add-row .field{flex:1}.mini-btn{padding:8px 11px;border-radius:8px;background:var(--surface2);font-size:12px}.mini-btn:hover{background:var(--hover)}.primary{width:100%;padding:10px;border-radius:9px;background:var(--text);color:var(--bg);margin-top:16px}.note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}.danger{color:var(--danger)}
+/* First-run loading / splash */
+.luma-splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:var(--bg);transition:opacity .42s ease,visibility .42s ease}.luma-splash.hide{opacity:0;visibility:hidden;pointer-events:none}.splash-inner{display:flex;flex-direction:column;align-items:center;gap:14px;transform:translateY(0);animation:splashFloat 1.7s ease-in-out infinite}.splash-mark{width:68px;height:68px;border-radius:19px;background:var(--accent);display:grid;place-items:center;box-shadow:0 12px 36px rgba(16,163,127,.24);animation:splashPulse 1.45s ease-in-out infinite}.splash-mark svg{width:39px;height:39px}.splash-name{font-size:25px;font-weight:650;letter-spacing:-.04em}.splash-sub{font-size:12px;color:var(--muted);margin-top:-8px}.splash-loader{width:76px;height:3px;border-radius:99px;overflow:hidden;background:var(--line);margin-top:3px}.splash-loader::after{content:"";display:block;width:38%;height:100%;border-radius:99px;background:var(--accent);animation:splashLoad 1.15s ease-in-out infinite}
+@keyframes splashPulse{0%,100%{transform:scale(1);box-shadow:0 12px 36px rgba(16,163,127,.20)}50%{transform:scale(1.055);box-shadow:0 16px 44px rgba(16,163,127,.34)}}@keyframes splashFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes splashLoad{0%{transform:translateX(-110%)}50%{transform:translateX(90%)}100%{transform:translateX(260%)}}
+@media(prefers-reduced-motion:reduce){.splash-inner,.splash-mark,.splash-loader::after{animation:none}.luma-splash{transition:none}}
+/* Mobile */
+@media(max-width:760px){.chat-titlebar{max-width:180px}.sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-101%);transition:transform .18s;box-shadow:10px 0 35px rgba(0,0,0,.15)}.sidebar.open{transform:none}.sidebar-mobile-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;z-index:25;transition:opacity .16s}.sidebar.open~.sidebar-mobile-backdrop{opacity:1;pointer-events:auto}.mobile-menu{display:grid}.topbar{height:52px;padding:0 8px}.model-btn{max-width:190px}.status{display:none}.messages{padding:2px 12px 140px}.welcome{min-height:calc(100dvh - 180px);padding:15px 0 70px}.welcome h1{font-size:25px}.suggestions{grid-template-columns:1fr;margin-top:22px;gap:7px}.suggestion{padding:11px 12px}.msg{margin:21px 0;gap:9px}.msg-body{font-size:15px;max-width:calc(100% - 37px)}.user .msg-body{max-width:82%}.msg-actions{opacity:1}.composer-area{padding:8px 8px 11px}.composer{border-radius:22px;padding:6px 7px 6px 9px}.composer textarea{font-size:15px}.settings-sheet{display:flex;flex-direction:column;overflow:hidden;width:100%;padding:18px 16px}.model-menu{left:8px;right:8px;width:auto}.chat-more{opacity:1}}
+@media(max-width:380px){.brand{font-size:14px}.model-btn{max-width:150px}.welcome h1{font-size:23px}.suggestions{margin-top:18px}.msg-body{font-size:14px}}
+
+/* Phase 4/5 enhancements */
+.chat-history-head{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 9px 5px}
+.chat-history-head .history-label{padding:0;margin:0}.history-toggle{font-size:10px;color:var(--muted);padding:4px 6px;border-radius:6px}.history-toggle:hover{background:var(--hover);color:var(--text)}
+.chat-item-wrap{position:relative;margin:1px 7px}.chat-item{margin:0!important;position:relative;padding-right:39px!important}.chat-open{display:flex;align-items:center;gap:8px;width:100%;padding:0;background:transparent;text-align:left}.chat-more{position:absolute;right:5px;top:5px;opacity:0!important}.chat-item-wrap:hover .chat-more,.chat-item-wrap:focus-within .chat-more,.chat-item-wrap.active .chat-more{opacity:1!important}.chat-item-wrap.active .chat-item{background:var(--hover)}
+.chat-pin{font-size:10px;color:var(--muted);margin-right:2px}.chat-menu{position:absolute;right:6px;top:34px;z-index:25;width:170px;padding:5px;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:0 10px 28px rgba(0,0,0,.14)}.chat-menu button{display:block;width:100%;padding:8px 9px;border-radius:7px;text-align:left;font-size:12px}.chat-menu button:hover{background:var(--hover)}.chat-menu .danger{color:#a33}
+.edit-box{display:flex;flex-direction:column;gap:8px}.edit-box textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);color:var(--text);outline:0}.edit-actions{display:flex;gap:7px}.edit-actions button{padding:7px 10px;border-radius:8px;font-size:12px}.edit-save{background:var(--text);color:var(--bg)}.edit-cancel{background:var(--surface2)}
+.message-attachment{display:block;max-width:min(420px,100%);max-height:360px;margin:8px 0 2px;border-radius:11px;border:1px solid var(--line);object-fit:contain;background:var(--surface2)}.attachment-preview{display:none;align-items:center;gap:8px;margin:0 auto 7px;width:min(var(--content),100%);padding:8px 11px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}.attachment-preview.show{display:flex}.attachment-preview img{width:38px;height:38px;object-fit:cover;border-radius:7px}.attachment-preview .attachment-name{min-width:0;flex:1;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.attachment-preview button{font-size:18px;color:var(--muted);padding:3px 7px;border-radius:7px}.attachment-preview button:hover{background:var(--hover);color:var(--text)}
+.md-image{margin:9px 0}.md-image img{display:block;max-width:100%;max-height:420px;border-radius:11px;border:1px solid var(--line);background:var(--surface2)}.md-image figcaption{font-size:10px;color:var(--muted);margin-top:4px}.math-inline,.math-display{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.math-inline{padding:1px 4px;border-radius:5px;background:var(--surface2)}.math-display{margin:9px 0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface2);white-space:pre-wrap;overflow:auto}.md-table{width:100%;border-collapse:collapse;margin:9px 0;font-size:12px}.md-table th,.md-table td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}.md-table th{background:var(--surface2);font-weight:600}.md-link{color:inherit;text-decoration:underline;text-underline-offset:2px}.msg-error .bubble{border:1px solid #a33}.retry-note{font-size:11px;color:#a33;margin-top:5px}
+.model-section{margin-top:12px}.model-section-title{font-size:12px;font-weight:600;margin:0 0 6px}.downloaded-models{border:1px solid var(--line);border-radius:11px;overflow:hidden}.downloaded-empty{padding:12px;font-size:11px;color:var(--muted)}.model-card{display:flex;align-items:center;gap:9px;padding:10px;border-bottom:1px solid var(--line)}.model-card:last-child{border-bottom:0}.model-card-main{min-width:0;flex:1}.model-card-main strong{display:block;font-size:12px}.model-card-main small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.model-card-actions{display:flex;gap:5px}.model-card-actions button{padding:6px 8px;border-radius:7px;font-size:10px;background:var(--surface2)}.model-card-actions button:hover{background:var(--hover)}.model-badge{font-size:9px;padding:3px 5px;border-radius:999px;background:var(--surface2);color:var(--muted);white-space:nowrap}.model-badge.ready{color:var(--accent)}.model-badge.recommended{color:var(--text);font-weight:600}.model-catalog{max-height:320px;overflow:auto;border:1px solid var(--line);border-radius:11px;padding:0 10px;margin-top:4px}.catalog-actions{display:flex;align-items:center;gap:6px}.catalog-actions button{padding:6px 8px;border-radius:7px;font-size:10px;background:var(--surface2);white-space:nowrap}.catalog-actions button:hover{background:var(--hover)}
+.model-overview{padding:11px;border-radius:10px;background:var(--surface2);border:1px solid var(--line)}.model-overview strong{display:block;font-size:13px}.model-overview span{display:block;font-size:10px;color:var(--muted);line-height:1.4;margin-top:3px}.model-warning{margin-top:8px;padding:9px 10px;border:1px solid #b88;border-radius:9px;font-size:11px;line-height:1.4;color:#855}.bench-history{display:flex;flex-direction:column;gap:6px;margin-top:7px}.bench-item{display:flex;justify-content:space-between;gap:8px;font-size:10px;padding:7px 8px;border-radius:8px;background:var(--surface2)}.bench-item small{color:var(--muted)}.gen-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gen-field label{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}.gen-field .field{font-size:12px}.range-compact{display:grid;grid-template-columns:1fr 52px;align-items:center;gap:8px}.range-compact output{font-size:10px;color:var(--muted);text-align:right}.cache-tools{display:flex;gap:7px;margin-top:9px}.cache-tools button{flex:1}.offline-note{font-size:10px;color:var(--muted);line-height:1.4;margin-top:8px}
+.send.stop{background:#a33}.send.stop svg{transform:none}.send.stop .send-icon{display:none}.send.stop .stop-icon{display:block}.stop-icon{display:none}
+@media(max-width:700px){.chat-menu{position:absolute;right:6px;top:38px}.model-card{align-items:flex-start}.model-card-actions{flex-direction:column}.gen-grid{grid-template-columns:1fr}}
+
+/* Model + storage management redesign v6 */
+.model-pane-shell{display:flex;flex-direction:column;gap:12px;min-height:0}
+.model-hero{padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}
+.model-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.model-hero-title{font-size:13px;font-weight:650}
+.model-hero-meta{font-size:10px;color:var(--muted);line-height:1.45;margin-top:3px}
+.model-status-badge{font-size:9px;padding:4px 7px;border-radius:999px;background:var(--surface);border:1px solid var(--line);white-space:nowrap}
+.model-status-badge.ready{color:var(--accent)}
+.model-control-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}
+.model-control-row .field{min-width:0}
+.model-control-row .mini-btn{white-space:nowrap}
+.model-limit-note{font-size:10px;color:var(--muted);margin-top:7px}
+.model-library{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.model-library-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 11px;border-bottom:1px solid var(--line)}
+.model-library-head strong{font-size:12px}.model-library-head span{font-size:10px;color:var(--muted)}
+.downloaded-models{border:0;border-radius:0;max-height:230px;overflow:auto}
+.model-card{padding:11px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.model-card-main strong{font-size:12px}.model-card-main small{font-size:10px;line-height:1.35}
+.model-card-side{display:flex;align-items:center;gap:6px}
+.model-card-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.model-card-actions button{font-size:10px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface2)}
+.model-card-actions .danger{color:#a33}.model-card-actions button:hover{background:var(--hover)}
+.model-catalog-wrap{border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.model-catalog-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 11px;border-bottom:1px solid var(--line)}
+.model-catalog-head strong{font-size:12px}.model-catalog-head span{font-size:10px;color:var(--muted)}
+.model-catalog{max-height:280px;overflow:auto;border:0;border-radius:0;margin:0;padding:0 10px}
+.catalog-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.catalog-row:last-child{border-bottom:0}.catalog-main{min-width:0;flex:1}.catalog-main strong{display:block;font-size:12px}.catalog-main small{display:block;font-size:10px;color:var(--muted);line-height:1.35;margin-top:2px}.catalog-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}.catalog-actions button{font-size:10px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface2);white-space:nowrap}.catalog-actions button:hover{background:var(--hover)}
+.model-progress{margin-top:0}.model-progress-sub{font-size:10px;color:var(--muted);margin-top:5px}
+.model-delete-confirm{font-size:10px;color:var(--muted);line-height:1.4;margin-top:6px}
+.storage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.storage-card{padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--surface2)}
+.storage-card strong{display:block;font-size:15px;font-variant-numeric:tabular-nums}.storage-card span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.storage-bar{height:7px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:9px}.storage-bar>i{display:block;height:100%;width:0;background:var(--text);border-radius:999px}
+.data-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px}.data-stat{padding:9px;border:1px solid var(--line);border-radius:9px}.data-stat b{display:block;font-size:14px}.data-stat span{font-size:10px;color:var(--muted)}
+.data-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.data-actions .primary{grid-column:1/-1}.data-note{font-size:10px;color:var(--muted);line-height:1.45}
+@media(max-width:700px){.model-control-row{grid-template-columns:1fr}.storage-grid{grid-template-columns:1fr}.data-stat-row{grid-template-columns:1fr 1fr}.model-card{grid-template-columns:1fr}.model-card-side{justify-content:space-between}.catalog-row{align-items:flex-start;flex-direction:column}.catalog-actions{justify-content:flex-start}}
+
+
+/* v7 reliability + PWA + model UX */
+.sidebar{transition:width .18s,flex-basis .18s,padding .18s,transform .18s}.sidebar.collapsed{width:0;flex-basis:0;padding-left:0;padding-right:0;overflow:hidden;border:0}.mobile-menu{display:grid}.jump-latest{position:absolute;z-index:7;right:50%;bottom:116px;transform:translateX(50%);padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);box-shadow:0 5px 18px rgba(0,0,0,.12);font-size:11px}.jump-latest:hover{background:var(--hover)}
+.model-progress.sticky-top{position:sticky;top:0;z-index:4;margin:-2px 0 12px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.model-progress.done{border-color:var(--line)}.model-progress.done .model-progress-bar{background:var(--accent)}
+.model-progress-time{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:4px}
+.model-status-line{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:5px 0 0}.model-status-line span{font-size:11px;color:var(--muted)}
+.settings-details{border:1px solid var(--line);border-radius:11px;margin-top:10px;background:var(--surface)}.settings-details>summary{cursor:pointer;list-style:none;padding:11px 12px;font-size:12px;font-weight:600}.settings-details>summary::-webkit-details-marker{display:none}.settings-details>summary:after{content:'+';float:right;font-size:15px;color:var(--muted)}.settings-details[open]>summary:after{content:'−'}.details-body{padding:0 12px 12px;border-top:1px solid var(--line)}
+.limit-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.limit-card{padding:9px;border:1px solid var(--line);border-radius:9px;background:var(--surface2)}.limit-card b{display:block;font-size:12px}.limit-card span{display:block;font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}.compat-line{display:flex;align-items:flex-start;gap:7px;padding:9px 0 2px;font-size:11px;color:var(--muted);line-height:1.45}.compat-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);margin-top:4px;flex:0 0 7px}.compat-dot.good{background:var(--accent)}
+.catalog-row{min-height:62px}.catalog-main strong{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.catalog-download{min-width:82px}.catalog-row.disabled .catalog-main{opacity:.68}.model-card{align-items:flex-start}.model-card-main{min-width:0;flex:1}.model-card-actions{flex:0 0 auto}.model-badge{display:inline-block;padding:2px 6px;border-radius:999px;background:var(--surface2);color:var(--muted);font-size:9px;white-space:nowrap}.model-badge.ready{background:rgba(16,163,127,.12);color:var(--accent)}.model-badge.pending{background:var(--surface2);color:var(--muted)}.model-badge.recommended{background:rgba(16,163,127,.10);color:var(--accent)}.downloaded-empty{padding:12px 10px}
+.data-actions{margin-top:7px}.refresh-stats{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.refresh-stats span{font-size:10px;color:var(--muted)}.storage-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.storage-detail{padding:8px 9px;border:1px solid var(--line);border-radius:9px}.storage-detail b{display:block;font-size:11px}.storage-detail span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.install-card{padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--surface2)}.install-card strong{display:block;font-size:12px}.install-card p{font-size:10px;color:var(--muted);line-height:1.45;margin:5px 0 9px}.install-row{display:flex;align-items:center;gap:7px}.install-row .mini-btn{flex:1}.install-status{font-size:10px;color:var(--muted);line-height:1.4}
+.pwa-banner{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);z-index:45;width:min(620px,calc(100vw - 24px));display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:var(--surface);box-shadow:0 12px 40px rgba(0,0,0,.16)}.pwa-banner>div:first-child{min-width:0}.pwa-banner strong{display:block;font-size:12px}.pwa-banner span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.pwa-banner-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}.small-primary{width:auto!important;margin:0!important;padding:8px 11px!important}.pwa-banner[hidden]{display:none}
+.code .tok-key{font-weight:600}.code .tok-str{font-style:italic}.code .tok-com{color:var(--muted)}.code .tok-num{font-variant-numeric:tabular-nums}.code .tok-tag{font-weight:600}.math-display.math-rendered,.math-inline.math-rendered{font-family:serif}.math-display.math-rendered{white-space:normal}.math-display.math-rendered math{font-size:1.15em}.math-inline.math-rendered{background:none;padding:0}
+@media(max-width:760px){.sidebar.collapsed{transform:translateX(-101%);width:var(--sidebar-w);flex-basis:var(--sidebar-w);padding:8px}.jump-latest{bottom:126px}.pwa-banner{bottom:92px}.limit-grid,.storage-detail-grid{grid-template-columns:1fr}.pwa-banner{align-items:flex-start}.pwa-banner-actions{flex-direction:column}.pwa-banner-actions .mini-btn{padding:7px 9px}}
+
+
+/* Phase 1 + 2 */
+.memory-suggestion{margin:8px 0 18px 40px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);font-size:11px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:8px}.memory-suggestion-text{min-width:0;line-height:1.4}.memory-suggestion-actions{display:flex;gap:6px;flex:0 0 auto}.memory-suggestion-actions button{padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:10px}.memory-suggestion-actions button:hover{background:var(--hover)}
+.thinking-state{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.thinking-label{white-space:nowrap}.msg.generating .msg-actions{display:none!important}.msg.generating .bubble{min-height:34px}.send.stop svg{width:16px;height:16px}.composer .attach.hidden{display:none}.composer .attach[disabled]{opacity:.35;cursor:not-allowed}
+.relationship-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mode-card{padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);margin-top:8px}.mode-card strong{display:block;font-size:12px}.mode-card small{display:block;font-size:10px;color:var(--muted);line-height:1.4;margin-top:3px}.phase2-note{font-size:10px;color:var(--muted);line-height:1.45;margin-top:7px}.date-list{display:flex;flex-direction:column;gap:6px;margin:8px 0}.date-pill{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;font-size:10px}.date-pill button{color:var(--muted)}.summary-card{padding:10px 11px;background:var(--surface2);border-radius:10px;border:1px solid var(--line);font-size:11px;line-height:1.45;color:var(--muted)}
+@media(max-width:700px){.relationship-grid{grid-template-columns:1fr}.memory-suggestion{margin-left:0;align-items:flex-start;flex-direction:column}}
+
+/* v10 model/cache UX */
+.model-card-side{max-width:48%;}.model-card-side .model-badge{display:inline-block;margin-bottom:5px}.model-card-actions{flex-wrap:wrap;justify-content:flex-end}.model-card-actions button{min-height:28px}.model-progress-head>span:last-child{flex:0 0 auto}.model-progress-head .mini-btn{padding:5px 7px;font-size:10px}.model-status-line{font-variant-numeric:tabular-nums}.storage-card strong{font-variant-numeric:tabular-nums}.data-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.data-stat{padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface2)}.data-stat b{display:block;font-size:13px}.data-stat span{display:block;font-size:10px;color:var(--muted);margin-top:2px}@media(max-width:700px){.model-card{flex-direction:column}.model-card-side{max-width:none;width:100%}.model-card-actions{justify-content:flex-start}.data-stat-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="luma-splash" id="lumaSplash" role="status" aria-label="Loading Luma"><div class="splash-inner"><div class="splash-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M8 19.5C8 13.7 12.7 9 18.5 9h7C31.3 9 36 13.7 36 19.5v1C36 26.3 31.3 31 25.5 31H19l-8 5.5V30a11 11 0 0 1-3-7.5v-3Z" fill="white"/><path d="M14 19h15M14 24h10" stroke="#10a37f" stroke-width="2.4" stroke-linecap="round"/><path d="M27 28.5h2.5C35.3 28.5 40 33.2 40 39v.5l-5-3.5h-6.5c-2 0-3.9-.6-5.4-1.7" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="splash-name">Luma</div><div class="splash-sub">Private local AI companion</div><div class="splash-loader" aria-hidden="true"></div></div></div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="side-top"><div class="brand">Luma</div><button class="collapse" id="collapseSide" aria-label="Close sidebar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6 9 12l6 6"/></svg></button></div>
+  <button class="new-chat" id="newChat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg><span>New chat</span></button>
+  <button class="side-search" id="searchBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" placeholder="Search chats" autocomplete="off"></button>
+  <div class="chat-history-head"><div class="history-label">Chats</div><button class="history-toggle" id="archiveToggle" type="button">Archived</button></div>
+  <div class="chat-list" id="chatList"></div>
+  <div class="side-bottom"><button class="side-btn profile-btn" id="companionBtn"><div class="avatar" id="sideAvatar">E</div><div class="profile-name" id="sideName">Emma</div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6"/></svg></button></div>
+</aside>
+<div class="sidebar-mobile-backdrop" id="sidebarBackdrop"></div>
+<main class="main">
+  <header class="topbar">
+    <div class="top-left"><button class="icon mobile-menu" id="menuBtn" aria-label="Open sidebar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div class="chat-titlebar" id="chatTitlebar">New chat</div></div>
+    <div class="top-right"><div class="status"><i class="status-dot" id="statusDot"></i><span id="statusText">Checking local AI</span></div><button class="icon" id="settingsBtn" aria-label="Settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/><path d="m19.4 15 .1.1-1.5 2.5-.1-.1a7.9 7.9 0 0 1-2.2 1.3v.1H13v-.1a8 8 0 0 1-2-.8l-.1.1-2.7-1.1.1-.1a7.8 7.8 0 0 1-1.3-2.2H7v-3h.1a7.8 7.8 0 0 1 .8-2L7.8 9.6l1.1-2.7.1.1a8 8 0 0 1 2.2-1.3V5.6h3v.1a8 8 0 0 1 2 .8l.1-.1 2.7 1.1-.1.1a7.8 7.8 0 0 1 1.3 2.2h.1v3h-.1a7.8 7.8 0 0 1-.8 2Z"/></svg></button></div>
+  </header>
+  <section class="messages" id="messages"><div class="message-stack" id="messageStack"></div></section><button class="jump-latest" id="jumpLatest" type="button" hidden>Jump to latest</button>
+  <div class="composer-area"><div class="attachment-preview" id="attachmentPreview"><img id="attachmentThumb" alt=""><span class="attachment-name" id="attachmentName"></span><button id="clearAttachment" type="button" title="Remove image">×</button></div><div class="composer"><button class="attach" id="imageBtn" aria-label="Attach image" title="Attach image"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="4" width="17" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m5.5 17 4.7-4.8 3.2 3.1 2.2-2.2 2.9 3.4"/></svg></button><button class="attach" id="micBtn" aria-label="Voice input" title="Voice input"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="3" width="8" height="12" rx="4"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></button><textarea id="input" rows="1" placeholder="Message your companion…" autocomplete="off"></textarea><button class="send" id="send" disabled aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 14-7-4 14-3-6-7-1Z"/></svg></button></div><div class="composer-note">Private local chat · conversations stay in this browser</div></div>
+</main>
+</div>
+<div class="backdrop" id="backdrop"><aside class="settings-sheet" id="settingsSheet" aria-label="Settings"></aside></div>
+<div class="backdrop" id="setupBackdrop"><div class="setup-card" id="setupCard"></div></div><div class="pwa-banner" id="pwaBanner" hidden><div><strong>Install Luma</strong><span>Keep Luma on your device for a faster app-like launch.</span></div><div class="pwa-banner-actions"><button class="mini-btn" id="pwaLater" type="button">Not now</button><button class="primary small-primary" id="pwaInstall" type="button">Install</button></div></div>
+<input type="file" id="fileInput" hidden multiple><input type="file" id="imageInput" hidden accept="image/*">
+<script>
+(function(){
+  const hide=()=>{const el=document.getElementById('lumaSplash'); if(!el) return; requestAnimationFrame(()=>setTimeout(()=>el.classList.add('hide'),420));};
+  if(document.readyState==='complete') hide(); else window.addEventListener('load',hide,{once:true});
+})();
+let MODELS=[
+ {id:'Llama-3.2-1B-Instruct-q4f16_1-MLC',label:'Llama 3.2 1B Instruct',desc:'Lightweight · ~0.9 GB',tier:'light',size:'~0.9 GB',vram:879,contextWindow:4096},
+ {id:'Llama-3.2-3B-Instruct-q4f16_1-MLC',label:'Llama 3.2 3B Instruct',desc:'Balanced · ~2.2 GB',tier:'balanced',size:'~2.2 GB',vram:2264,contextWindow:4096},
+ {id:'Hermes-3-Llama-3.2-3B-q4f16_1-MLC',label:'Hermes 3 Llama 3.2 3B',desc:'Conversational · ~2.2 GB',tier:'balanced',size:'~2.2 GB',vram:2264,contextWindow:4096},
+ {id:'Phi-4-mini-instruct-q4f16_1-MLC',label:'Phi-4 Mini Instruct',desc:'Balanced · ~3.4 GB',tier:'balanced',size:'~3.4 GB',vram:3438,contextWindow:4096},
+ {id:'Phi-3.5-mini-instruct-q4f16_1-MLC',label:'Phi-3.5 Mini Instruct',desc:'General purpose · ~3.6 GB',tier:'balanced',size:'~3.6 GB',vram:3672,contextWindow:4096},
+ {id:'Mistral-7B-Instruct-v0.3-q4f16_1-MLC',label:'Mistral 7B Instruct v0.3',desc:'Powerful · ~4.5 GB',tier:'power',size:'~4.5 GB',vram:4573,contextWindow:4096},
+ {id:'Hermes-2-Pro-Mistral-7B-q4f16_1-MLC',label:'Hermes 2 Pro Mistral 7B',desc:'Conversational · ~4.0 GB',tier:'power',size:'~4.0 GB',vram:4033,contextWindow:4096},
+ {id:'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC',label:'DeepSeek R1 Distill Qwen 7B',desc:'Reasoning · ~5.0 GB',tier:'power',size:'~5.0 GB',vram:5107,contextWindow:4096},
+ {id:'Llama-3.1-8B-Instruct-q4f16_1-MLC',label:'Llama 3.1 8B Instruct',desc:'High-end · ~4.9 GB',tier:'power',size:'~4.9 GB',vram:5001,contextWindow:4096},
+ {id:'Hermes-3-Llama-3.1-8B-q4f16_1-MLC',label:'Hermes 3 Llama 3.1 8B',desc:'High-end conversational · ~4.9 GB',tier:'power',size:'~4.9 GB',vram:4876,contextWindow:4096}
+];
+const NAMES={Female:['Emma','Olivia','Mia','Sophia','Ava','Lily','Ella','Chloe','Grace','Nora'],Male:['Daniel','Noah','Ethan','Ryan','Alex','Leo','Arjun','Adam','James','Lucas']};
+const ROLES=['Companion','Best friend','Close friend','Girlfriend','Boyfriend','Wife','Husband','Romantic partner','Partner','Spouse','Crush','Flirty companion','Long-distance partner','Soulmate','Virtual date','Roleplay partner','Study buddy','Learning coach','Mentor','Gaming buddy','Coding partner','Creative partner','Writing partner','Accountability partner','Life organizer','Conversation partner','Language practice partner','Travel planning buddy','Book club buddy','Movie & series buddy','Fitness motivation buddy','Calm listener','Cheerleader','Problem-solving partner','Debate partner','Storyteller','Roleplay character','Custom role'];
+const defaults={name:'Emma',gender:'Female',age:'18+',role:'Companion',customRole:'',tone:'Natural',conversationMode:'Casual',warmth:82,humor:62,energy:55,formality:18,proactivity:38,emoji:25,initiative:true,relationshipStage:'New connection',companionNickname:'',nicknames:[],sharedMemories:[],importantDates:[],relationshipRules:'',words:[{w:'bro',f:'occasional'},{w:'okay okay',f:'rare'}],avoid:[],memories:[],userName:'',userGender:'Prefer not to say',pronouns:'they/them',nickname:'',addressMode:'name'};
+const generationDefaults={temperature:.72,topP:.9,repetitionPenalty:1.08,maxTokens:512,contextWindow:4096};
+let S={comp:{...defaults,words:defaults.words.map(x=>({...x})),avoid:[],memories:[],nicknames:[],sharedMemories:[],importantDates:[]},chats:[],active:null,model:null,loadedModel:null,engine:null,loading:false,search:'',device:null,modelBench:null,benchmarkHistory:[],modelBenchmarks:{},cacheStates:{},showArchived:false,sidebarCollapsed:false,followOutput:true,chatMenu:null,editing:null,draftImage:null,setupComplete:false,generation:{...generationDefaults},modelDownload:{active:false,id:null,progress:null,label:'',note:'',error:false,done:false,startedAt:null},modelCacheMeta:{},cacheRecoveryPending:false,loadingKind:'idle',memoryCandidate:null,generatingMessageKey:null};
+try{
+ const raw=localStorage.getItem('luma_companion_v5')||localStorage.getItem('luma_companion_v4')||localStorage.getItem('krono_companion_v3');
+ const x=raw?JSON.parse(raw):null;
+ if(x){
+  S={...S,...x};
+  S.comp={...defaults,...(x.comp||{})};
+  S.setupComplete=typeof x.setupComplete==='boolean'?x.setupComplete:!!x.comp?.userName;
+  S.loadedModel=x.loadedModel||null;
+  S.comp.words=Array.isArray(S.comp.words)?S.comp.words.map(v=>typeof v==='string'?{w:v,f:'occasional'}:v):defaults.words.map(v=>({...v}));
+  S.comp.avoid=Array.isArray(S.comp.avoid)?S.comp.avoid:[];
+  S.comp.memories=Array.isArray(S.comp.memories)?S.comp.memories.map(normalizeMemory).filter(m=>m.text):[];
+  S.comp.nicknames=Array.isArray(S.comp.nicknames)?S.comp.nicknames:[];
+  S.comp.sharedMemories=Array.isArray(S.comp.sharedMemories)?S.comp.sharedMemories.map(v=>String(v).trim()).filter(Boolean):[];
+  S.comp.importantDates=Array.isArray(S.comp.importantDates)?S.comp.importantDates:[];
+  S.generation={...generationDefaults,...(x.generation||{})};
+  S.benchmarkHistory=Array.isArray(x.benchmarkHistory)?x.benchmarkHistory.slice(-8):[];
+  S.modelBenchmarks=(x.modelBenchmarks&&typeof x.modelBenchmarks==='object')?x.modelBenchmarks:{};
+  S.cacheStates=(x.cacheStates&&typeof x.cacheStates==='object')?x.cacheStates:{};
+  S.modelCacheMeta=(x.modelCacheMeta&&typeof x.modelCacheMeta==='object')?x.modelCacheMeta:{};
+  S.cacheRecoveryPending=!Object.keys(S.modelCacheMeta).length&&Object.keys(S.cacheStates||{}).length>0;
+  if(x.modelDownload&&typeof x.modelDownload==='object') S.modelDownload={...S.modelDownload,...x.modelDownload};
+  if(S.modelDownload?.active){S.modelDownload={...S.modelDownload,active:false,error:true,done:false,note:'Browser was closed while this download was in progress. The partial cache is not assumed complete. Verify the model or download it again.'};}
+  S.sidebarCollapsed=!!x.sidebarCollapsed;S.showArchived=!!x.showArchived;
+  S.loadingKind='idle';S.loading=false;S.memoryCandidate=null;S.generatingMessageKey=null;
+  S.chats=Array.isArray(x.chats)?x.chats.map(c=>({...c,pinned:!!c.pinned,archived:!!c.archived,messages:Array.isArray(c.messages)?c.messages:[],summary:typeof c.summary==='string'?c.summary:'',summaryUpdated:Number(c.summaryUpdated)||0})):[];
+ }
+}catch{}
+// Migrate legacy cache flags into a durable downloaded-model registry.
+S.modelCacheMeta=S.modelCacheMeta&&typeof S.modelCacheMeta==='object'?S.modelCacheMeta:{};
+for(const [id,val] of Object.entries(S.cacheStates||{})){
+  if(val&&!S.modelCacheMeta[id]) S.modelCacheMeta[id]={status:'downloaded',downloadedAt:Date.now(),lastVerifiedAt:0,verification:'legacy-state'};
+}
+if(S.loadedModel&&!S.modelCacheMeta[S.loadedModel]) S.modelCacheMeta[S.loadedModel]={status:'downloaded',downloadedAt:Date.now(),lastVerifiedAt:0,verification:'loaded-session'};
+save();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function save(){localStorage.setItem('luma_companion_v5',JSON.stringify({version:10,comp:S.comp,chats:S.chats,active:S.active,model:S.model,loadedModel:S.loadedModel,setupComplete:S.setupComplete,generation:S.generation,benchmarkHistory:S.benchmarkHistory,modelBenchmarks:S.modelBenchmarks,showArchived:S.showArchived,sidebarCollapsed:S.sidebarCollapsed,cacheStates:S.cacheStates,modelCacheMeta:S.modelCacheMeta,modelDownload:S.modelDownload,cacheRecoveryPending:S.cacheRecoveryPending}))}
+function normalizeMemory(m){const x=(m&&typeof m==='object')?m:{text:String(m||'')};return {id:x.id||((crypto.randomUUID&&crypto.randomUUID())||String(Date.now()+Math.random())),text:String(x.text||'').trim(),source:String(x.source||'saved'),type:String(x.type||'FACT').toUpperCase(),importance:Number.isFinite(Number(x.importance))?Number(x.importance):0.6,confidence:Number.isFinite(Number(x.confidence))?Number(x.confidence):1,updated:Number(x.updated||x.created||Date.now()),created:Number(x.created||Date.now()),tags:Array.isArray(x.tags)?x.tags.map(v=>String(v).toLowerCase()).slice(0,10):[]}}
+function modeInstructions(mode){return ({'Casual':'Chat like a natural friend: relaxed, conversational, brief, curious, and warm.','Deep conversation':'Be reflective and thoughtful. Ask meaningful follow-ups without turning every reply into an interview.','Playful':'Be playful, teasing, witty, and lightly cheeky while respecting boundaries.','Supportive':'Be warm, reassuring, practical, and attentive without being melodramatic or creating dependency.','Romantic':'Be affectionate, sweet, slightly cheesy when the personality calls for it, and emotionally present. Light flirting is fine for an 18+ profile; keep 16+ interactions non-sexual.','Serious':'Be direct, grounded, respectful, and focused. Minimize jokes and filler.','Funny':'Use light humor and wit naturally. Do not force a joke into every message.','Quiet':'Use shorter, softer replies and leave room for the user.','Storytelling':'Use vivid but concise storytelling when appropriate, without claiming imagined events really happened.','Roleplay':'Stay in the selected character/relationship role, use natural dialogue and light action beats when helpful, and never speak for the user.'}[mode]||'Be natural and conversational.')}
+function relationshipInstructions(c){const p=[];if(c.role)p.push(`role: ${c.role==='Custom role'?(c.customRole||'custom companion'):c.role}`);if(c.relationshipStage)p.push(`stage: ${c.relationshipStage}`);if(c.sharedMemories?.length)p.push(`shared memories: ${c.sharedMemories.slice(-8).join(' | ')}`);if(c.relationshipRules)p.push(`rules: ${c.relationshipRules}`);return p.join('; ')||'relationship not specified'}
+function addressName(){const c=S.comp;return c.addressMode==='nickname'?(c.nickname||c.userName||'there'):c.addressMode==='name'?(c.userName||c.nickname||'there'):'there'}
+function memoryKeywords(text){return new Set(String(text||'').toLowerCase().replace(/[^a-z0-9\s'-]/g,' ').split(/\s+/).filter(w=>w.length>=3&&!['the','and','that','this','what','when','where','with','have','from','your','you','are','for','can','about','just','like','tell','into','will','would','could','should','here','there'].includes(w)))}
+function relevantMemories(text){const keys=memoryKeywords(text);return (S.comp.memories||[]).map(m=>{const mk=memoryKeywords(m.text);let overlap=0;for(const k of mk)if(keys.has(k))overlap++;return {m,score:overlap*3+(Number(m.importance)||0)*1.4+(Number(m.confidence)||0)*.8}}).filter(x=>x.score>1.3).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m)}
+function updateConversationSummary(c){if(!c)return;const users=(c.messages||[]).filter(m=>m.role==='user'&&m.content).map(m=>String(m.content).replace(/\s+/g,' ').trim());if(users.length<4)return;const uniq=[];for(const t of users.slice(-10))if(!uniq.some(u=>u.toLowerCase()===t.toLowerCase()))uniq.push(t);c.summary=uniq.slice(-6).map(t=>'• '+t.slice(0,150)).join('\n');c.summaryUpdated=Date.now()}
+function memoryCandidateFromText(text){const t=String(text||'').trim();const rules=[{re:/\bmy name is\s+(.+?)(?:[.!?]|$)/i,type:'PROFILE',importance:.9},{re:/\bi work (?:as|at)\s+(.+?)(?:[.!?]|$)/i,type:'PROFILE',importance:.8},{re:/\bi (?:really )?(?:like|love)\s+(.+?)(?:[.!?]|$)/i,type:'PREFERENCE',importance:.7},{re:/\bi hate\s+(.+?)(?:[.!?]|$)/i,type:'PREFERENCE',importance:.8},{re:/\bi(?:'| a)m working on\s+(.+?)(?:[.!?]|$)/i,type:'GOAL',importance:.8},{re:/\bi want to\s+(.+?)(?:[.!?]|$)/i,type:'GOAL',importance:.7}];for(const r of rules){const m=t.match(r.re);if(m&&m[1]&&m[1].length<160){const v=m[0].trim();if(!(S.comp.memories||[]).some(x=>x.text.toLowerCase()===v.toLowerCase()))return normalizeMemory({text:v,source:'conversation',type:r.type,importance:r.importance,confidence:.86,tags:[r.type.toLowerCase()]})}}return null}
+function setMemoryCandidate(text){S.memoryCandidate=memoryCandidateFromText(text);save()}
+function acceptMemoryCandidate(){if(!S.memoryCandidate)return;addMemoryObject(S.memoryCandidate);S.memoryCandidate=null;save();renderMessages()}
+function dismissMemoryCandidate(){S.memoryCandidate=null;save();renderMessages()}
+function relationshipMode(){return S.comp.conversationMode||'Casual'}
+function initials(){return (S.comp.name||'E').trim().charAt(0).toUpperCase()||'E'}
+function ensureChat(){if(S.active&&S.chats.some(c=>c.id===S.active))return;const c={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),title:'New chat',messages:[],updated:Date.now(),pinned:false,archived:false};S.chats.unshift(c);S.active=c.id;save()}
+function current(){return S.chats.find(c=>c.id===S.active)||null}
+function chatText(c){return (c?.messages||[]).map(m=>typeof m.content==='string'?m.content:'').join(' ')}
+function sortChats(a,b){if(!!b.pinned!==!!a.pinned)return b.pinned?1:-1;return (b.updated||0)-(a.updated||0)}
+function renderChats(){
+  const q=S.search.trim().toLowerCase();
+  const visible=S.chats.filter(c=>S.showArchived?!!c.archived:!c.archived).filter(c=>!q||c.title.toLowerCase().includes(q)||chatText(c).toLowerCase().includes(q)).slice().sort(sortChats);
+  $('chatList').innerHTML=visible.map(c=>`<div class="chat-item-wrap ${c.id===S.active?'active':''}" data-wrap-chat="${esc(c.id)}"><button class="chat-item ${c.id===S.active?'active':''}" data-open-chat="${esc(c.id)}" type="button"><span class="chat-open"><span class="chat-pin">${c.pinned?'•':''}</span><span class="chat-title">${esc(c.title)}</span></span></button><button class="chat-more" data-chat-menu="${esc(c.id)}" title="Chat options" type="button">⋯</button>${S.chatMenu===c.id?`<div class="chat-menu" data-menu-for="${esc(c.id)}"><button data-rename-chat="${esc(c.id)}" type="button">Rename</button><button data-pin-chat="${esc(c.id)}" type="button">${c.pinned?'Unpin':'Pin'}</button><button data-archive-chat="${esc(c.id)}" type="button">${c.archived?'Unarchive':'Archive'}</button><button data-delete-chat="${esc(c.id)}" class="danger" type="button">Delete</button></div>`:''}</div>`).join('')||`<div class="field-help" style="padding:10px">${S.showArchived?'No archived chats.':'No chats found.'}</div>`;
+}
+function renameChat(id){const c=S.chats.find(x=>x.id===id);if(!c)return;const n=prompt('Rename chat',c.title);if(n!=null&&n.trim()){c.title=n.trim().slice(0,80);c.updated=Date.now();S.chatMenu=null;save();renderChats();renderMessages()}}
+function togglePin(id){const c=S.chats.find(x=>x.id===id);if(!c)return;c.pinned=!c.pinned;S.chatMenu=null;c.updated=Date.now();save();renderChats()}
+function toggleArchive(id){const c=S.chats.find(x=>x.id===id);if(!c)return;c.archived=!c.archived;S.chatMenu=null;if(c.archived&&S.active===id){S.active=S.chats.find(x=>!x.archived)?.id||null;ensureChat()}c.updated=Date.now();save();renderChats();renderMessages()}
+function deleteChat(id){const c=S.chats.find(x=>x.id===id);if(!c)return;if(!confirm(`Delete “${c.title}”? This cannot be undone.`))return;S.chats=S.chats.filter(x=>x.id!==id);S.chatMenu=null;if(S.active===id)S.active=S.chats.find(x=>S.showArchived?x.archived:!x.archived)?.id||null;ensureChat();save();renderChats();renderMessages()}
+function safeUrl(u,kind='link'){const x=String(u||'').trim();if(kind==='image')return /^(https?:\/\/|blob:|data:image\/)/i.test(x)?x:'';return /^https?:\/\//i.test(x)?x:''}
+function stashBlock(arr,html){const i=arr.push(html)-1;return `@@LUMABLOCK${i}@@`}
+function tableToHtml(lines){const cells=r=>r.trim().replace(/^\||\|$/g,'').split('|').map(x=>x.trim());const h=cells(lines[0]);const body=lines.slice(2).filter(Boolean).map(cells);return `<table class="md-table"><thead><tr>${h.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${body.map(row=>`<tr>${row.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+function highlightCode(code,lang='code'){
+  const L=String(lang||'').toLowerCase();
+  let x=esc(code);
+  const slots=[];
+  const put=v=>{const k=`@@LUMATOK${slots.length}@@`;slots.push(v);return k};
+  const stringRx=/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)/g;
+  x=x.replace(stringRx,m=>put(`<span class="tok-str">${m}</span>`));
+  const commentRx=(L==='python'||L==='py'||L==='bash'||L==='sh')?/([#][^\n]*)/g:/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g;
+  x=x.replace(commentRx,m=>put(`<span class="tok-com">${m}</span>`));
+  if(['js','javascript','ts','typescript','java','c#','csharp','cpp','c++','cs','go','rust','kotlin','swift','php','python','py'].includes(L)){
+    x=x.replace(/\b(?:const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|class|extends|import|from|export|async|await|try|catch|throw|typeof|instanceof|in|of|def|lambda|with|as|yield|public|private|protected|static|void|int|float|double|bool|string|namespace|using|struct|enum|interface|package|fun|funct|fn|match|impl|trait|use|mut)\b/g,m=>`<span class="tok-key">${m}</span>`);
+  } else if(L==='json'){
+    x=x.replace(/(&quot;[^&]*?&quot;)(?=\s*:)/g,`<span class="tok-key">$1</span>`);
+  } else if(['html','xml'].includes(L)){
+    x=x.replace(/(&lt;\/?[a-zA-Z0-9:-]+)([^&]*?)(\/&gt;|&gt;)/g,(m,a,b,c)=>`<span class="tok-tag">${a}${b}${c}</span>`);
+  } else if(L==='css'){
+    x=x.replace(/([.#]?[a-zA-Z_-][\w-]*)(?=\s*\{)/g,`<span class="tok-key">$1</span>`);
+  } else if(L==='sql'){
+    x=x.replace(/\b(?:SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP|BY|ORDER|HAVING|LIMIT|AS|AND|OR|NOT|NULL|PRIMARY|KEY|INDEX)\b/gi,m=>`<span class="tok-key">${m}</span>`);
+  }
+  x=x.replace(/\b(?:0x[0-9a-f]+|\d+(?:\.\d+)?)\b/gi,m=>`<span class="tok-num">${m}</span>`);
+  x=x.replace(/@@LUMATOK(\d+)@@/g,(_,i)=>slots[+i]);
+  return x;
+}
+function latexSimpleHTML(src){
+  let x=String(src||'').trim();
+  const greek={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',theta:'θ',lambda:'λ',mu:'μ',pi:'π',sigma:'σ',phi:'φ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Omega:'Ω'};
+  for(const [k,v] of Object.entries(greek))x=x.replaceAll('\\'+k,v);
+  x=x.replace(/\\(cdot|times|div|pm|leq|geq|neq|approx|rightarrow|leftarrow|infty|sum|prod|int|to)\\b/g,(_,k)=>({cdot:'·',times:'×',div:'÷',pm:'±',leq:'≤',geq:'≥',neq:'≠',approx:'≈',rightarrow:'→',leftarrow:'←',infty:'∞',sum:'∑',prod:'∏',int:'∫',to:'→'}[k]||k));
+  x=x.replace(/\\sqrt\{([^{}]+)\}/g,'√($1)');
+  x=x.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g,'<span class="math-frac"><span>$1</span><span>$2</span></span>');
+  x=x.replace(/\^\{([^{}]+)\}/g,'<sup>$1</sup>').replace(/_\{([^{}]+)\}/g,'<sub>$1</sub>');
+  x=x.replace(/\^([A-Za-z0-9])/g,'<sup>$1</sup>').replace(/_([A-Za-z0-9])/g,'<sub>$1</sub>');
+  x=x.replace(/\\text\{([^{}]+)\}/g,'$1');
+  x=x.replace(/\\left|\\right|\\,|\\!|\\quad/g,'');
+  return x;
+}
+function renderMath(src,display){
+  const body=latexSimpleHTML(src);
+  return display?`<div class="math-display math-rendered" role="math">${body}</div>`:`<span class="math-inline math-rendered" role="math">${body}</span>`;
+}
+function markdown(t){
+  let s=String(t??'').replace(/\r\n?/g,'\n');const blocks=[];
+  s=s.replace(/```([\w+-]*)\n?([\s\S]*?)```/g,(_,lang,code)=>stashBlock(blocks,`<div class="code-wrap"><div class="code-head"><span>${esc(lang||'code')}</span><button data-copy-code type="button">Copy</button></div><pre class="code" data-lang="${esc(lang||'code')}">${highlightCode(code.trim(),lang)}</pre></div>`));
+  s=s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,(_,alt,url)=>{const safe=safeUrl(url,'image');return safe?stashBlock(blocks,`<figure class="md-image"><img src="${esc(safe)}" alt="${esc(alt)}" loading="lazy" referrerpolicy="no-referrer"><figcaption>${esc(alt)}</figcaption></figure>`):''});
+  s=s.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,(_,label,url)=>stashBlock(blocks,`<a class="md-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`));
+  s=s.replace(/\$\$([\s\S]*?)\$\$/g,(_,m)=>stashBlock(blocks,renderMath(m.trim(),true)));
+  s=s.replace(/(^|[^$])\$([^$\n]+)\$/g,(_,pre,m)=>pre+stashBlock(blocks,renderMath(m.trim(),false)));
+  const rawLines=s.split('\n');let built=[];for(let i=0;i<rawLines.length;i++){const a=rawLines[i],b=rawLines[i+1]||'';if(a.includes('|')&&/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(b)){let rows=[a,b],j=i+2;while(j<rawLines.length&&rawLines[j].includes('|')&&rawLines[j].trim()){rows.push(rawLines[j]);j++}built.push(stashBlock(blocks,tableToHtml(rows)));i=j-1}else built.push(a)}s=built.join('\n');
+  s=esc(s);
+  s=s.replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>');
+  s=s.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/__(.*?)__/g,'<strong>$1</strong>').replace(/~~(.*?)~~/g,'<del>$1</del>').replace(/(^|[^*])\*(?!\s)([^*\n]+?)\*(?!\*)/g,'$1<em>$2</em>');
+  s=s.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  s=s.replace(/(?:^|\n)((?:[-*] .+(?:\n|$))+)/g,(m)=>{const items=m.trim().split(/\n/).map(x=>x.replace(/^[-*] /,'')).map(x=>`<li>${x}</li>`).join('');return `<ul>${items}</ul>`});
+  s=s.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');s='<p>'+s+'</p>';
+  s=s.replace(/<p>(?=<h[1-3]>|<ul>|@@LUMABLOCK|<table)/g,'').replace(/<\/h([1-3])><\/p>/g,'</h$1>').replace(/<\/ul><\/p>/g,'</ul>').replace(/<\/table><\/p>/g,'</table>');
+  return s.replace(/@@LUMABLOCK(\d+)@@/g,(_,i)=>blocks[+i]).replace(/<p><\/p>/g,'');
+}
+async function copyToClipboard(text){
+ const value=String(text??'');
+ if(!value)return false;
+ try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);return true}}catch{}
+ try{const ta=document.createElement('textarea');ta.value=value;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.left='-9999px';ta.style.top='0';document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);const ok=document.execCommand('copy');ta.remove();return ok}catch{return false}
+}
+async function copyText(btn){const pre=btn.closest('.code-wrap')?.querySelector('pre');if(!pre)return;const ok=await copyToClipboard(pre.innerText);const old=btn.textContent;btn.textContent=ok?'Copied':'Copy failed';setTimeout(()=>btn.textContent=old||'Copy',1000)}
+async function copyMsg(btn,i){const c=current(),m=c?.messages[i];if(!m)return;const ok=await copyToClipboard(typeof m.content==='string'?m.content:'');if(btn){const old=btn.textContent;btn.textContent=ok?'✓':'!';btn.title=ok?'Copied':'Copy failed';setTimeout(()=>{btn.textContent=old;btn.title='Copy'},1000)}}
+function renderMessageBody(m){let html=m.content?markdown(typeof m.content==='string'?m.content:''):'<span class="typing"><i></i><i></i><i></i></span>';if(m.image)html=`<img class="message-attachment" src="${esc(m.image)}" alt="${esc(m.imageName||'Attached image')}" loading="lazy">`+html;return html}
+function atBottom(el){return el.scrollHeight-el.scrollTop-el.clientHeight<72}
+function updateJumpButton(){const m=$('messages'),b=$('jumpLatest');if(!m||!b)return;const show=!S.followOutput&&!atBottom(m);b.hidden=!show}
+function renderMessages(){
+ const c=current();$('chatTitlebar').textContent=c?.title||'New chat';
+ if(!c||!c.messages.length){$('messageStack').innerHTML=`<div class="welcome"><div class="welcome-logo"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3.5 13.9 10l6.1 2-6.1-2L12 20.5 10.1 14 4 12l6.1-2L12 3.5Z"/></svg></div><h1>${esc(S.comp.userName?`Hi ${S.comp.userName}, I’m ${S.comp.name}.`:`Hi, I’m ${S.comp.name}.`)}</h1><p>${esc(S.comp.userName?`${S.comp.name} is ready for a ${relationshipMode().toLowerCase()} chat.`:`Set your name and preferences in Settings so ${S.comp.name} knows how to address you.`)}</p><div class="suggestions"><button class="suggestion" data-prompt="Tell me something interesting">Tell me something interesting</button><button class="suggestion" data-prompt="Let's have a casual chat">Let's have a casual chat</button><button class="suggestion" data-prompt="Help me plan my day">Help me plan my day</button></div></div>`;document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>send(b.dataset.prompt));updateJumpButton();return;}
+ const html=c.messages.map((m,i)=>{const isA=m.role==='assistant',err=!!m.error,editing=S.editing?.index===i&&S.editing?.chatId===c.id,generating=isA&&S.loading&&S.loadingKind==='generation'&&S.generatingMessageKey===`${c.id}:${i}`;let bodyHtml;if(editing){bodyHtml=`<div class="edit-box"><textarea id="edit_${i}">${esc(m.content||'')}</textarea><div class="edit-actions"><button class="edit-save" onclick="saveEditedMessage(${i})" type="button">Save & regenerate</button><button class="edit-cancel" onclick="cancelEdit()" type="button">Cancel</button></div></div>`}else if(generating&&!m.content){bodyHtml=`<div class="bubble"><span class="thinking-state"><span class="typing"><i></i><i></i><i></i></span><span class="thinking-label">${esc(S.comp.name)} is thinking…</span></span></div>`}else{bodyHtml=`<div class="bubble">${renderMessageBody(m)}</div>`}let actions='';if(m.content&&!editing&&!generating){if(isA){actions=`<button onclick="copyMsg(this,${i})" title="Copy" type="button">⧉</button><button onclick="speakMsg(${i})" title="Read aloud" type="button">◖</button><button onclick="${err?'retryMessage':'regen'}(${i})" title="${err?'Retry':'Regenerate'}" type="button">↻</button><button onclick="branchFrom(${i})" title="Branch from here" type="button">⌘</button>`}else{actions=`<button onclick="copyMsg(this,${i})" title="Copy" type="button">⧉</button><button onclick="editMessage(${i})" title="Edit" type="button">✎</button><button onclick="regenerateFromUser(${i})" title="Regenerate from here" type="button">↻</button><button onclick="rememberMessage(${i})" title="Remember this" type="button">☆</button><button onclick="branchFrom(${i})" title="Branch from here" type="button">⌘</button>`}}const candidate=(S.memoryCandidate&&m.role==='user'&&i===c.messages.length-2&&S.memoryCandidate.text===m.content)?`<div class="memory-suggestion"><div class="memory-suggestion-text">Remember this for later?</div><div class="memory-suggestion-actions"><button onclick="acceptMemoryCandidate()" type="button">Remember</button><button onclick="dismissMemoryCandidate()" type="button">Ignore</button></div></div>`:'';return `<article class="msg ${isA?'assistant':'user'} ${err?'msg-error':''} ${generating?'generating':''}" data-msg-index="${i}"><div class="msg-avatar">${isA?initials():'You'}</div><div class="msg-body">${bodyHtml}${actions?`<div class="msg-actions">${actions}</div>`:''}${candidate}${err?`<div class="retry-note">${esc(m.errorMessage||'Local generation failed. Retry or choose another model.')}</div>`:''}</div></article>`}).join('');$('messageStack').innerHTML=html;if(S.followOutput)$('messages').scrollTop=$('messages').scrollHeight;updateJumpButton();if(S.editing)setTimeout(()=>{$('edit_'+S.editing.index)?.focus()},0)
+}
+function editMessage(i){const c=current(),m=c?.messages[i];if(!m||m.role!=='user'||S.loading)return;S.editing={chatId:c.id,index:i};renderMessages()}
+function cancelEdit(){S.editing=null;renderMessages()}
+async function saveEditedMessage(i){const c=current(),m=c?.messages[i];if(!c||!m||m.role!=='user'||S.loading)return;const value=$('edit_'+i)?.value.trim();if(!value)return;m.content=value;m.image=null;m.imageName=null;c.messages=c.messages.slice(0,i+1);const a={role:'assistant',content:'',error:false};c.messages.push(a);c.title=i===0?value.replace(/\s+/g,' ').slice(0,48):c.title;c.updated=Date.now();S.editing=null;save();renderChats();renderMessages();await generate(buildContextMessages(c,c.messages.length-2),a);c.updated=Date.now();save();renderChats()}
+function regenerateFromUser(i){const c=current(),m=c?.messages[i];if(!c||S.loading||!m||m.role!=='user')return;c.messages=c.messages.slice(0,i+1);const a={role:'assistant',content:'',error:false};c.messages.push(a);c.updated=Date.now();save();renderMessages();generate(buildContextMessages(c,i),a).then(()=>{c.updated=Date.now();save();renderChats()})}
+function branchFrom(i){const c=current();if(!c)return;const copied=(c.messages||[]).slice(0,i+1).map(m=>({...m}));const title=(c.title||'Chat')+' · Branch';const n={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),title:title.slice(0,80),messages:copied,updated:Date.now(),pinned:false,archived:false};S.chats.unshift(n);S.active=n.id;save();renderChats();renderMessages();closeSidebar()}
+function buildContextMessages(c,beforeIndex=c.messages.length-1){const system={role:'system',content:systemPrompt(c,beforeIndex)};const maxCtx=Math.min(modelContextLimit(S.model),Math.max(1024,Number(S.generation.contextWindow)||4096));const reserve=responseTokenBudget()+180;let budget=Math.max(160,maxCtx-reserve-estimateTokens(system.content));const out=[];const start=Math.min(beforeIndex,c.messages.length-1);const floor=Math.max(0,start-9);for(let i=start;i>=floor;i--){const m=c.messages[i],cost=estimateTokens(typeof m.content==='string'?m.content:'')+(m.image?350:0);if(cost>budget)continue;out.unshift(apiMessage(m));budget-=cost}if(c.summary&&estimateTokens(c.summary)+estimateTokens(system.content)<maxCtx-reserve){out.unshift({role:'system',content:`Conversation summary (background only; recent messages override it):\n${c.summary}`})}return [system,...out]}
+function systemPrompt(c=S.comp,beforeIndex=null){const comp=c||S.comp;const words=comp.words?.map(x=>`${x.w} (${x.f})`).join(', ')||'none';const avoid=comp.avoid?.join(', ')||'none';const role=comp.role==='Custom role'?(comp.customRole||'general companion'):comp.role;const address=addressName();const conv=beforeIndex!=null&&current()?current():null;const relevant=conv?relevantMemories(conv.messages[beforeIndex]?.content||''):(comp.memories||[]).sort((a,b)=>(Number(b.importance)||0)-(Number(a.importance)||0)).slice(0,6);const memoryText=relevant.length?relevant.map(m=>`- [${m.type||'FACT'}] ${m.text}`).join('\\n'):'- none relevant';const mode=comp.conversationMode||'Casual';const ageRule=comp.age==='16+'?'Keep everything age-appropriate and non-sexual. Romantic roles remain non-sexual.':'This is an adult profile. Mature romantic tone and light flirting are allowed when clearly invited, but do not inject sexual language when it is not wanted and do not become graphic.';const nick=comp.nicknames?.length?`Possible contextual nicknames: ${comp.nicknames.join(', ')}. Use sparingly.`:'No contextual nicknames configured.';const shared=comp.sharedMemories?.length?comp.sharedMemories.slice(-8).join(' | '):'none';const dates=comp.importantDates?.length?comp.importantDates.slice(-8).map(d=>`${d.label||'date'} (${d.date||''})`).join(' | '):'none';return `You are ${comp.name}, a ${String(comp.gender||'').toLowerCase()} AI companion speaking directly to one user. You are not the user. Answer the user's latest message only.\n\nRELATIONSHIP: ${relationshipInstructions(comp)}.\nCONVERSATION MODE: ${mode}. ${modeInstructions(mode)}\n\nPERSONALITY: warmth ${comp.warmth}/100; humor ${comp.humor}/100; energy ${comp.energy}/100; formality ${comp.formality}/100; proactivity ${comp.proactivity}/100; emoji ${comp.emoji}/100.\nPreferred words/phrases: ${words}. Avoid: ${avoid}.\nUSER: name ${comp.userName||'not provided'}; pronouns ${comp.pronouns||'not provided'}; gender ${comp.userGender||'not specified'}; preferred address ${address}. ${nick}\nCOMPANION NICKNAME: ${comp.companionNickname||'not set'}.\nSHARED MEMORIES: ${shared}.\nIMPORTANT DATES: ${dates}.\n\nRELEVANT LONG-TERM MEMORY:\n${memoryText}\n\nBEHAVIOR: Reply as one speaker. Never output simulated transcripts or role labels such as User:, Assistant:, You:, ${comp.name}: unless explicitly asked for a transcript. Never narrate the user's thoughts, feelings, actions, or words as facts unless stated. Never invent browsing, weather checks, current time checks, camera/microphone access, external tools, or real-world actions. You have no external tools. Stay in the selected relationship role and conversation mode. ${ageRule} Do not repeat the user's question or use canned filler. ${comp.initiative===false?'Do not force follow-up questions.':'When natural, follow up on unfinished topics, goals, or remembered discussions without interrogating.'} Do not claim to be human or physically present. Keep roleplay separate from factual real-world claims.\nYour reply should sound like ${comp.name} talking naturally to ${address}, not like documentation about an AI.`}
+function setStatus(text,ok=false){$('statusText').textContent=text;$('statusDot').classList.toggle('ok',ok)}
+function cleanModelLabel(id){return id.replace(/-q4f\d+_\d+-MLC$/i,'').replace(/-q0f\d+-MLC$/i,'').replace(/-MLC$/i,'').replace(/-/g,' ').replace(/\s+/g,' ').trim()}
+function formatModel(m){const id=m.model_id||m.id;const mb=Number(m.vram_required_MB||m.vram_required_mb||m.vram||0);const gb=mb?`~${(mb/1024).toFixed(1)} GB`:'size varies';const tier=mb<=1600?'light':mb<=2600?'mobile':mb<=4200?'balanced':'power';const ov=m.overrides||{};return {id,label:cleanModelLabel(id),desc:`${tier==='power'?'High-end':tier==='balanced'?'Balanced':tier==='mobile'?'Mobile-friendly':'Lightweight'} · ${gb} GPU memory`,tier,size:gb,vram:mb,low:!!m.low_resource_required,buffer:Number(m.buffer_size_required_bytes||0),features:Array.isArray(m.required_features)?m.required_features:[],modelType:m.model_type||'LLM',contextWindow:Number(ov.context_window_size||m.context_window_size||4096),source:m.model||'',lib:m.model_lib||'',integrity:m.integrity||null,overrides:ov,modelRecord:m}}
+function isMobileDevice(){return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)}
+function softVramBudget(info={}){const mem=Number(info.memory||navigator.deviceMemory||0);const mobile=isMobileDevice();let base;if(mobile)base=mem<=2?1200:mem<=3?1550:mem<=4?2100:mem<=6?2800:3400;else base=mem<=4?2000:mem<=8?3600:mem<=16?5200:7000;if(info.benchmarkScore){const mult=info.benchmarkScore<25?.82:info.benchmarkScore<55?1:1.15;base*=mult}return Math.round(base)}
+function modelCompatibility(m,info=S.device||{}){if(!info.gpu)return {status:'unavailable',reason:'WebGPU unavailable'};if(m.features?.length&&info.features&&m.features.some(f=>!info.features.includes(f)))return {status:'unavailable',reason:`Needs ${m.features.find(f=>!info.features.includes(f))}`};if(m.buffer&&info.maxBuffer&&m.buffer>info.maxBuffer)return {status:'unavailable',reason:'GPU buffer limit too low'};const budget=softVramBudget(info);if(m.vram&&m.vram>budget*1.35)return {status:'heavy',reason:`Above conservative ${(budget/1024).toFixed(1)} GB budget`};if(m.vram&&m.vram>budget)return {status:'possible',reason:'May work, but leaves less headroom'};return {status:'compatible',reason:m.low?'Low-resource model':'Fits conservative budget'}}
+function modelQualityScore(m){const id=m.id.toLowerCase();let q=0;if(id.includes('llama-3.2-3b-instruct'))q+=95;if(id.includes('qwen3-1.7b'))q+=93;if(id.includes('qwen3-0.6b'))q+=82;if(id.includes('phi-4-mini'))q+=86;if(id.includes('llama-3.2-1b-instruct'))q+=80;if(id.includes('mistral-7b'))q+=92;if(id.includes('llama-3.1-8b'))q+=94;if(id.includes('hermes-3'))q+=91;if(id.includes('deepseek-r1-distill'))q+=90;if(id.includes('phi-3.5-mini'))q+=78;if(id.includes('phi-2'))q+=35;if(id.includes('tinyllama'))q+=32;if(id.includes('q4f16'))q+=4;if(id.includes('q4f32'))q-=2;q+=Math.min(10,(m.contextWindow||2048)/1024);return q}
+function deviceModel(info={}){const pool=MODELS.map(m=>({m,c:modelCompatibility(m,info)})).filter(x=>x.c.status==='compatible'||x.c.status==='possible');if(!pool.length)return MODELS.slice().sort((a,b)=>(a.vram||999999)-(b.vram||999999))[0];const mobile=isMobileDevice();return pool.sort((a,b)=>{const qa=modelQualityScore(a.m),qb=modelQualityScore(b.m);const mobilePenalty=x=>mobile&&x.m.vram>3200?-20:(!mobile&&x.m.vram>5200?-5:0);return (qb+mobilePenalty(b))-(qa+mobilePenalty(a))})[0].m}
+async function hydrateModels(){try{const w=await importWebLLM();const list=w.prebuiltAppConfig?.model_list||[];const seen=new Set();const dynamic=list.map(formatModel).filter(m=>m.id&&!seen.has(m.id)&&seen.add(m.id));if(dynamic.length)MODELS=dynamic;const cur=MODELS.find(m=>m.id===S.model);if(!cur){const rec=deviceModel(S.device||{});if(rec)S.model=rec.id}else if(/phi\s*2/i.test(cur.label)&&!isModelDownloaded(cur.id)){const rec=MODELS.find(m=>/Llama 3\.2 3B Instruct/i.test(m.label))||deviceModel(S.device||{});if(rec)S.model=rec.id}save();return true}catch{return false}}
+async function detectDevice(){const info={memory:navigator.deviceMemory||null,cores:navigator.hardwareConcurrency||null,gpu:false,adapter:null,maxBuffer:null,features:[]};if(navigator.gpu){try{const a=await navigator.gpu.requestAdapter();if(a){info.gpu=true;info.adapter=a.info?.description||a.info?.device||a.info?.vendor||'WebGPU';info.maxBuffer=a.limits?.maxStorageBufferBindingSize||null;info.features=[...a.features]}}catch{}}S.device=info;return info}
+async function benchmarkGPU(){if(!S.device?.gpu||!navigator.gpu)return null;try{const adapter=await navigator.gpu.requestAdapter();if(!adapter)return null;const device=await adapter.requestDevice();const count=131072;const buf=device.createBuffer({size:count*4,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_SRC});const read=device.createBuffer({size:4,usage:GPUBufferUsage.COPY_DST|GPUBufferUsage.MAP_READ});const shader=device.createShaderModule({code:`@group(0) @binding(0) var<storage,read_write> data: array<f32>; @compute @workgroup_size(64) fn main(@builtin(global_invocation_id) id: vec3<u32>){let i=id.x;if(i<${count}u){var x=data[i];for(var j=0u;j<24u;j++){x=x*1.000001+0.000001;}data[i]=x;}}`});const pipeline=device.createComputePipeline({layout:'auto',compute:{module:shader,entryPoint:'main'}});const bg=device.createBindGroup({layout:pipeline.getBindGroupLayout(0),entries:[{binding:0,resource:{buffer:buf}}]});const times=[];for(let r=0;r<3;r++){const enc=device.createCommandEncoder();const pass=enc.beginComputePass();pass.setPipeline(pipeline);pass.setBindGroup(0,bg);pass.dispatchWorkgroups(Math.ceil(count/64));pass.end();enc.copyBufferToBuffer(buf,0,read,0,4);const t=performance.now();device.queue.submit([enc.finish()]);await read.mapAsync(GPUMapMode.READ);times.push(performance.now()-t);read.unmap()}const avg=times.reduce((a,b)=>a+b,0)/times.length;device.destroy?.();const score=Math.max(1,Math.min(100,1000/avg*2));S.modelBench={score,ms:avg,at:Date.now()};S.benchmarkHistory=[...(S.benchmarkHistory||[]),{ms:avg,score,model:S.model,at:Date.now()}].slice(-8);S.device.benchmarkScore=score;save();return S.modelBench}catch{return null}}
+let WEBLLM=null;async function importWebLLM(){if(!WEBLLM)WEBLLM=await import('https://esm.run/@mlc-ai/web-llm@0.2.85');return WEBLLM}
+function isModelDownloaded(id){
+  return !!(S.loadedModel===id||S.cacheStates?.[id]===true||S.modelCacheMeta?.[id]?.status==='downloaded'||S.modelCacheMeta?.[id]?.status==='verified');
+}
+function modelCacheMeta(id){return S.modelCacheMeta?.[id]||null}
+function modelCacheLabel(id){
+  const meta=modelCacheMeta(id);if(!meta)return 'Not downloaded';
+  if(S.loadedModel===id&&S.engine)return 'Loaded';
+  if(S.cacheStates?.[id]===true||meta.status==='verified')return 'Downloaded · verified';
+  return 'Downloaded · verify pending';
+}
+function modelSupportsVision(m){
+  if(!m)return false;
+  const raw=m.modelRecord?.model_type;
+  const label=String(m.modelType||'')+' '+String(m.label||'')+' '+String(m.id||'');
+  return raw===2 || /VLM|vision|llava|smolvlm|qwen.*vl|phi.*vision|gemma-3/i.test(label);
+}
+async function probeCacheArtifacts(id){
+  const model=modelRecord(id);if(!model)return {status:'missing',weights:false,config:false,wasm:false};
+  const result={status:'unknown',weights:false,config:false,wasm:false};
+  try{const w=await importWebLLM();result.weights=!!(await w.hasModelInCache(id));}catch{return result}
+  if(!('caches' in window)){result.status=result.weights?'weights-cached':'missing';return result}
+  try{
+    const base=new URL((model.source||model.modelRecord?.model||'').replace(/\/$/, '')+'/resolve/main/');
+    const configUrl=new URL('mlc-chat-config.json',base).href;
+    const modelCache=await caches.open('webllm/config');result.config=!!(await modelCache.match(configUrl));
+    if(model.lib){const wasmCache=await caches.open('webllm/wasm');result.wasm=!!(await wasmCache.match(model.lib));}
+  }catch{}
+  result.status=result.weights&&result.config&&result.wasm?'verified':result.weights?'partial':'missing';
+  return result;
+}
+function markModelDownloaded(id,verified=false,verification='downloaded locally'){
+  S.cacheStates[id]=!!verified;
+  S.modelCacheMeta[id]={...(S.modelCacheMeta[id]||{}),status:'downloaded',downloadedAt:S.modelCacheMeta[id]?.downloadedAt||Date.now(),lastVerifiedAt:verified?Date.now():(S.modelCacheMeta[id]?.lastVerifiedAt||0),verification};
+  save();
+}
+function markModelVerified(id,note='WebLLM cache confirmed'){
+  S.cacheStates[id]=true;
+  S.modelCacheMeta[id]={...(S.modelCacheMeta[id]||{}),status:'verified',downloadedAt:S.modelCacheMeta[id]?.downloadedAt||Date.now(),lastVerifiedAt:Date.now(),verification:note};
+  save();
+}
+async function cacheState(id){
+  try{const w=await importWebLLM();return !!(await w.hasModelInCache(id))}catch{return null}
+}
+async function verifyOneModel(id){
+  const result=await probeCacheArtifacts(id);
+  if(result.status==='verified'){markModelVerified(id,'Model weights, chat config and WebGPU runtime are present in browser cache');return result}
+  if(result.status==='partial'){
+    S.cacheStates[id]=false;
+    if(S.modelCacheMeta[id]) S.modelCacheMeta[id]={...S.modelCacheMeta[id],status:'downloaded',lastVerifiedAt:Date.now(),verification:`Partial cache: weights=${result.weights?'yes':'no'}, config=${result.config?'yes':'no'}, runtime=${result.wasm?'yes':'no'}`};
+    save();return result;
+  }
+  if(result.status==='missing'){
+    S.cacheStates[id]=false;
+    if(S.modelCacheMeta[id]) S.modelCacheMeta[id]={...S.modelCacheMeta[id],status:'downloaded',lastVerifiedAt:Date.now(),verification:'Cache probe did not confirm the model artifacts'};
+    save();return result;
+  }
+  return result;
+}
+async function refreshCacheStates(opts={}){
+  const forceAll=!!opts.forceAll;
+  const ids=(forceAll?MODELS.map(m=>m.id):MODELS.filter(m=>isModelDownloaded(m.id)).map(m=>m.id));
+  let resolved=false;
+  for(const id of ids){try{const r=await verifyOneModel(id);if(r&&r.status&&r.status!=='unknown')resolved=true}catch{}}
+  if(resolved||!ids.length)S.cacheRecoveryPending=false;
+  save();
+  if(document.querySelector('[data-pane="model"]')){
+    const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;const tab='model';
+    $('settingsSheet').innerHTML=settingsHTML(tab);bindSettings();renderModelProgress();renderInstallState();
+    const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll;
+  }
+}
+function formatBytes(bytes){const n=Number(bytes)||0;if(n<1024)return `${n} B`;const kb=n/1024;if(kb<1024)return `${kb.toFixed(0)} KB`;const mb=kb/1024;if(mb<1024)return `${mb.toFixed(1)} MB`;return `${(mb/1024).toFixed(2)} GB`}
+function localAppBytes(){try{return new Blob([localStorage.getItem('luma_companion_v5')||'']).size}catch{return 0}}
+async function knownWebLLMCacheStats(){
+ let bytes=0,entries=0;
+ if(!('caches' in window))return {bytes:0,entries:0,exact:false};
+ try{
+  const names=(await caches.keys()).filter(k=>/webllm|mlc/i.test(k));
+  for(const name of names){const cache=await caches.open(name);const responses=await cache.matchAll();entries+=responses.length;for(const r of responses){const n=Number(r.headers.get('content-length'));if(Number.isFinite(n)&&n>0)bytes+=n}}
+  return {bytes,entries,exact:bytes>0};
+ }catch{return {bytes:0,entries:0,exact:false}}
+}
+async function getStorageStats(){
+ const usage=(navigator.storage?.estimate)?await navigator.storage.estimate().catch(()=>({})):{};
+ const modelCache=await knownWebLLMCacheStats();const app=localAppBytes();const quota=Number(usage.quota)||0,used=Number(usage.usage)||0;
+ const details=usage.usageDetails&&typeof usage.usageDetails==='object'?Object.entries(usage.usageDetails).filter(([,v])=>Number(v)>0).sort((a,b)=>Number(b[1])-Number(a[1])).slice(0,8):[];
+ const downloaded=MODELS.filter(m=>isModelDownloaded(m.id));return {used,quota,app,modelCache,details,localModels:downloaded.length,conversations:S.chats.length,messages:S.chats.reduce((n,c)=>n+(c.messages?.length||0),0),memories:(S.comp.memories||[]).length};
+}
+async function refreshDataStats(){
+ const root=$('dataStats');if(!root)return;const btn=$('refreshStorageStats');if(btn){btn.disabled=true;btn.textContent='Refreshing…'}
+ root.innerHTML='<div class="field-help">Checking browser-reported storage…</div>';
+ const st=await getStorageStats();const pct=st.quota?Math.min(100,(st.used/st.quota)*100):0;
+ const detailHtml=st.details.length?`<div class="storage-detail-grid">${st.details.map(([k,v])=>`<div class="storage-detail"><b>${esc(k.replace(/([A-Z])/g,' $1'))}</b><span>${formatBytes(v)}</span></div>`).join('')}</div>`:'<div class="field-help" style="margin-top:8px">Detailed breakdown is not exposed by this browser.</div>';
+ root.innerHTML=`<div class="storage-grid"><div class="storage-card"><strong>${formatBytes(st.used)}</strong><span>Site storage used</span></div><div class="storage-card"><strong>${st.quota?formatBytes(st.quota):'Not reported'}</strong><span>Storage quota</span></div></div><div class="storage-bar" aria-label="Storage usage"><i style="width:${pct.toFixed(1)}%"></i></div>${detailHtml}<div class="data-stat-row"><div class="data-stat"><b>${st.localModels}</b><span>Downloaded models</span></div><div class="data-stat"><b>${formatBytes(st.modelCache.bytes)}</b><span>Known model-cache bytes</span></div><div class="data-stat"><b>${formatBytes(st.app)}</b><span>Luma app data</span></div><div class="data-stat"><b>${st.conversations}</b><span>Conversations</span></div><div class="data-stat"><b>${st.messages}</b><span>Messages</span></div><div class="data-stat"><b>${st.memories}</b><span>Memories</span></div></div><p class="data-note">Browser storage usage/quota come from the Storage API when supported. The model-cache byte figure is best-effort because browsers do not expose a universal per-model size API.</p>`;
+ const updated=$('storageUpdated');if(updated)updated.textContent='Updated just now';if(btn){btn.disabled=false;btn.textContent='Refresh storage stats'}
+}
+async function unloadEngine(){if(!S.engine){S.loadedModel=null;updateImageButton();return true}try{await S.engine.unload()}catch{}S.engine=null;S.loadedModel=null;updateImageButton();localStorage.removeItem('luma_model_ready');setStatus('No model loaded');save();return true}
+async function deleteDownloadedModel(id){
+ if(S.loading)return;
+ const model=modelRecord(id);if(!model)return;
+ const wasLoaded=S.loadedModel===id;
+ if(!confirm(`Delete the downloaded files for “${model.label}”? You can download it again later.`))return;
+ S.loading=true;S.loadingKind='model';setModelProgress(true,'Deleting model…','Removing the model, tokenizer, WASM and chat-config cache entries.',null,false,false);renderSendState();
+ try{
+  if(wasLoaded)await unloadEngine();
+  const w=await importWebLLM();
+  if(w.deleteModelAllInfoInCache)await w.deleteModelAllInfoInCache(id);
+  else if(w.deleteModelInCache)await w.deleteModelInCache(id);
+  S.cacheStates[id]=false;delete S.modelCacheMeta[id];
+  if(S.model===id){const replacement=MODELS.find(m=>isModelDownloaded(m.id));S.model=replacement?.id||deviceModel(S.device||{})?.id||MODELS[0]?.id}
+  S.modelDownload={active:false,id:null,progress:null,label:'',note:'',error:false,done:false,startedAt:null};
+  localStorage.removeItem('luma_model_ready');save();setStatus('Model deleted');
+ }catch(e){setModelProgress(false,'Delete failed',e?.message||'Could not delete the downloaded model.',null,true,false);setStatus('Model delete failed')}
+ finally{S.loading=false;S.loadingKind='idle';renderSendState();if(document.querySelector('[data-pane="model"]'))await refreshCacheStates({forceAll:false})}
+}
+async function clearWebLLMCache(){
+ if(S.loading)return;
+ if(!confirm('Clear all downloaded AI models and their WebLLM cache? Conversations and companion settings will be kept.'))return;
+ try{
+  await unloadEngine();const w=await importWebLLM();
+  const ids=MODELS.filter(m=>isModelDownloaded(m.id)).map(m=>m.id);
+  for(const id of ids){try{if(w.deleteModelAllInfoInCache)await w.deleteModelAllInfoInCache(id);else if(w.deleteModelInCache)await w.deleteModelInCache(id)}catch{}}
+  S.cacheStates={};S.modelCacheMeta={};S.modelDownload={active:false,id:null,progress:null,label:'',note:'',error:false,done:false,startedAt:null};localStorage.removeItem('luma_model_ready');save();
+  if(document.querySelector('[data-pane="model"]'))await refreshCacheStates({forceAll:false}); else alert('Downloaded AI model cache cleared.');
+ }catch(e){alert('Could not clear model cache: '+e.message)}
+}
+function browserOnline(){return navigator.onLine!==false}
+function modelRecord(id){return MODELS.find(m=>m.id===id)||null}
+function modelContextLimit(id){return Math.max(1024,Number(modelRecord(id)?.contextWindow||4096))}
+function responseTokenBudget(){const limit=modelContextLimit(S.model);const desired=Math.min(Number(S.generation.maxTokens)||512,1024);const cap=Math.max(128,Math.floor(limit*.4));return Math.min(desired,cap)}
+function estimateTokens(text){return Math.max(1,Math.ceil(String(text||'').length/4))}
+function apiMessage(m){if(m.role==='user'&&m.image){return {role:'user',content:[{type:'text',text:m.content||'Please inspect this image.'},{type:'image_url',image_url:{url:m.image}}]}}return {role:m.role,content:m.content||''}}
+function buildContextMessages(c, beforeIndex=c.messages.length-1){const system={role:'system',content:systemPrompt()};const maxCtx=Math.min(modelContextLimit(S.model),Math.max(1024,Number(S.generation.contextWindow)||4096));const reserve=responseTokenBudget()+160;let budget=Math.max(128,maxCtx-reserve-estimateTokens(system.content));const out=[];for(let i=Math.min(beforeIndex,c.messages.length-1);i>=0;i--){const m=c.messages[i];const cost=estimateTokens(typeof m.content==='string'?m.content:'')+(m.image?350:0);if(cost>budget){if(out.length===0){const clipped={...m,content:(m.content||'').slice(-Math.max(160,budget*4))};out.unshift(apiMessage(clipped));}break}out.unshift(apiMessage(m));budget-=cost}return [system,...out]}
+let MODEL_TIMER=null;let MODEL_SAVE_TIMER=null;
+function persistModelDownload(){clearTimeout(MODEL_SAVE_TIMER);MODEL_SAVE_TIMER=setTimeout(()=>save(),250)}
+function setModelProgress(active,label,note='',progress=null,error=false,done=false){
+  if(active&&!S.modelDownload?.active){S.modelDownload.startedAt=Date.now()}
+  S.modelDownload={...(S.modelDownload||{}),active,id:S.modelDownload?.id||S.model,progress,label,note,error,done,startedAt:S.modelDownload?.startedAt||Date.now()};
+  if(active&&!MODEL_TIMER)MODEL_TIMER=setInterval(()=>renderModelProgress(),500);
+  if(!active&&MODEL_TIMER){clearInterval(MODEL_TIMER);MODEL_TIMER=null}
+  persistModelDownload();renderModelProgress();
+}
+function renderModelProgress(){
+  const wrap=$('modelProgressWrap');if(!wrap)return;const st=S.modelDownload||{};
+  wrap.classList.toggle('show',!!st.active||!!st.error||!!st.done);wrap.classList.toggle('error',!!st.error);wrap.classList.toggle('done',!!st.done&&!st.error);
+  const bar=$('modelProgressBar'),pct=$('modelProgressPct'),label=$('modelProgressLabel'),note=$('modelProgressNote'),time=$('modelProgressTime');
+  if(label)label.textContent=st.label||'';if(note)note.textContent=st.note||'';
+  const n=st.progress==null?null:Math.max(0,Math.min(100,Math.round(st.progress*100)));
+  if(bar)bar.style.width=n==null?(st.active?'36%':'0%'):n+'%';
+  if(pct)pct.textContent=n==null?(st.active?'Working…':st.done?'Done':''):n+'%';
+  if(time){const sec=st.startedAt?Math.max(0,Math.floor((Date.now()-st.startedAt)/1000)):0;time.textContent=st.active?`Elapsed ${sec}s`:sec?`Took ${sec}s`:''}
+}
+async function loadEngine(id){
+ if(S.loading)return false;if(!navigator.gpu){setStatus('WebGPU unavailable');return false}
+ const model=modelRecord(id)||deviceModel(S.device||{});if(!model)return false;S.model=model.id;save();
+ if(S.engine&&S.loadedModel===model.id){setStatus('Local AI ready',true);return true;}
+ S.loading=true;S.loadingKind='model';renderSendState();setStatus('Preparing local AI…');setModelProgress(true,'Checking local model…','Verifying the model cache before loading. Luma will not download a model during Load.',0,false,false);
+ try{
+   const probe=await probeCacheArtifacts(model.id);
+   if(probe.status!=='verified'){setModelProgress(false,'Model cache not verified',browserOnline()?'The model record exists, but all required local artifacts are not confirmed. Use Verify downloaded models or Re-download.':'Offline · this model is not fully verified in this browser.',probe.weights?.5:0,true,false);setStatus('Model not verified');return false}
+   markModelVerified(model.id,'Model weights, chat config and WebGPU runtime are present in browser cache');
+   if(S.engine&&S.loadedModel!==model.id){try{await S.engine.unload()}catch{}}
+   S.engine=null;S.loadedModel=null;
+   const init=report=>{const p=report?.progress!=null?Number(report.progress):null;setModelProgress(true,'Loading cached model…',report?.text||'Preparing WebGPU runtime.',p,false,false)};
+   S.engine=await importWebLLM().then(webllm=>webllm.CreateMLCEngine(model.id,{initProgressCallback:init,logLevel:'ERROR'},{context_window_size:Math.min(modelContextLimit(model.id),Number(S.generation.contextWindow)||4096),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,repetition_penalty:Number(S.generation.repetitionPenalty)||1.08}));
+   S.loadedModel=model.id;updateImageButton();setModelProgress(false,'Model ready','Loaded into WebGPU. The model remains cached on this device.',1,false,true);setStatus('Local AI ready',true);localStorage.setItem('luma_model_ready','1');save();return true;
+ }catch(e){S.engine=null;S.loadedModel=null;setModelProgress(false,'Model load failed',e?.message||'Could not load the local model.',null,true,false);setStatus('Model unavailable');return false}
+ finally{S.loading=false;S.loadingKind='idle';renderSendState()}
+}
+async function downloadModelOnly(id){
+ if(S.loading)return false;if(!navigator.gpu){alert('Local WebGPU AI is not available in this browser.');return false}
+ const model=modelRecord(id);if(!model)return false;S.model=model.id;save();
+ S.loading=true;S.loadingKind='model';S.modelDownload={active:true,id:model.id,progress:0,label:'Preparing download…',note:`Preparing ${model.label}. Downloading and caching may take a while.`,error:false,done:false,startedAt:Date.now()};persistModelDownload();renderSendState();renderModelProgress();setStatus('Preparing model…');
+ try{
+   if(!browserOnline()){setModelProgress(false,'Download requires internet','Connect once to download this model. After completion, you can disconnect and load it offline.',0,true,false);setStatus('Offline · model not downloaded');return false}
+   const webllm=await importWebLLM();
+   const cached=await webllm.hasModelInCache(model.id).catch(()=>false);
+   if(cached){markModelVerified(model.id,'WebLLM cache confirmed before download');setModelProgress(false,'Already downloaded','The model is already cached. Use Load to start it.',1,false,true);setStatus('Model already downloaded',true);return true}
+   setModelProgress(true,'Downloading & caching…',`Downloading ${model.label}. Approximate GPU memory is ${model.size}; it is not the exact network size.`,0,false,false);setStatus('Downloading model…');
+   const temp=await webllm.CreateMLCEngine(model.id,{initProgressCallback:p=>{const n=p?.progress!=null?Number(p.progress):null;setModelProgress(true,n!=null&&n<.999?'Downloading & caching…':'Finalizing cache…',p?.text||'Caching model files for local use.',n,false,false);if(n!=null)setStatus(`Downloading ${Math.round(n*100)}%`)},logLevel:'ERROR'},{context_window_size:Math.min(modelContextLimit(model.id),Number(S.generation.contextWindow)||4096),temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,repetition_penalty:Number(S.generation.repetitionPenalty)||1.08});
+   try{await temp.unload()}catch{}
+   markModelDownloaded(model.id,false,'Download completed; cache verification pending');
+   const verified=await probeCacheArtifacts(model.id);
+   if(verified.status==='verified')markModelVerified(model.id,'Model weights, chat config and WebGPU runtime are present in browser cache');
+   setModelProgress(false,'Download complete','Model is cached locally. It is not loaded into GPU memory.',1,false,true);setStatus('Model downloaded',true);localStorage.removeItem('luma_model_ready');save();return true;
+ }catch(e){setModelProgress(false,'Model download failed',e?.message||'Could not download the model.',null,true,false);setStatus('Model download failed');return false}
+ finally{S.loading=false;S.loadingKind='idle';renderSendState();save();if(document.querySelector('[data-pane="model"]')){const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;$('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll}}
+}
+async function benchmarkLoadedModel(){
+ if(!S.engine||!S.loadedModel||S.loading)return null;
+ const id=S.loadedModel, rec=modelRecord(id);S.loading=true;S.loadingKind='model';renderSendState();setStatus('Benchmarking model…',true);
+ const start=performance.now();let text='',usage=null;
+ try{
+  const res=await S.engine.chat.completions.create({messages:[{role:'user',content:'Reply with exactly: OK'}],stream:true,stream_options:{include_usage:true},temperature:0,max_tokens:8});
+  for await(const chunk of res){text+=chunk.choices?.[0]?.delta?.content||'';if(chunk.usage)usage=chunk.usage;if(!S.loading)break}
+  const ms=Math.max(1,performance.now()-start);const tokens=Number(usage?.completion_tokens)||estimateTokens(text);const tokps=tokens/(ms/1000);S.modelBenchmarks[id]={ms,tokens,tokps,at:Date.now()};save();return S.modelBenchmarks[id];
+ }catch(e){alert('Model benchmark failed: '+(e?.message||e));return null}
+ finally{S.loading=false;S.loadingKind='idle';renderSendState();setStatus('Local AI ready',true)}
+}
+function sanitizeAssistantText(text){let s=String(text||'').replace(/\r/g,'');const lines=s.split('\n');const labeled=lines.some(l=>/^\s*(?:User|Assistant|You|System)\s*:/i.test(l));const n=String(S.comp.name||'').trim();const labeledName=n?new RegExp(`^\\s*${n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\s*:`,'i'):null;if(labeled||labeledName){let mode='assistant',keep=[];for(const line of lines){if(/^\s*User\s*:/i.test(line)||/^\s*System\s*:/i.test(line)){mode='user';continue}if(/^\s*(?:Assistant|You)\s*:/i.test(line)||labeledName?.test(line)){mode='assistant';continue}if(mode==='assistant')keep.push(line)}s=keep.join('\n')}s=s.replace(/^\s*\[(?:assistant|user|system)\]\s*:?\s*/gmi,'');if(!/Roleplay|Storytelling/i.test(relationshipMode()))s=s.replace(/^\s*\*[^\n]*(?:forecast|weather|internet|browser|current time)[^\n]*\*\s*$/gmi,'');return s.trim()}
+function safeAssistantChunk(target,delta){target.content=sanitizeAssistantText((target.content||'')+String(delta||''))}
+async function generate(history,target){if(!S.engine||S.loadedModel!==S.model){const ok=await loadEngine(S.model);if(!ok){target.error=true;target.content='';target.errorMessage=browserOnline()?'Model is not loaded. Open Settings → Model and load a downloaded model.':'This model is not downloaded in this browser. Connect once and download it from Settings → Model.';renderMessages();return false}}const c=current(),idx=c?c.messages.indexOf(target):-1;S.loading=true;S.loadingKind='generation';S.generatingMessageKey=c&&idx>=0?`${c.id}:${idx}`:null;renderSendState();setStatus('Generating…',true);target.error=false;target.errorMessage='';target.partial=false;renderMessages();try{const req={messages:history,stream:true,temperature:Number(S.generation.temperature)||.72,top_p:Number(S.generation.topP)||.9,repetition_penalty:Number(S.generation.repetitionPenalty)||1.08,max_tokens:responseTokenBudget()};const res=await S.engine.chat.completions.create(req);let stopped=false;for await(const chunk of res){const d=chunk.choices?.[0]?.delta?.content||'';if(d)safeAssistantChunk(target,d);renderMessages();if(!S.loading){stopped=true;break}}target.content=sanitizeAssistantText(target.content);target.partial=stopped&&!!target.content.trim();if(c)updateConversationSummary(c);renderMessages();return true}catch(e){target.error=true;target.content='';target.errorMessage=e?.message||'Unknown local inference error.';renderMessages();return false}finally{S.loading=false;S.loadingKind='idle';S.generatingMessageKey=null;renderSendState();setStatus('Local AI ready',true);save()}}
+function interruptGeneration(){if(!S.loading||S.loadingKind!=='generation')return;try{S.engine?.interruptGenerate?.()}catch{}S.loading=false;S.loadingKind='idle';S.generatingMessageKey=null;setStatus('Generation stopped');renderSendState();renderMessages();save()}
+async function send(text){if(S.loading){if(S.loadingKind==='generation')interruptGeneration();return}const clean=String(text||'').trim();if(!clean)return;ensureChat();const c=current();if(S.draftImage&&!currentModelSupportsVision()){alert('Image input is available only when the currently loaded model supports vision.');return}
+autoRemember(clean);S.followOutput=true;if(c.messages.length===0)c.title=clean.replace(/\s+/g,' ').slice(0,48);c.messages.push({role:'user',content:clean,image:S.draftImage?.dataUrl||null,imageName:S.draftImage?.name||null});c.updated=Date.now();S.draftImage=null;renderAttachmentPreview();$('input').value='';resize();renderChats();renderMessages();const assistant={role:'assistant',content:'',error:false};c.messages.push(assistant);save();await generate(buildContextMessages(c,c.messages.length-2),assistant);c.updated=Date.now();updateConversationSummary(c);save();renderChats()}
+async function regen(i){const c=current(),m=c?.messages[i];if(!c||S.loading||!m||m.role!=='assistant')return;const user=c.messages[i-1];if(!user||user.role!=='user')return;m.content='';m.error=false;renderMessages();await generate(buildContextMessages(c,i-1),m);c.updated=Date.now();save();renderChats()}
+async function retryMessage(i){const c=current(),m=c?.messages[i];if(!c||!m||m.role!=='assistant'||!m.error||S.loading)return; m.content='';m.error=false;renderMessages();await generate(buildContextMessages(c,i-1),m);save();renderChats()}
+function renderSendState(){const b=$('send');if(!b)return;const generating=S.loading&&S.loadingKind==='generation';const modelBusy=S.loading&&S.loadingKind==='model';if(generating){b.disabled=false;b.classList.add('stop');b.setAttribute('aria-label','Stop generation');b.title='Stop generation';b.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>'}else{b.classList.remove('stop');b.disabled=modelBusy||(!$('input').value.trim()&& !S.draftImage);b.setAttribute('aria-label','Send');b.title=modelBusy?'Model operation in progress':'Send';b.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 14-7-4 14-3-6-7-1Z"/></svg>'}}
+function renderAttachmentPreview(){const wrap=$('attachmentPreview');if(!wrap)return;const d=S.draftImage;wrap.classList.toggle('show',!!d);if(d){$('attachmentThumb').src=d.dataUrl;$('attachmentName').textContent=d.name||'Attached image'}}
+function addImageFile(file){if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=()=>{S.draftImage={dataUrl:r.result,name:file.name};renderAttachmentPreview();renderSendState()};r.readAsDataURL(file)}
+function resize(){const x=$('input');x.style.height='auto';x.style.height=Math.min(180,x.scrollHeight)+'px';renderSendState()}
+function closeSidebar(){$('sidebar').classList.remove('open');$('sidebarBackdrop').classList.remove('show')}
+function closePanels(){$('backdrop').classList.remove('show');$('settingsSheet').innerHTML='';S.chatMenu=null}
+function openSetup(){const m=deviceModel(S.device||{})||MODELS[0];const mc=modelCompatibility(m,S.device||{});const c=S.comp;$('setupCard').innerHTML=`<h2>Welcome to Luma</h2><p>A private AI companion that runs locally in your browser. Set up how you want to be addressed first. The next step opens <b>Settings → Model</b> so you can explicitly choose and download the local AI model.</p><label class="field-label">Your name</label><input class="field" id="setupUserName" value="${esc(c.userName)}" placeholder="Your name"><div class="row2"><div><label class="field-label">Your gender</label><select class="field" id="setupUserGender"><option>Prefer not to say</option><option ${c.userGender==='Female'?'selected':''}>Female</option><option ${c.userGender==='Male'?'selected':''}>Male</option><option ${c.userGender==='Non-binary'?'selected':''}>Non-binary</option></select></div><div><label class="field-label">Pronouns</label><select class="field" id="setupPronouns"><option ${c.pronouns==='she/her'?'selected':''}>she/her</option><option ${c.pronouns==='he/him'?'selected':''}>he/him</option><option ${c.pronouns==='they/them'?'selected':''}>they/them</option></select></div></div><label class="field-label">What should I call you?</label><div class="row2"><input class="field" id="setupNickname" value="${esc(c.nickname)}" placeholder="Nickname (optional)"><select class="field" id="setupAddress"><option value="name" ${c.addressMode==='name'?'selected':''}>Use my name</option><option value="nickname" ${c.addressMode==='nickname'?'selected':''}>Use my nickname</option><option value="none" ${c.addressMode==='none'?'selected':''}>Don't use a name</option></select></div><div class="section-divider"></div><div class="setup-model"><strong>${esc(m.label)}</strong><span>${esc(m.desc)} · ${mc.status==='compatible'?'recommended for this device':mc.status==='possible'?'possible, with less headroom':'not recommended on this device'}${S.modelBench?.ms?` · GPU test ${S.modelBench.ms.toFixed(0)} ms`:''}</span></div><p>${navigator.gpu?'WebGPU is available. Continue to Model settings to download the model explicitly.':'WebGPU is not available in this browser, so local model inference cannot start yet.'}</p><div class="setup-actions"><button class="setup-secondary" id="setupLater">Later</button><button class="setup-primary" id="setupContinue" ${navigator.gpu?'':'disabled'}>Continue to Model Settings</button></div>`;$('setupBackdrop').classList.add('show');$('setupLater').onclick=()=>$('setupBackdrop').classList.remove('show');$('setupContinue').onclick=()=>{c.userName=$('setupUserName').value.trim();c.userGender=$('setupUserGender').value;c.pronouns=$('setupPronouns').value;c.nickname=$('setupNickname').value.trim();c.addressMode=$('setupAddress').value;S.setupComplete=true;save();$('setupBackdrop').classList.remove('show');openSettings('model')}}
+function addMemoryObject(obj){const n=normalizeMemory(obj);if(!n.text)return false;const c=S.comp;c.memories=c.memories||[];const existing=c.memories.find(m=>m.text.toLowerCase()===n.text.toLowerCase());if(existing){existing.importance=Math.max(Number(existing.importance)||0,n.importance);existing.confidence=Math.max(Number(existing.confidence)||0,n.confidence);existing.updated=Date.now();save();return false}c.memories.push(n);c.memories=c.memories.sort((a,b)=>(Number(b.importance)||0)-(Number(a.importance)||0)).slice(0,80);save();return true}
+function addMemory(text,source='user',type='FACT',importance=.6,confidence=1){const v=String(text||'').trim();if(v)addMemoryObject({text:v,source,type,importance,confidence})}
+function autoRemember(text){setMemoryCandidate(text)}
+function rememberMessage(i){const c=current(),m=c?.messages[i];if(!m||m.role!=='user')return;addMemory(m.content,'conversation','FACT',.7,1);S.memoryCandidate=null;renderMessages()}
+function editMemory(id){const m=(S.comp.memories||[]).find(x=>x.id===id);if(!m)return;const v=prompt('Edit memory',m.text);if(v!=null&&v.trim()){m.text=v.trim();m.updated=Date.now();save();openSettings('memory')}}
+function forgetMemory(id){S.comp.memories=(S.comp.memories||[]).filter(m=>m.id!==id);save();openSettings('memory')}
+
+function modelMetaHtml(m,cc){
+ const context=Number(m?.contextWindow||4096),vram=m?.vram?`~${(m.vram/1024).toFixed(1)} GB`: 'Not reported';
+ const modelType=String(m?.modelType||'LLM').toUpperCase();
+ const features=m?.features?.length?m.features.join(', '):'No special WebGPU features listed';
+ return `<div class="compat-line"><i class="compat-dot ${cc?.status==='compatible'?'good':''}"></i><span><b>${esc((cc?.status||'unknown').toUpperCase())}</b> · ${esc(cc?.reason||'No compatibility data')}</span></div><div class="limit-grid"><div class="limit-card"><b>${esc(vram)}</b><span>Estimated GPU memory</span></div><div class="limit-card"><b>${context} tokens</b><span>Model context limit</span></div><div class="limit-card"><b>${m?.low?'Yes':'No'}</b><span>Low-resource flag</span></div><div class="limit-card"><b>${esc(modelType)}</b><span>Model type${/VLM/i.test(modelType)?' · image input':''}</span></div></div><p class="data-note" style="margin:8px 0 0">Required WebGPU features: ${esc(features)}.</p>`;
+}
+function pwaStateText(){
+ if(window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true)return 'Installed — running as an app';
+ if(isIOS())return 'iPhone/iPad: use Share → Add to Home Screen';
+ return window.__lumaInstallPrompt?'Ready to install from this page':'Install is offered by the browser when this PWA meets its install criteria';
+}
+function isIOS(){return /iPad|iPhone|iPod/i.test(navigator.userAgent)&&!window.MSStream}
+function settingsHTML(tab='companion'){
+ const c=S.comp, memories=(c.memories||[]).slice().reverse();
+ const roleOpts=ROLES.map(r=>`<option ${c.role===r?'selected':''}>${esc(r)}</option>`).join('');
+ const modelRec=deviceModel(S.device||{})||MODELS[0];
+ const selected=modelRecord(S.model)||modelRec;
+ const compatible=modelCompatibility(selected,S.device||{});
+ const cached=MODELS.filter(m=>isModelDownloaded(m.id)).sort((a,b)=>{
+   const al=a.id===S.loadedModel, bl=b.id===S.loadedModel;
+   if(al!==bl)return al?-1:1;
+   return modelQualityScore(b)-modelQualityScore(a);
+ });
+ const g=S.generation||generationDefaults;
+ const contextLimit=modelContextLimit(selected?.id||S.model);
+ const loadedRec=modelRecord(S.loadedModel);
+ const activeBench=loadedRec?S.modelBenchmarks?.[loadedRec.id]:null;
+ const selectedIsCached=isModelDownloaded(selected?.id);
+ const downloadedOptions=cached.length
+   ? cached.map(m=>`<option value="${esc(m.id)}" ${m.id===S.model?'selected':''}>${esc(m.label)} · ${esc(m.size)}</option>`).join('')
+   : '<option value="">No downloaded models</option>';
+ const downloadedHtml=cached.length
+   ? cached.map(m=>{
+       const active=S.loadedModel===m.id&&!!S.engine;
+       const selectedNow=S.model===m.id;
+       return `<div class="model-card ${selectedNow?'selected':''}">
+         <div class="model-card-main">
+           <div class="model-card-title"><strong>${esc(m.label)}</strong>${selectedNow?'<span class="model-badge recommended">Selected</span>':''}</div>
+           <small>${esc(m.size)} GPU estimate · context ${esc(String(m.contextWindow||4096))} · ${active?'loaded in GPU memory':(S.cacheStates?.[m.id]?'cache verified':'download recorded · verify on demand')}</small>
+         </div>
+         <div class="model-card-side">
+           <span class="model-badge ${active?'ready':S.cacheStates?.[m.id]?'ready':'pending'}">${esc(active?'Loaded':modelCacheLabel(m.id))}</span>
+           <div class="model-card-actions">
+             ${active?`<button data-unload-model="${esc(m.id)}" type="button">Unload</button>`:`<button data-load-cached="${esc(m.id)}" type="button">Load</button>`}
+             ${!S.cacheStates?.[m.id]?`<button data-redownload-model="${esc(m.id)}" type="button">Re-download</button>`:''}
+             <button class="danger" data-delete-model="${esc(m.id)}" type="button">Delete</button>
+           </div>
+         </div>
+       </div>`;
+     }).join('')
+   : '<div class="downloaded-empty"><strong>No models downloaded yet.</strong><span>Expand Model catalogue below to download one. Downloading never loads it automatically.</span></div>';
+ const catalog=MODELS.slice().sort((a,b)=>{
+   const ca=isModelDownloaded(a.id), cb=isModelDownloaded(b.id);
+   if(ca!==cb)return ca?-1:1;
+   const ra=modelQualityScore(a), rb=modelQualityScore(b);
+   return rb-ra;
+ }).map(m=>{
+   const cc=modelCompatibility(m,S.device||{});
+   const isCached=isModelDownloaded(m.id);
+   const rec=m.id===modelRec?.id;
+   const isVlm=modelSupportsVision(m);
+   const action=isCached
+     ? `<span class="cache-state ready">Downloaded</span>`
+     : cc.status==='unavailable'
+       ? `<span class="cache-state">Unavailable</span>`
+       : `<button class="catalog-download" data-model-action="${esc(m.id)}" type="button">Download</button>`;
+   return `<div class="catalog-row ${cc.status==='unavailable'?'disabled':''}" data-cache-id="${esc(m.id)}">
+     <div class="catalog-main">
+       <strong>${esc(m.label)} ${rec?'<span class="model-badge recommended">Recommended</span>':''}${isVlm?'<span class="model-badge">Vision</span>':''}</strong>
+       <small>${esc(m.desc)} · ${esc(cc.reason||'Compatibility not evaluated')}</small>
+     </div>
+     <div class="catalog-actions">${action}</div>
+   </div>`;
+ }).join('');
+ const bench=(S.benchmarkHistory||[]).slice().reverse().slice(0,6).map(b=>`<div class="bench-item"><span>${esc(cleanModelLabel(b.model||'GPU'))}</span><span>${Number(b.ms).toFixed(0)} ms · score ${Number(b.score).toFixed(0)} <small>${new Date(b.at).toLocaleTimeString()}</small></span></div>`).join('');
+ return `<div class="sheet-head"><h2>Settings</h2><button class="close" id="closeSettings" aria-label="Close settings">×</button></div>
+ <div class="tabs">
+   <button class="tab ${tab==='companion'?'active':''}" data-tab="companion">Companion</button>
+   <button class="tab ${tab==='memory'?'active':''}" data-tab="memory">Memory</button>
+   <button class="tab ${tab==='model'?'active':''}" data-tab="model">Model</button>
+   <button class="tab ${tab==='data'?'active':''}" data-tab="data">Data</button>
+ </div>
+ <div class="pane ${tab==='companion'?'active':''}" data-pane="companion">
+   <label class="field-label">Companion name</label><input class="field" id="cName" value="${esc(c.name)}">
+   <div class="row2"><div><label class="field-label">Gender</label><select class="field" id="cGender"><option ${c.gender==='Female'?'selected':''}>Female</option><option ${c.gender==='Male'?'selected':''}>Male</option></select></div>
+   <div><label class="field-label">Age mode</label><select class="field" id="cAge"><option ${c.age==='16+'?'selected':''}>16+</option><option ${c.age==='18+'?'selected':''}>18+</option></select></div></div>
+   <label class="field-label">Role</label><select class="field" id="cRole">${roleOpts}</select>
+   <input class="field ${c.role==='Custom role'?'show':''}" id="cCustomRole" value="${esc(c.customRole)}" placeholder="Describe the custom role">
+   <label class="field-label">Tone</label><select class="field" id="cTone">${['Natural','Casual','Warm','Playful','Focused','Gentle','Energetic','Dry humor'].map(x=>`<option ${c.tone===x?'selected':''}>${x}</option>`).join('')}</select>
+   <div class="section-divider"></div><h3 class="section-title">Conversation behavior</h3><div class="relationship-grid"><div><label class="field-label">Conversation mode</label><select class="field" id="cMode">${['Casual','Deep conversation','Playful','Supportive','Romantic','Serious','Funny','Quiet','Storytelling','Roleplay'].map(x=>`<option ${c.conversationMode===x?'selected':''}>${x}</option>`).join('')}</select></div><div><label class="field-label">Relationship stage</label><select class="field" id="rStage">${['New connection','Getting familiar','Close','Deep bond','Long-term'].map(x=>`<option ${c.relationshipStage===x?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="mode-card"><strong>Conversation initiative</strong><small>Follow unfinished topics, goals, and prior discussions without forcing a question every message.</small><label style="display:flex;align-items:center;gap:7px;margin-top:8px;font-size:11px"><input type="checkbox" id="initiativeToggle" ${c.initiative!==false?'checked':''}> Allow proactive follow-ups</label></div><label class="field-label">Nicknames Luma may use</label><input class="field" id="uNicknames" value="${esc((c.nicknames||[]).join(', '))}" placeholder="e.g. bro, buddy, sunshine"><p class="phase2-note">Use sparingly; do not repeat a nickname every message.</p><div class="relationship-grid"><div><label class="field-label">Companion nickname</label><input class="field" id="compNickname" value="${esc(c.companionNickname||'')}" placeholder="Optional"></div><div><label class="field-label">Shared memory</label><div class="add-row"><input class="field" id="sharedMemoryInput" placeholder="e.g. our late-night chai chat"><button class="mini-btn" id="addSharedMemory">Add</button></div></div></div>${(c.sharedMemories||[]).length?`<div class="date-list">${c.sharedMemories.map((x,i)=>`<div class="date-pill"><span>${esc(x)}</span><button type="button" data-rm-shared="${i}">×</button></div>`).join('')}</div>`:''}<label class="field-label">Relationship rule / boundary</label><input class="field" id="relationshipRule" value="${esc(c.relationshipRules||'')}" placeholder="Optional rule">
+   <div class="section-divider"></div><h3 class="section-title">About you</h3>
+   <label class="field-label">Your name</label><input class="field" id="uName" value="${esc(c.userName||'')}" placeholder="Your name">
+   <div class="row2"><div><label class="field-label">Gender</label><select class="field" id="uGender"><option ${!c.userGender||c.userGender==='Prefer not to say'?'selected':''}>Prefer not to say</option><option ${c.userGender==='Female'?'selected':''}>Female</option><option ${c.userGender==='Male'?'selected':''}>Male</option><option ${c.userGender==='Non-binary'?'selected':''}>Non-binary</option></select></div>
+   <div><label class="field-label">Pronouns</label><select class="field" id="uPronouns"><option ${c.pronouns==='she/her'?'selected':''}>she/her</option><option ${c.pronouns==='he/him'?'selected':''}>he/him</option><option ${c.pronouns==='they/them'?'selected':''}>they/them</option></select></div></div>
+   <div class="row2"><div><label class="field-label">Nickname</label><input class="field" id="uNickname" value="${esc(c.nickname||'')}" placeholder="Optional"></div><div><label class="field-label">Address me as</label><select class="field" id="uAddress"><option value="name" ${c.addressMode==='name'?'selected':''}>Name</option><option value="nickname" ${c.addressMode==='nickname'?'selected':''}>Nickname</option><option value="none" ${c.addressMode==='none'?'selected':''}>No name</option></select></div></div>
+   <div class="field-help">These details tell the companion who it is talking to.</div>
+   ${[['warmth','Warmth'],['humor','Humor'],['energy','Energy'],['formality','Formality'],['proactivity','Proactivity'],['emoji','Emoji']].map(([k,l])=>`<div class="range-row"><input type="range" id="r_${k}" min="0" max="100" value="${c[k]}"><span>${l} <b>${c[k]}</b></span></div>`).join('')}
+   <label class="field-label">Preferred words & phrases</label><div class="word-list" id="words">${(c.words||[]).map((w,i)=>`<span class="word">${esc(w.w)} <small>${esc(w.f)}</small><button data-rm-word="${i}" title="Remove phrase">×</button></span>`).join('')}</div>
+   <div class="add-row"><input class="field" id="wordInput" placeholder="e.g. bro"><select class="field" id="wordFreq"><option>rare</option><option selected>occasional</option><option>frequent</option></select><button class="mini-btn" id="addWord">Add</button></div>
+   <label class="field-label">Avoid phrases</label><div class="word-list" id="avoids">${(c.avoid||[]).map((w,i)=>`<span class="word">${esc(w)}<button data-rm-avoid="${i}" title="Remove phrase">×</button></span>`).join('')}</div>
+   <div class="add-row"><input class="field" id="avoidInput" placeholder="Phrase to avoid"><button class="mini-btn" id="addAvoid">Add</button></div>
+   <div class="mode-card"><strong>Important dates</strong><small>Birthdays and personal milestones Luma can remember.</small><div class="add-row" style="margin-top:8px"><input class="field" id="dateLabel" placeholder="Birthday"><input class="field" id="dateValue" type="date"><button class="mini-btn" id="addDate">Add</button></div>${(c.importantDates||[]).length?`<div class="date-list">${c.importantDates.map((d,i)=>`<div class="date-pill"><span>${esc(d.label||'Date')} · ${esc(d.date||'')}</span><button type="button" data-rm-date="${i}">×</button></div>`).join('')}</div>`:''}</div><button class="primary" id="saveComp">Save changes</button><p class="note">16+ and 18+ are profile labels. A 16+ profile remains age-appropriate; an 18+ profile keeps the conversation appropriate to that setting.</p>
+ </div>
+ <div class="pane ${tab==='memory'?'active':''}" data-pane="memory">
+   <label class="field-label">What Luma remembers about you</label><p class="note">Memories stay in this browser.</p>
+   <div class="memory-list">${memories.length?memories.map(m=>`<div class="memory-card"><strong>${esc(m.text)}</strong><small>${esc(m.type||'FACT')} · importance ${Math.round((Number(m.importance)||.5)*100)}% · confidence ${Math.round((Number(m.confidence)||1)*100)}% · ${esc(m.source||'saved')} · ${new Date(m.updated||m.created||Date.now()).toLocaleDateString()}</small><button data-edit-memory="${esc(m.id)}" type="button">Edit</button><button data-rm-memory="${esc(m.id)}" type="button">Forget</button></div>`).join(''):'<div class="field-help">No memories saved yet.</div>'}</div>
+   <details class="settings-details" open><summary>Conversation summary</summary><div class="details-body"><div class="summary-card">${esc(current()?.summary||'A compact summary appears after a few messages. Recent messages stay higher priority.')}</div></div></details><label class="field-label">Add a memory</label><textarea class="field" id="memoryInput" rows="3" placeholder="e.g. I prefer concise explanations."></textarea><div class="relationship-grid" style="margin-top:8px"><select class="field" id="memoryType"><option>FACT</option><option>PROFILE</option><option>PREFERENCE</option><option>GOAL</option><option>BEHAVIOUR</option></select><select class="field" id="memoryImportance"><option value="0.5">Normal importance</option><option value="0.7">Important</option><option value="0.9">Very important</option></select></div><button class="primary" id="addMemory">Remember this</button>
+ </div>
+ <div class="pane ${tab==='model'?'active':''}" data-pane="model">
+   <div class="model-pane-shell">
+     <div class="model-progress sticky-top ${S.modelDownload?.active||S.modelDownload?.error||S.modelDownload?.done?'show':''} ${S.modelDownload?.error?'error':''} ${S.modelDownload?.done&&!S.modelDownload?.error?'done':''}" id="modelProgressWrap">
+       <div class="model-progress-head"><span class="model-progress-label" id="modelProgressLabel">${esc(S.modelDownload?.label||'')}</span><span class="model-progress-pct" id="modelProgressPct">${S.modelDownload?.progress!=null?Math.round(S.modelDownload.progress*100)+'%':''}</span></div>
+       <div class="model-progress-track"><div class="model-progress-bar" id="modelProgressBar" style="width:${S.modelDownload?.progress!=null?Math.max(0,Math.min(100,Math.round(S.modelDownload.progress*100))):S.modelDownload?.active?'36':0}%;"></div></div>
+       <div class="model-progress-note" id="modelProgressNote">${esc(S.modelDownload?.note||'')}</div><div class="model-progress-time" id="modelProgressTime"></div>
+     </div>
+     <div class="model-hero">
+       <div class="model-hero-top"><div><div class="model-hero-title">Local model runtime</div><div class="model-hero-meta"><b>One model loaded at a time.</b> Downloads stay cached until you delete them.</div></div><span class="model-status-badge ${S.engine?'ready':''}">${S.engine?`Loaded · ${esc(loadedRec?.label||S.loadedModel||'model')}`:'No model loaded'}</span></div>
+       <div class="model-control-row"><select class="field" id="loadedModelSelect">${downloadedOptions}</select><button class="mini-btn" id="loadSelectedModel" ${cached.length?'':'disabled'}>Load selected</button></div>
+       <div class="model-status-line"><span>${cached.length?`${cached.length} downloaded model${cached.length===1?'':'s'}`:'No downloaded models yet'}</span><span>${S.engine?'1 loaded':'0 loaded'}</span></div><button class="mini-btn" id="verifyDownloadedModels" style="width:100%;margin-top:8px" ${cached.length?'':'disabled'}>Verify downloaded models</button>
+       ${S.engine?`<button class="mini-btn" id="unloadCurrentModel" style="width:100%;margin-top:8px">Unload current model</button>`:''}
+     </div>
+     <details class="settings-details" open><summary>Downloaded models <span>${cached.length}</span></summary><div class="details-body"><div class="downloaded-models" style="border:0;border-radius:0;margin-top:0">${downloadedHtml}</div></div></details>
+     <details class="settings-details"><summary>Selected model limits & compatibility</summary><div class="details-body">${modelMetaHtml(selected,compatible)}<p class="data-note">${/phi\s*2/i.test(selected?.label||'')?'Phi-2 is an older small model and may follow the companion prompt poorly. A newer instruct model is recommended for natural conversation.':selectedIsCached?(S.cacheStates?.[selected?.id]?'This selected model is locally cached and verified.':'This selected model has a durable download record, but the browser has not confirmed every required artifact yet.'):'This model is not downloaded yet.'} Compatibility is a conservative estimate from WebGPU limits, browser-reported memory, required features and the device benchmark; actual load/generation performance can differ. Download state is persisted locally so browser restarts do not erase the model registry.</p></div></details>
+     <details class="settings-details"><summary>Model catalogue <span>${MODELS.length}</span></summary><div class="details-body"><p class="data-note" style="margin:9px 0 6px">Download once, then load locally whenever you need it. Approximate GPU-memory figures below are runtime estimates, not exact network download sizes.</p><div class="model-catalog" id="cacheList" style="max-height:340px">${catalog}</div></div></details>
+     <details class="settings-details"><summary>Performance & benchmarks</summary><div class="details-body"><div class="model-control-row" style="margin-top:10px"><button class="mini-btn" id="benchmarkGpu">${S.modelBench?'Run GPU test again':'Test this device'}</button><button class="mini-btn" id="benchmarkModel" ${S.engine?'':'disabled'}>${activeBench?`Benchmark again · ${Number(activeBench.tokps).toFixed(1)} tok/s`:'Benchmark loaded model'}</button></div>${bench?`<div class="model-section"><div class="model-section-title">GPU history</div><div class="bench-history">${bench}</div></div>`:'<p class="data-note" style="margin-top:10px">Run the device test to store a local performance baseline.</p>'}${activeBench?`<div class="model-section"><div class="model-section-title">Loaded model performance</div><div class="bench-item"><span>${esc(loadedRec?.label||'Model')}</span><span>${Number(activeBench.tokps).toFixed(1)} tok/s · ${Number(activeBench.ms).toFixed(0)} ms</span></div></div>`:''}</div></details>
+     <details class="settings-details"><summary>Generation controls</summary><div class="details-body"><div class="gen-grid" style="margin-top:10px"><div class="gen-field"><label>Temperature</label><div class="range-compact"><input type="range" id="gTemperature" min="0.1" max="1.2" step="0.01" value="${g.temperature}"><output id="oTemperature">${Number(g.temperature).toFixed(2)}</output></div></div><div class="gen-field"><label>Top P</label><div class="range-compact"><input type="range" id="gTopP" min="0.5" max="1" step="0.01" value="${g.topP}"><output id="oTopP">${Number(g.topP).toFixed(2)}</output></div></div><div class="gen-field"><label>Repetition penalty</label><div class="range-compact"><input type="range" id="gRep" min="1" max="1.3" step="0.01" value="${g.repetitionPenalty}"><output id="oRep">${Number(g.repetitionPenalty).toFixed(2)}</output></div></div><div class="gen-field"><label>Max response tokens</label><select class="field" id="gMaxTokens">${[128,256,384,512,768,1024].map(v=>`<option value="${v}" ${Number(g.maxTokens)===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="gen-field"><label>Context window</label><select class="field" id="gContext">${[1024,2048,4096].map(v=>`<option value="${v}" ${(Number(g.contextWindow)===v||(![1024,2048,4096].includes(Number(g.contextWindow))&&v===Math.min(4096,contextLimit)))?'selected':''} ${v>contextLimit?'disabled':''}>${v} tokens</option>`).join('')}</select></div></div><p class="note">Context management trims older turns and reserves response space before generation to avoid context-overflow errors.</p></div></details>
+     <details class="settings-details"><summary>Cache management</summary><div class="details-body"><button class="mini-btn danger" id="clearModelCache" style="width:100%;margin-top:10px">Delete all downloaded models</button><p class="data-note">Deleting a model removes its WebLLM model, WASM and chat-config cache records. Conversations, memories and companion settings remain.</p></div></details>
+   </div>
+ </div>
+ <div class="pane ${tab==='data'?'active':''}" data-pane="data">
+   <div class="model-section" style="margin-top:0"><div class="model-section-title">Storage</div><div class="refresh-stats"><span id="storageUpdated">Not checked yet</span><button class="mini-btn" id="refreshStorageStats" type="button">Refresh storage stats</button></div><div id="dataStats"><div class="field-help">Storage stats are read only when you click Refresh, so opening Settings does not scan storage.</div></div></div>
+   <div class="model-section"><div class="model-section-title">Install Luma</div><div class="install-card"><strong>Use Luma like an app</strong><p id="installDescription">Install status: ${esc(pwaStateText())}</p><div class="install-row"><button class="mini-btn" id="installLumaBtn" type="button">${isIOS()?'How to install':'Install Luma'}</button><span class="install-status" id="installStatus">${esc(pwaStateText())}</span></div><details class="install-help"><summary>Android / iPhone / iPad instructions</summary><p><b>Android / Chromium:</b> use Install Luma when the browser exposes the install prompt. <b>iPhone / iPad:</b> open Luma in Safari, tap Share, then Add to Home Screen.</p></details></div></div>
+   <div class="model-section"><div class="model-section-title">Backup</div><div class="data-actions"><button class="primary" id="exportData">Export Luma backup</button><button class="mini-btn" id="importData">Import backup</button><button class="mini-btn" id="exportChats">Export current chat</button></div><p class="data-note">Backups include conversations, pins, archives, companion profile, memories and generation settings. Downloaded model weights are not exported.</p></div>
+   <div class="model-section"><div class="model-section-title">Data controls</div><button class="mini-btn danger" id="clearChats" style="width:100%">Clear conversations only</button><button class="mini-btn danger" id="clearData" style="width:100%;margin-top:8px">Clear Luma data</button><p class="data-note">Clearing Luma data keeps downloaded AI models. Use Model → Cache management to remove model files.</p></div>
+ </div>`;
+}
+
+async function openSettings(tab='companion'){closePanels();if(tab==='model')await hydrateModels();$('settingsSheet').innerHTML=settingsHTML(tab);$('backdrop').classList.add('show');bindSettings();if(tab==='model'){renderModelProgress();renderInstallState();setTimeout(()=>refreshCacheStates({forceAll:false}).catch(()=>{}),0)}else{renderInstallState()}}
+function renderInstallState(){const status=pwaStateText();const a=$('installStatus'),d=$('installDescription'),b=$('installLumaBtn');if(a)a.textContent=status;if(d)d.textContent='Install status: '+status;if(b){const installed=/^Installed/i.test(status);b.disabled=installed;b.textContent=installed?'Installed':(isIOS()?'How to install':'Install Luma')}}
+function bindSettings(){
+ $('closeSettings').onclick=closePanels;
+ document.querySelectorAll('[data-tab]').forEach(t=>t.onclick=async()=>{const next=t.dataset.tab;if(next==='model')await hydrateModels();$('settingsSheet').innerHTML=settingsHTML(next);bindSettings();renderModelProgress();renderInstallState();if(next==='model')setTimeout(()=>refreshCacheStates({forceAll:false}).catch(()=>{}),0)});
+ $('cRole')?.addEventListener('change',e=>$('cCustomRole').classList.toggle('show',e.target.value==='Custom role'));
+
+ ['warmth','humor','energy','formality','proactivity','emoji'].forEach(k=>{$('r_'+k)?.addEventListener('input',e=>e.target.parentElement.querySelector('b').textContent=e.target.value)});
+ $('addWord')?.addEventListener('click',()=>{const v=$('wordInput').value.trim();if(v){S.comp.words.push({w:v,f:$('wordFreq').value});save();openSettings('companion')}});
+ $('addAvoid')?.addEventListener('click',()=>{const v=$('avoidInput').value.trim();if(v){S.comp.avoid.push(v);save();openSettings('companion')}});
+ document.querySelectorAll('[data-rm-word]').forEach(b=>b.onclick=()=>{S.comp.words.splice(+b.dataset.rmWord,1);save();openSettings('companion')});document.querySelectorAll('[data-rm-avoid]').forEach(b=>b.onclick=()=>{S.comp.avoid.splice(+b.dataset.rmAvoid,1);save();openSettings('companion')});document.querySelectorAll('[data-edit-memory]').forEach(b=>b.onclick=()=>editMemory(b.dataset.editMemory));document.querySelectorAll('[data-rm-memory]').forEach(b=>b.onclick=()=>forgetMemory(b.dataset.rmMemory));
+ $('addMemory')?.addEventListener('click',()=>{const v=$('memoryInput').value.trim();if(v){addMemory(v,'manual',$('memoryType')?.value||'FACT',Number($('memoryImportance')?.value||.6),1);openSettings('memory')}});
+ $('addSharedMemory')?.addEventListener('click',()=>{const v=$('sharedMemoryInput')?.value.trim();if(v){S.comp.sharedMemories=[...(S.comp.sharedMemories||[]),v].slice(-12);save();openSettings('companion')}});document.querySelectorAll('[data-rm-shared]').forEach(b=>b.onclick=()=>{S.comp.sharedMemories=(S.comp.sharedMemories||[]).filter((_,i)=>i!==+b.dataset.rmShared);save();openSettings('companion')});
+ $('addDate')?.addEventListener('click',()=>{const label=$('dateLabel')?.value.trim(),date=$('dateValue')?.value;if(label&&date){S.comp.importantDates=[...(S.comp.importantDates||[]),{label,date}].slice(-16);save();openSettings('companion')}});document.querySelectorAll('[data-rm-date]').forEach(b=>b.onclick=()=>{S.comp.importantDates=(S.comp.importantDates||[]).filter((_,i)=>i!==+b.dataset.rmDate);save();openSettings('companion')});
+ $('saveComp')?.addEventListener('click',()=>{S.comp.name=$('cName').value.trim()||'Emma';S.comp.gender=$('cGender').value;S.comp.age=$('cAge').value;S.comp.role=$('cRole').value;S.comp.customRole=$('cCustomRole').value.trim();S.comp.tone=$('cTone').value;S.comp.conversationMode=$('cMode')?.value||'Casual';S.comp.relationshipStage=$('rStage')?.value||'New connection';S.comp.initiative=$('initiativeToggle')?.checked!==false;S.comp.nicknames=String($('uNicknames')?.value||'').split(',').map(v=>v.trim()).filter(Boolean).slice(0,12);S.comp.companionNickname=$('compNickname')?.value.trim()||'';S.comp.relationshipRules=$('relationshipRule')?.value.trim()||'';S.comp.userName=$('uName').value.trim();S.comp.userGender=$('uGender').value;S.comp.pronouns=$('uPronouns').value;S.comp.nickname=$('uNickname').value.trim();S.comp.addressMode=$('uAddress').value;for(const k of ['warmth','humor','energy','formality','proactivity','emoji'])S.comp[k]=+$('r_'+k).value;save();$('sideName').textContent=S.comp.name;$('sideAvatar').textContent=initials();closePanels();renderMessages()});
+ $('loadedModelSelect')?.addEventListener('change',e=>{if(e.target.value&&isModelDownloaded(e.target.value)){S.model=e.target.value;save();renderModelProgress();const pane=document.querySelector('[data-pane="model"]');if(pane){const details=pane.querySelectorAll('.settings-details');if(details[1])details[1].open=true}}});
+ document.querySelectorAll('[data-load-cached]').forEach(b=>b.onclick=async()=>{if(S.loading)return;S.model=b.dataset.loadCached;save();await loadEngine(S.model);if(document.querySelector('[data-pane="model"]')){const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;$('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll;}});
+ document.querySelectorAll('[data-unload-model]').forEach(b=>b.onclick=async()=>{if(S.loading)return;await unloadEngine();if(document.querySelector('[data-pane="model"]')){const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;$('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll;}});
+ document.querySelectorAll('[data-delete-model]').forEach(b=>b.onclick=async()=>{if(S.loading)return;await deleteDownloadedModel(b.dataset.deleteModel)});
+ document.querySelectorAll('[data-redownload-model]').forEach(b=>b.onclick=async()=>{if(S.loading)return;S.model=b.dataset.redownloadModel;save();await deleteDownloadedModel(S.model).catch(()=>{});await downloadModelOnly(S.model)});
+ document.querySelectorAll('[data-model-action]').forEach(b=>b.onclick=async()=>{if(S.loading)return;const id=b.dataset.modelAction;S.model=id;save();await downloadModelOnly(id)});
+ $('loadSelectedModel')?.addEventListener('click',async()=>{const id=$('loadedModelSelect').value;if(!id||S.loading)return;S.model=id;save();await loadEngine(id);if(document.querySelector('[data-pane="model"]')){const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;$('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll}});
+ $('unloadCurrentModel')?.addEventListener('click',async()=>{if(S.loading)return;await unloadEngine();if(document.querySelector('[data-pane="model"]')){const pane=document.querySelector('[data-pane="model"]');const wasScroll=pane?.scrollTop||0;$('settingsSheet').innerHTML=settingsHTML('model');bindSettings();renderModelProgress();renderInstallState();const np=document.querySelector('[data-pane="model"]');if(np)np.scrollTop=wasScroll}});
+ $('verifyDownloadedModels')?.addEventListener('click',async()=>{if(S.loading)return;const b=$('verifyDownloadedModels');b.disabled=true;b.textContent='Verifying…';await refreshCacheStates({forceAll:false});if(document.querySelector('[data-pane="model"]'))$('verifyDownloadedModels').textContent='Verify downloaded models'});
+ $('benchmarkGpu')?.addEventListener('click',async()=>{if(S.loading)return;const b=$('benchmarkGpu');b.disabled=true;S.loading=true;S.loadingKind='model';renderSendState();b.textContent='Testing GPU…';const r=await benchmarkGPU();if(r)b.textContent=`GPU test: ${r.ms.toFixed(0)} ms · Run again`;else b.textContent='GPU test unavailable';S.loading=false;S.loadingKind='idle';renderSendState();save()});
+ $('benchmarkModel')?.addEventListener('click',async()=>{if(S.loading)return;const b=$('benchmarkModel');b.disabled=true;b.textContent='Benchmarking…';const r=await benchmarkLoadedModel();if(r)b.textContent=`Model ${Number(r.tokps).toFixed(1)} tok/s`;else b.textContent='Benchmark loaded model';save()});
+ const ranges=[['gTemperature','temperature','oTemperature',2],['gTopP','topP','oTopP',2],['gRep','repetitionPenalty','oRep',2]];ranges.forEach(([id,key,out,digits])=>{$(id)?.addEventListener('input',e=>{S.generation[key]=+e.target.value;$(out).textContent=S.generation[key].toFixed(digits);save()})});
+ $('gMaxTokens')?.addEventListener('change',e=>{S.generation.maxTokens=+e.target.value;save()});$('gContext')?.addEventListener('change',e=>{S.generation.contextWindow=Math.min(+e.target.value,modelContextLimit(S.model));save()});
+ $('clearModelCache')?.addEventListener('click',clearWebLLMCache);
+ $('refreshStorageStats')?.addEventListener('click',refreshDataStats);
+ $('installLumaBtn')?.addEventListener('click',installLuma);
+ $('exportData')?.addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:10,app:'Luma',comp:S.comp,chats:S.chats,active:S.active,model:S.model,loadedModel:S.loadedModel,generation:S.generation,benchmarkHistory:S.benchmarkHistory,modelBenchmarks:S.modelBenchmarks,modelCacheMeta:S.modelCacheMeta},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='luma-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+ $('exportChats')?.addEventListener('click',()=>{const c=current();if(!c)return;const blob=new Blob([JSON.stringify(c,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`luma-chat-${(c.title||'chat').replace(/[^\w-]+/g,'_').slice(0,50)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+ $('importData')?.addEventListener('click',()=>$('fileInput').click());
+ $('clearChats')?.addEventListener('click',()=>{if(confirm('Delete all conversations and keep your companion settings, memories, and downloaded models?')){S.chats=[];S.active=null;ensureChat();save();renderChats();renderMessages();openSettings('data')}});
+ $('clearData')?.addEventListener('click',()=>{if(confirm('Clear Luma conversations, companion settings, memories and app data? Downloaded AI models will be kept.')){const keep={version:10,model:S.model,loadedModel:null,cacheStates:S.cacheStates,modelCacheMeta:S.modelCacheMeta,modelDownload:{active:false,id:null,progress:null,label:'',note:'',error:false,done:false,startedAt:null},cacheRecoveryPending:false};localStorage.removeItem('luma_companion_v5');localStorage.removeItem('luma_companion_v4');localStorage.removeItem('krono_companion_v3');localStorage.removeItem('luma_model_ready');localStorage.setItem('luma_companion_v5',JSON.stringify(keep));location.reload()}});
+}
+$('newChat').onclick=()=>{if(S.loading)return;S.active=null;S.showArchived=false;S.chatMenu=null;S.followOutput=true;ensureChat();save();renderChats();renderMessages();$('input').focus();closeSidebar()};$('companionBtn').onclick=()=>openSettings('companion');$('settingsBtn').onclick=()=>openSettings('companion');$('backdrop').onclick=e=>{if(e.target.id==='backdrop')closePanels()};$('menuBtn').onclick=()=>{S.sidebarCollapsed=false;save();$('sidebar').classList.toggle('open',true);$('sidebar').classList.remove('collapsed');$('sidebarBackdrop').classList.toggle('show',window.matchMedia('(max-width:760px)').matches)};$('collapseSide').onclick=()=>{if(window.matchMedia('(max-width:760px)').matches){$('sidebar').classList.remove('open');$('sidebarBackdrop').classList.remove('show')}else{S.sidebarCollapsed=true;save();$('sidebar').classList.add('collapsed')}};$('sidebarBackdrop').onclick=()=>{closeSidebar()};$('archiveToggle').onclick=()=>{S.showArchived=!S.showArchived;S.chatMenu=null;save();renderChats();renderMessages()};
+$('chatList').addEventListener('click',e=>{const menuBtn=e.target.closest('[data-chat-menu]');if(menuBtn){e.preventDefault();e.stopPropagation();S.chatMenu=S.chatMenu===menuBtn.dataset.chatMenu?null:menuBtn.dataset.chatMenu;renderChats();return}const open=e.target.closest('[data-open-chat]');if(open){S.active=open.dataset.openChat;S.chatMenu=null;S.followOutput=true;save();renderChats();renderMessages();closeSidebar();return}const rename=e.target.closest('[data-rename-chat]');if(rename){e.preventDefault();e.stopPropagation();renameChat(rename.dataset.renameChat);return}const pin=e.target.closest('[data-pin-chat]');if(pin){e.preventDefault();e.stopPropagation();togglePin(pin.dataset.pinChat);return}const archive=e.target.closest('[data-archive-chat]');if(archive){e.preventDefault();e.stopPropagation();toggleArchive(archive.dataset.archiveChat);return}const del=e.target.closest('[data-delete-chat]');if(del){e.preventDefault();e.stopPropagation();deleteChat(del.dataset.deleteChat);return}});
+document.addEventListener('click',e=>{if(e.target.closest('.chat-item-wrap'))return;if(S.chatMenu){S.chatMenu=null;renderChats()}});$('messageStack').addEventListener('click',e=>{const b=e.target.closest('[data-copy-code]');if(b)copyText(b)});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(S.loading&&S.loadingKind==='generation'){interruptGeneration()}else if(!S.loading){closePanels();$('sidebar').classList.remove('open')}}});
+$('messages').addEventListener('scroll',()=>{const m=$('messages');const near=atBottom(m);if(S.loading&&!near)S.followOutput=false;else if(near)S.followOutput=true;updateJumpButton()});$('jumpLatest').onclick=()=>{S.followOutput=true;$('messages').scrollTo({top:$('messages').scrollHeight,behavior:'smooth'});updateJumpButton()};
+let deferredInstallPrompt=null;
+function canInstallDirect(){return !!deferredInstallPrompt}
+async function installLuma(){
+ if(window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true)return;
+ if(deferredInstallPrompt){const ev=deferredInstallPrompt;deferredInstallPrompt=null;try{const r=await ev.prompt();setStatus(r?.outcome==='accepted'?'Luma installed':'Install prompt dismissed');renderInstallState();}catch{}} else if(isIOS()){alert('On iPhone or iPad: open this site in Safari, tap Share, then choose “Add to Home Screen”. On newer iOS versions this can also be available from the browser Share menu.');} else {alert('The browser has not exposed the install prompt yet. Make sure Luma is served from localhost or HTTPS, then reload once.');}
+}
+function initPWA(){
+ if('serviceWorker' in navigator&&location.protocol!=='file:'){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;window.__lumaInstallPrompt=true;const b=$('pwaBanner');if(b)b.hidden=false;renderInstallState()});
+ window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;window.__lumaInstallPrompt=false;const b=$('pwaBanner');if(b)b.hidden=true;renderInstallState();setStatus('Luma installed')});
+ $('pwaInstall')?.addEventListener('click',installLuma);$('pwaLater')?.addEventListener('click',()=>{$('pwaBanner').hidden=true;localStorage.setItem('luma_pwa_banner_dismissed','1')});
+ if(isIOS()&&!window.matchMedia?.('(display-mode: standalone)').matches&&!localStorage.getItem('luma_pwa_banner_dismissed')){const b=$('pwaBanner');if(b){b.hidden=false;$('pwaInstall').textContent='How to install'}}
+}
+initPWA();
+
+function currentModelSupportsVision(){const m=modelRecord(S.loadedModel||S.model);if(!m)return false;const t=String(m.modelType||m.model_id||m.label||m.id||'');return /VLM|vision|llava|smolvlm|qwen.*vl|phi.*vision/i.test(t)}
+function updateImageButton(){const b=$('imageBtn');if(!b)return;const show=currentModelSupportsVision();b.classList.toggle('hidden',!show);b.disabled=!show;if(!show&&S.draftImage){S.draftImage=null;renderAttachmentPreview()}}
+$('imageBtn').onclick=()=>{if(currentModelSupportsVision())$('imageInput').click()};$('imageInput').onchange=e=>{if(currentModelSupportsVision())addImageFile(e.target.files[0]);e.target.value=''};$('clearAttachment').onclick=()=>{S.draftImage=null;renderAttachmentPreview();renderSendState()};
+$('send').onclick=()=>send($('input').value);$('input').oninput=resize;$('input').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(e.target.value)}};
+let recognition=null;let recognizing=false;function speechCtor(){return window.SpeechRecognition||window.webkitSpeechRecognition||null}
+async function startVoice(){
+ const C=speechCtor();if(!C){alert('Voice input is not supported by this browser. Try current Chrome or Edge.');return}
+ if(recognizing){try{recognition.stop()}catch{}return}
+ recognition=new C();recognition.lang='en-IN';recognition.interimResults=true;recognition.continuous=false;recognition.maxAlternatives=1;
+ if('processLocally' in recognition)recognition.processLocally=true;
+ recognition.onstart=()=>{recognizing=true;$('micBtn').classList.add('mic','active');setStatus('Listening…')};
+ recognition.onresult=e=>{let text='';for(let i=e.resultIndex;i<e.results.length;i++)text+=e.results[i][0].transcript;if(text){$('input').value=text;resize()}};
+ recognition.onerror=e=>{if(e.error==='language-not-supported'||e.error==='service-not-allowed'){try{recognition.processLocally=false;recognition.start();return}catch{}}if(e.error!=='aborted')alert('Voice input: '+e.error)};
+ recognition.onend=()=>{recognizing=false;$('micBtn').classList.remove('active');setStatus(navigator.gpu?'Local AI ready':'WebGPU unavailable',!!navigator.gpu)};
+ try{
+   if(C.available&&'processLocally' in recognition){const state=await C.available({langs:['en-IN'],processLocally:true,quality:'dictation'}).catch(()=>null);if(state==='downloadable'&&C.install)await C.install({langs:['en-IN'],processLocally:true,quality:'dictation'});if(state==='unavailable')recognition.processLocally=false}
+   recognition.start();
+ }catch(e){alert('Could not start microphone: '+(e?.message||e))}
+}
+$('micBtn').onclick=startVoice;
+function speakMsg(i){const c=current(),text=c?.messages[i]?.content;if(!text||!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/```[\s\S]*?```/g,'code block'));u.lang='en-IN';u.rate=.98;speechSynthesis.speak(u)}
+$('fileInput').onchange=async()=>{const f=$('fileInput').files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(x.comp)S.comp={...defaults,...x.comp};if(Array.isArray(x.chats))S.chats=x.chats.map(c=>({...c,pinned:!!c.pinned,archived:!!c.archived,messages:Array.isArray(c.messages)?c.messages:[]}));if(x.model)S.model=x.model;if(x.loadedModel)S.loadedModel=x.loadedModel;if(x.generation)S.generation={...generationDefaults,...x.generation};if(x.modelBenchmarks&&typeof x.modelBenchmarks==='object')S.modelBenchmarks=x.modelBenchmarks;if(x.modelCacheMeta&&typeof x.modelCacheMeta==='object')S.modelCacheMeta={...S.modelCacheMeta,...x.modelCacheMeta};S.active=x.active||S.chats[0]?.id||null;save();renderChats();renderMessages();$('sideName').textContent=S.comp.name;$('sideAvatar').textContent=initials()}catch(e){alert('Could not import backup: '+e.message)}$('fileInput').value=''};$('search').oninput=e=>{S.search=e.target.value;renderChats()};
+$('chatTitlebar').textContent='New chat';$('sideName').textContent=S.comp.name;$('sideAvatar').textContent=initials();ensureChat();renderChats();renderMessages();updateImageButton();if(S.sidebarCollapsed&&window.matchMedia('(min-width:761px)').matches)$('sidebar').classList.add('collapsed');window.addEventListener('online',()=>{if(!S.loading&&!S.engine)setStatus('Online · cached model ready to load',true)});window.addEventListener('offline',()=>{if(!S.loading&&!S.engine)setStatus('Offline · cached model required')});(async()=>{await detectDevice();await hydrateModels();if(navigator.gpu&&!S.modelBench)await benchmarkGPU();if(!S.model||!MODELS.some(m=>m.id===S.model)){const remembered=MODELS.find(m=>isModelDownloaded(m.id));S.model=remembered?.id||deviceModel(S.device||{})?.id||MODELS[0]?.id;save()}if(!navigator.gpu){setStatus('WebGPU unavailable');if(!S.setupComplete)setTimeout(openSetup,450);return}const remembered=isModelDownloaded(S.model);if(S.cacheRecoveryPending){setStatus('Recovering local model cache…',!!S.device?.gpu);setTimeout(()=>refreshCacheStates({forceAll:true}).catch(()=>{}),250)}else if(remembered){setStatus(S.loadedModel===S.model?'Local AI ready':'Downloaded model · ready to verify/load',S.loadedModel===S.model);setTimeout(()=>refreshCacheStates({forceAll:false}).catch(()=>{}),250)}else{localStorage.removeItem('luma_model_ready');if(!S.setupComplete)setTimeout(openSetup,450);else setStatus(browserOnline()?'Choose a downloaded model in Settings → Model':'Offline · open Settings → Model')}})();
+</script>
+<!-- Luma Phase 1 + 2 + 4 + 5 v10 -->
+</body>
+</html>
